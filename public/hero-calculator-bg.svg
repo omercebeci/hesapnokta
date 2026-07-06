@@ -1,0 +1,59 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g1" x1="0" y1="0" x2="1600" y2="900" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#071629"/>
+      <stop offset="0.5" stop-color="#123B67"/>
+      <stop offset="1" stop-color="#0B6A89"/>
+    </linearGradient>
+    <linearGradient id="g2" x1="500" y1="120" x2="1230" y2="770" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF" stop-opacity="0.20"/>
+      <stop offset="1" stop-color="#DFFFD0" stop-opacity="0.14"/>
+    </linearGradient>
+    <filter id="blur" x="0" y="0" width="1600" height="900" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="34"/>
+    </filter>
+  </defs>
+  <rect width="1600" height="900" fill="url(#g1)"/>
+  <circle cx="240" cy="190" r="260" fill="#35F0B2" fill-opacity="0.13" filter="url(#blur)"/>
+  <circle cx="1290" cy="150" r="310" fill="#43D6FF" fill-opacity="0.18" filter="url(#blur)"/>
+  <circle cx="1220" cy="760" r="320" fill="#9FE870" fill-opacity="0.08" filter="url(#blur)"/>
+
+  <g opacity="0.18">
+    <text x="120" y="180" fill="white" font-size="90" font-family="Inter, Arial, sans-serif" font-weight="800">123 456</text>
+    <text x="980" y="170" fill="white" font-size="78" font-family="Inter, Arial, sans-serif" font-weight="800">+ 25%</text>
+    <text x="150" y="760" fill="white" font-size="86" font-family="Inter, Arial, sans-serif" font-weight="800">₺ 9.480</text>
+    <text x="1120" y="760" fill="white" font-size="92" font-family="Inter, Arial, sans-serif" font-weight="800">7 8 9</text>
+  </g>
+
+  <g transform="translate(910 170)" opacity="0.9">
+    <rect x="0" y="0" width="420" height="560" rx="38" fill="url(#g2)" stroke="white" stroke-opacity="0.18"/>
+    <rect x="34" y="34" width="352" height="96" rx="22" fill="#071629" fill-opacity="0.45"/>
+    <text x="52" y="95" fill="white" fill-opacity="0.86" font-size="42" font-family="Inter, Arial, sans-serif" font-weight="800">1 234 567,89</text>
+
+    <g fill="white" fill-opacity="0.92">
+      <rect x="34" y="156" width="72" height="72" rx="18"/>
+      <rect x="118" y="156" width="72" height="72" rx="18"/>
+      <rect x="202" y="156" width="72" height="72" rx="18"/>
+      <rect x="286" y="156" width="100" height="72" rx="18" fill="#35F0B2"/>
+
+      <rect x="34" y="240" width="72" height="72" rx="18"/>
+      <rect x="118" y="240" width="72" height="72" rx="18"/>
+      <rect x="202" y="240" width="72" height="72" rx="18"/>
+      <rect x="286" y="240" width="100" height="72" rx="18" fill="#43D6FF"/>
+
+      <rect x="34" y="324" width="72" height="72" rx="18"/>
+      <rect x="118" y="324" width="72" height="72" rx="18"/>
+      <rect x="202" y="324" width="72" height="72" rx="18"/>
+      <rect x="286" y="324" width="100" height="72" rx="18"/>
+
+      <rect x="34" y="408" width="114" height="72" rx="18" fill="#9FE870"/>
+      <rect x="160" y="408" width="114" height="72" rx="18"/>
+      <rect x="286" y="408" width="100" height="72" rx="18" fill="#35F0B2"/>
+    </g>
+  </g>
+
+  <g opacity="0.5" stroke="white" stroke-opacity="0.18">
+    <path d="M0 640C180 560 300 610 420 570C580 515 690 410 850 450C1000 490 1110 640 1280 600C1410 570 1510 520 1600 495" stroke-width="2"/>
+    <path d="M0 700C180 620 330 680 470 640C640 590 740 490 900 530C1060 570 1150 710 1310 675C1430 650 1515 605 1600 575" stroke-width="2"/>
+  </g>
+</svg>

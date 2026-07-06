@@ -1,0 +1,26 @@
+# Bağımlılıklar
+node_modules/
+
+# Build çıktıları
+dist/
+dev-dist/
+
+# Ortam değişkenleri (gerçek .env dosyaları; .env.example hariç)
+.env
+.env.local
+.env.*.local
+
+# Vercel yerel yapılandırması
+.vercel
+
+# Log dosyaları
+*.log
+npm-debug.log*
+
+# Editör/işletim sistemi dosyaları
+.DS_Store
+.vscode/
+.idea/
+
+# Test/coverage çıktıları
+coverage/

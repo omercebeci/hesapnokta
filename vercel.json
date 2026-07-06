@@ -1,0 +1,53 @@
+{
+  "redirects": [
+    { "source": "/kredi-hesaplama/", "destination": "/kredi-hesaplama", "permanent": true },
+    { "source": "/kdv-hesaplama/", "destination": "/kdv-hesaplama", "permanent": true },
+    { "source": "/indirim-hesaplama/", "destination": "/indirim-hesaplama", "permanent": true },
+    { "source": "/kar-marji-hesaplama/", "destination": "/kar-marji-hesaplama", "permanent": true },
+    { "source": "/kar-zarar-hesaplama/", "destination": "/kar-zarar-hesaplama", "permanent": true },
+    { "source": "/maas-zam-hesaplama/", "destination": "/maas-zam-hesaplama", "permanent": true },
+    { "source": "/kira-artis-hesaplama/", "destination": "/kira-artis-hesaplama", "permanent": true },
+    { "source": "/mevduat-faizi-hesaplama/", "destination": "/mevduat-faizi-hesaplama", "permanent": true },
+    { "source": "/ortalama-maliyet-hesaplama/", "destination": "/ortalama-maliyet-hesaplama", "permanent": true },
+    { "source": "/yakit-maliyeti-hesaplama/", "destination": "/yakit-maliyeti-hesaplama", "permanent": true },
+
+    { "source": "/butce-nabzi", "destination": "/butce-nabzi-hesaplama", "permanent": true },
+    { "source": "/butce-nabzi/", "destination": "/butce-nabzi-hesaplama", "permanent": true },
+
+    { "source": "/beton-hesaplama", "destination": "/", "permanent": true },
+    { "source": "/beton-hesaplama/", "destination": "/", "permanent": true },
+    { "source": "/boya-hesaplama", "destination": "/", "permanent": true },
+    { "source": "/boya-hesaplama/", "destination": "/", "permanent": true },
+    { "source": "/fayans-mozaik-hesaplama", "destination": "/", "permanent": true },
+    { "source": "/fayans-mozaik-hesaplama/", "destination": "/", "permanent": true },
+    { "source": "/gurultu-olcer", "destination": "/", "permanent": true },
+    { "source": "/gurultu-olcer/", "destination": "/", "permanent": true },
+    { "source": "/insaat-maliyet-hesaplama", "destination": "/", "permanent": true },
+    { "source": "/insaat-maliyet-hesaplama/", "destination": "/", "permanent": true },
+    { "source": "/kum-ton-m3-hesaplama", "destination": "/", "permanent": true },
+    { "source": "/kum-ton-m3-hesaplama/", "destination": "/", "permanent": true },
+    { "source": "/metrekup-hesaplama", "destination": "/", "permanent": true },
+    { "source": "/metrekup-hesaplama/", "destination": "/", "permanent": true },
+    { "source": "/parke-laminat-hesaplama", "destination": "/", "permanent": true },
+    { "source": "/parke-laminat-hesaplama/", "destination": "/", "permanent": true },
+    { "source": "/su-terazisi-egim-olcer", "destination": "/", "permanent": true },
+    { "source": "/su-terazisi-egim-olcer/", "destination": "/", "permanent": true },
+    { "source": "/titresim-olcer", "destination": "/", "permanent": true },
+    { "source": "/titresim-olcer/", "destination": "/", "permanent": true },
+    { "source": "/yapi-metraj-hesaplama", "destination": "/", "permanent": true },
+    { "source": "/yapi-metraj-hesaplama/", "destination": "/", "permanent": true },
+    { "source": "/banyo-tuvalet-tadilat-maliyeti", "destination": "/", "permanent": true },
+    { "source": "/banyo-tuvalet-tadilat-maliyeti/", "destination": "/", "permanent": true },
+    { "source": "/dwg-pdf-dxf-insaat-maliyet-analizi", "destination": "/", "permanent": true },
+    { "source": "/dwg-pdf-dxf-insaat-maliyet-analizi/", "destination": "/", "permanent": true },
+
+    { "source": "/rehber", "destination": "/", "permanent": true },
+    { "source": "/rehber/", "destination": "/", "permanent": true },
+    { "source": "/rehber/:slug*", "destination": "/", "permanent": true },
+
+    { "source": "/admin/:path*", "destination": "/", "permanent": true }
+  ],
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}

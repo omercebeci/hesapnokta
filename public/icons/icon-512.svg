@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="HesapNokta">
+  <rect width="512" height="512" rx="112" fill="#0b0604"/>
+  <circle cx="360" cy="136" r="132" fill="#ff8a2a" opacity="0.28"/>
+  <path d="M118 348V132h64v82h148v-82h64v216h-64v-82H182v82h-64Z" fill="#fff8f0"/>
+  <path d="M104 382h304" stroke="#ffb86b" stroke-width="28" stroke-linecap="round"/>
+</svg>
