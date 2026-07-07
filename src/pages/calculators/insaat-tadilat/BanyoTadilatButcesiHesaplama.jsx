@@ -1,21 +1,27 @@
 import React, { useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import { ResultCard, ResultMetrics } from '../../../components/Result.jsx';
 import RatioBar from '../../../components/RatioBar.jsx';
+import Icon from '../../../components/Icon.jsx';
+import StepStrip from '../../../components/StepStrip.jsx';
+import PrintableBudgetPlan from '../../../components/PrintableBudgetPlan.jsx';
 import { calculateLineItemBudget } from '../../../lib/insaatTadilatCalculators.js';
 import { formatCurrency, formatNumber, parseLocaleNumber } from '../../../utils/format.js';
 import { useQueryParamState, serializeRows, deserializeRows } from '../../../hooks/useQueryParamState.js';
+
+const STEPS = ['Yıkım', 'Su/tesisat', 'Elektrik', 'Seramik', 'Vitrifiye/Duşakabin', 'Mobilya', 'Boya/tavan'];
 
 const ITEMS = [
   { key: 'yikim', label: 'Yıkım ve moloz atımı', defaultAmount: '5000' },
   { key: 'tesisat', label: 'Su/tesisat işleri', defaultAmount: '8000' },
   { key: 'elektrik', label: 'Elektrik tesisatı', defaultAmount: '4000' },
-  { key: 'seramik', label: 'Seramik (malzeme + işçilik)', defaultAmount: '12000' },
+  { key: 'seramik', label: 'Seramik (malzeme + işçilik)', defaultAmount: '12000', linkTo: 'fayans-seramik-hesaplama', linkLabel: 'kaç kutu gerekir?' },
   { key: 'vitrifiye', label: 'Vitrifiye (klozet, lavabo, batarya)', defaultAmount: '15000' },
   { key: 'dusakabin', label: 'Duşakabin/küvet', defaultAmount: '10000' },
   { key: 'mobilya', label: 'Banyo mobilyası', defaultAmount: '9000' },
-  { key: 'boya', label: 'Boya/tavan', defaultAmount: '3000' },
+  { key: 'boya', label: 'Boya/tavan', defaultAmount: '3000', linkTo: 'boya-hesaplama', linkLabel: 'kaç litre gerekir?' },
 ];
 
 const ROW_FIELDS = ['enabled', 'amount'];
@@ -55,10 +61,17 @@ export default function BanyoTadilatButcesiHesaplama() {
         <div style={{ display: 'grid', gap: 10 }}>
           {rows.map((row, index) => (
             <div className="form-grid" key={ITEMS[index].key}>
-              <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontWeight: 600 }}>
-                <input type="checkbox" checked={row.enabled === '1'} onChange={() => toggleRow(index)} />
-                {ITEMS[index].label}
-              </label>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+                <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontWeight: 600 }}>
+                  <input type="checkbox" checked={row.enabled === '1'} onChange={() => toggleRow(index)} />
+                  {ITEMS[index].label}
+                </label>
+                {ITEMS[index].linkTo && (
+                  <Link to={`/${ITEMS[index].linkTo}`} className="line-item-link">
+                    <Icon name="arrow-right" size={12} /> {ITEMS[index].linkLabel}
+                  </Link>
+                )}
+              </div>
               <FormField label="Teklif/tahmini tutar (TL)" htmlFor={`amount-${ITEMS[index].key}`}>
                 <input
                   id={`amount-${ITEMS[index].key}`}
@@ -93,11 +106,13 @@ export default function BanyoTadilatButcesiHesaplama() {
             ))}
           </div>
         )}
+        <PrintableBudgetPlan items={result.breakdown} total={result.total} />
       </div>
 
       <div className="info-card">
         <h2>Nereden başlamalı?</h2>
-        <p>Genellikle sıra yıkım → tesisat/elektrik → seramik → vitrifiye/duşakabin → mobilya → boya şeklindedir. Kalemleri açıp kapatarak yalnızca yaptırmayı planladığınız işleri bütçeye dahil edebilir, birden fazla ustadan/firmadan aldığınız teklifleri karşılaştırarak buraya girebilirsiniz.</p>
+        <StepStrip steps={STEPS} />
+        <p style={{ marginTop: 12 }}>Kalemleri açıp kapatarak yalnızca yaptırmayı planladığınız işleri bütçeye dahil edebilir, birden fazla ustadan/firmadan aldığınız teklifleri karşılaştırarak buraya girebilirsiniz.</p>
       </div>
     </CalculatorLayout>
   );

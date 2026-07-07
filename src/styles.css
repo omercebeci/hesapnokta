@@ -1201,6 +1201,86 @@ h1, h2, h3, h4 {
   .footer-links { gap: 20px; }
 }
 
+/* ── İş sırası şeridi (banyo/mutfak/ev yapım bütçe araçları) ── */
+.step-strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.step-strip-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  padding: 7px 14px 7px 7px;
+  font-size: .84rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+.step-strip-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--accent-text-on);
+  font-size: .74rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.step-strip-arrow { color: var(--text-dim); font-size: .9rem; }
+
+/* ── Bütçe kalemlerinden ilgili miktar araçlarına çapraz link ── */
+.line-item-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: .78rem;
+  font-weight: 600;
+  color: var(--accent);
+  margin-left: auto;
+  white-space: nowrap;
+}
+.line-item-link:hover { color: var(--accent-hover); text-decoration: underline; text-underline-offset: 2px; }
+
+/* ═══════════════════════════════════════════
+   YAZDIRILABİLİR PLAN (bütçe araçları)
+   ═══════════════════════════════════════════ */
+.print-plan-button { justify-self: start; }
+.print-summary { display: none; }
+
+@media print {
+  body * { visibility: hidden; }
+  .print-summary, .print-summary * { visibility: visible; }
+  .print-summary {
+    display: block !important;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 24px;
+    background: #ffffff;
+    color: #111111;
+  }
+  .print-summary h1 { font-size: 1.4rem; margin-bottom: 4px; }
+  .print-summary-meta { color: #444444; margin-bottom: 14px; }
+  .print-summary-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
+  .print-summary-table th, .print-summary-table td {
+    border: 1px solid #999999;
+    padding: 8px 10px;
+    text-align: left;
+  }
+  .print-summary-table td:last-child, .print-summary-table th:last-child { text-align: right; }
+  .print-summary-table tfoot td { font-weight: 700; border-top: 2px solid #111111; }
+  .print-summary-note { font-size: .82rem; color: #444444; }
+  .no-print { display: none !important; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;

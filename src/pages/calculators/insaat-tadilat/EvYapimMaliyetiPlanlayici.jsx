@@ -1,20 +1,26 @@
 import React, { useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import { ResultCard, ResultMetrics } from '../../../components/Result.jsx';
 import RatioBar from '../../../components/RatioBar.jsx';
+import Icon from '../../../components/Icon.jsx';
+import StepStrip from '../../../components/StepStrip.jsx';
+import PrintableBudgetPlan from '../../../components/PrintableBudgetPlan.jsx';
 import { calculateLineItemBudget } from '../../../lib/insaatTadilatCalculators.js';
 import { formatCurrency, formatNumber, parseLocaleNumber } from '../../../utils/format.js';
 import { useQueryParamState, serializeRows, deserializeRows } from '../../../hooks/useQueryParamState.js';
 
+const STEPS = ['Temel', 'Kaba yapı', 'Çatı', 'Tesisat/elektrik', 'Sıva/boya', 'Zemin/doğrama'];
+
 const ITEMS = [
-  { key: 'temel', label: 'Hafriyat ve temel', defaultAmount: '150000' },
-  { key: 'kabaYapi', label: 'Duvar/karkas (kaba yapı)', defaultAmount: '200000' },
-  { key: 'cati', label: 'Çatı', defaultAmount: '100000' },
+  { key: 'temel', label: 'Hafriyat ve temel', defaultAmount: '150000', linkTo: 'beton-sap-hesaplama', linkLabel: 'kaç m³ beton gerekir?' },
+  { key: 'kabaYapi', label: 'Duvar/karkas (kaba yapı)', defaultAmount: '200000', linkTo: 'duvar-tugla-gazbeton-hesaplama', linkLabel: 'kaç blok gerekir?' },
+  { key: 'cati', label: 'Çatı', defaultAmount: '100000', linkTo: 'cati-hesaplama', linkLabel: 'kaç kiremit gerekir?' },
   { key: 'tesisat', label: 'Su/atık su tesisatı', defaultAmount: '60000' },
   { key: 'elektrik', label: 'Elektrik tesisatı', defaultAmount: '50000' },
-  { key: 'sivaBoya', label: 'Sıva ve boya', defaultAmount: '70000' },
-  { key: 'zemin', label: 'Zemin kaplaması', defaultAmount: '60000' },
+  { key: 'sivaBoya', label: 'Sıva ve boya', defaultAmount: '70000', linkTo: 'boya-hesaplama', linkLabel: 'kaç litre gerekir?' },
+  { key: 'zemin', label: 'Zemin kaplaması', defaultAmount: '60000', linkTo: 'parke-laminat-hesaplama', linkLabel: 'kaç paket gerekir?' },
   { key: 'dograma', label: 'Doğrama (kapı/pencere)', defaultAmount: '80000' },
   { key: 'disCephe', label: 'Dış cephe kaplama/yalıtım', defaultAmount: '90000' },
 ];
@@ -56,10 +62,17 @@ export default function EvYapimMaliyetiPlanlayici() {
         <div style={{ display: 'grid', gap: 10 }}>
           {rows.map((row, index) => (
             <div className="form-grid" key={ITEMS[index].key}>
-              <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontWeight: 600 }}>
-                <input type="checkbox" checked={row.enabled === '1'} onChange={() => toggleRow(index)} />
-                {ITEMS[index].label}
-              </label>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+                <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontWeight: 600 }}>
+                  <input type="checkbox" checked={row.enabled === '1'} onChange={() => toggleRow(index)} />
+                  {ITEMS[index].label}
+                </label>
+                {ITEMS[index].linkTo && (
+                  <Link to={`/${ITEMS[index].linkTo}`} className="line-item-link">
+                    <Icon name="arrow-right" size={12} /> {ITEMS[index].linkLabel}
+                  </Link>
+                )}
+              </div>
               <FormField label="Teklif/tahmini tutar (TL)" htmlFor={`amount-${ITEMS[index].key}`}>
                 <input
                   id={`amount-${ITEMS[index].key}`}
@@ -94,11 +107,13 @@ export default function EvYapimMaliyetiPlanlayici() {
             ))}
           </div>
         )}
+        <PrintableBudgetPlan items={result.breakdown} total={result.total} />
       </div>
 
       <div className="info-card">
         <h2>Köyde/arsada sıfırdan ev yapımı için not</h2>
-        <p>Köyde veya müstakil arsada sıfırdan ev yapımında genellikle şehir imarındaki hazır altyapı (yol, su, elektrik bağlantısı) bulunmayabilir; bu durumda "Hafriyat ve temel" ve "Dış cephe" kalemlerine ek olarak altyapı bağlantı maliyetlerini de ayrı bir kalem olarak bütçenize eklemeniz gerekebilir. Kalemlerin sırası genellikle temel → kaba yapı → çatı → tesisat/elektrik → sıva/boya → zemin/doğrama şeklindedir.</p>
+        <StepStrip steps={STEPS} />
+        <p style={{ marginTop: 12 }}>Köyde veya müstakil arsada sıfırdan ev yapımında genellikle şehir imarındaki hazır altyapı (yol, su, elektrik bağlantısı) bulunmayabilir; bu durumda "Hafriyat ve temel" ve "Dış cephe" kalemlerine ek olarak altyapı bağlantı maliyetlerini de ayrı bir kalem olarak bütçenize eklemeniz gerekebilir.</p>
       </div>
     </CalculatorLayout>
   );
