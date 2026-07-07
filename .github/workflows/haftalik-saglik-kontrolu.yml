@@ -1,0 +1,144 @@
+name: Haftalık Sağlık Kontrolü
+
+# Her Pazartesi 06:00 UTC'de otomatik çalışır; ayrıca Actions sekmesinden elle de
+# tetiklenebilir (workflow_dispatch). Bu workflow siteyi hiçbir şekilde
+# DEĞİŞTİRMEZ; yalnızca build/test/link/veri/sitemap kontrolü yapıp sorun
+# bulursa bir GitHub issue açar veya mevcut olana yorum ekler.
+on:
+  schedule:
+    - cron: '0 6 * * 1'
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  saglik-kontrolu:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Kodu al
+        uses: actions/checkout@v4
+
+      - name: Node.js kur
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Bağımlılıkları yükle
+        run: npm ci
+
+      - name: Testleri çalıştır
+        id: test
+        continue-on-error: true
+        run: npm test
+
+      - name: Production build al
+        id: build
+        continue-on-error: true
+        run: npm run build
+
+      - name: Kırık iç link taraması
+        id: broken_links
+        if: steps.build.outcome == 'success'
+        continue-on-error: true
+        run: node scripts/ci/check-broken-links.mjs
+
+      - name: Güncel veri tazeliği kontrolü
+        id: freshness
+        continue-on-error: true
+        run: node scripts/ci/check-data-freshness.mjs
+
+      - name: Sitemap tutarlılık kontrolü
+        id: sitemap
+        if: steps.build.outcome == 'success'
+        continue-on-error: true
+        run: node scripts/ci/check-sitemap-consistency.mjs
+
+      - name: Sonuçları değerlendir ve gerekirse issue aç
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          set +e
+          mkdir -p ci-reports
+          BODY_FILE="ci-reports/issue-body.md"
+          : > "$BODY_FILE"
+          PROBLEM_COUNT=0
+
+          {
+            echo "Tarih: $(date -u '+%Y-%m-%d %H:%M UTC')"
+            echo ""
+            echo "Çalıştırma: $RUN_URL"
+            echo ""
+          } >> "$BODY_FILE"
+
+          if [ "${{ steps.test.outcome }}" = "failure" ]; then
+            PROBLEM_COUNT=$((PROBLEM_COUNT + 1))
+            {
+              echo "### ❌ Testler başarısız"
+              echo "\`npm test\` başarısız oldu. Detaylar için çalıştırma loguna bakın."
+              echo ""
+            } >> "$BODY_FILE"
+          fi
+
+          if [ "${{ steps.build.outcome }}" = "failure" ]; then
+            PROBLEM_COUNT=$((PROBLEM_COUNT + 1))
+            {
+              echo "### ❌ Build başarısız"
+              echo "\`npm run build\` başarısız oldu. Detaylar için çalıştırma loguna bakın."
+              echo "(Bu nedenle kırık link ve sitemap kontrolleri atlandı.)"
+              echo ""
+            } >> "$BODY_FILE"
+          fi
+
+          if [ -f ci-reports/broken-links.md ]; then
+            PROBLEM_COUNT=$((PROBLEM_COUNT + 1))
+            {
+              echo "### 🔗 Kırık iç linkler"
+              cat ci-reports/broken-links.md
+              echo ""
+            } >> "$BODY_FILE"
+          fi
+
+          if [ -f ci-reports/freshness.md ]; then
+            PROBLEM_COUNT=$((PROBLEM_COUNT + 1))
+            {
+              echo "### 📅 Güncel veri tazeliği (src/data/guncelVeriler.js)"
+              cat ci-reports/freshness.md
+              echo ""
+            } >> "$BODY_FILE"
+          fi
+
+          if [ -f ci-reports/sitemap.md ]; then
+            PROBLEM_COUNT=$((PROBLEM_COUNT + 1))
+            {
+              echo "### 🗺️ Sitemap tutarsızlığı"
+              cat ci-reports/sitemap.md
+              echo ""
+            } >> "$BODY_FILE"
+          fi
+
+          if [ "$PROBLEM_COUNT" -eq 0 ]; then
+            echo "Sorun bulunamadı, issue açılmayacak."
+            exit 0
+          fi
+
+          TITLE="🔎 Haftalık sağlık kontrolü: ${PROBLEM_COUNT} sorun bulundu"
+
+          gh label create "saglik-kontrolu" --color "d73a4a" --description "Haftalık otomatik sağlık kontrolü" >/dev/null 2>&1 || true
+
+          EXISTING=$(gh issue list --label "saglik-kontrolu" --state open --json number --jq '.[0].number' 2>/dev/null)
+
+          if [ -n "$EXISTING" ] && [ "$EXISTING" != "null" ]; then
+            gh issue comment "$EXISTING" --body-file "$BODY_FILE"
+            gh issue edit "$EXISTING" --title "$TITLE"
+            echo "Mevcut açık issue #$EXISTING güncellendi."
+          else
+            gh issue create --title "$TITLE" --label "saglik-kontrolu" --body-file "$BODY_FILE"
+            echo "Yeni issue açıldı."
+          fi
+
+          echo "$PROBLEM_COUNT sorun bulundu."
+          exit 1

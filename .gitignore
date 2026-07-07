@@ -28,3 +28,6 @@ npm-debug.log*
 
 # Test/coverage çıktıları
 coverage/
+
+# CI sağlık kontrolü script'lerinin ürettiği geçici raporlar (bkz. .github/workflows/)
+ci-reports/

@@ -1,0 +1,88 @@
+name: Deploy Sonrası Kontrol
+
+# main branch'ine her push'tan sonra çalışır; Vercel'in deploy'u tamamlaması için
+# birkaç dakika bekleyip canlı sitede hızlı bir duman testi yapar. Bu workflow
+# siteyi DEĞİŞTİRMEZ; yalnızca birkaç URL'nin beklenen durum kodunu döndürüp
+# döndürmediğini kontrol eder ve sorun varsa bir GitHub issue açar.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+permissions:
+  issues: write
+
+jobs:
+  duman-testi:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Vercel deploy'un tamamlanmasını bekle
+        run: sleep 180
+
+      - name: Canlı site duman testi
+        id: smoke
+        continue-on-error: true
+        run: |
+          set +e
+          : > /tmp/smoke-results.txt
+
+          check_status() {
+            local url="$1"
+            local expected="$2"
+            local follow="$3"
+            local code
+            code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 15 $follow "$url")
+            local status="OK"
+            if [[ ! " $expected " =~ " $code " ]]; then
+              status="FAIL"
+            fi
+            echo "$status | $url -> $code (beklenen: $expected)" | tee -a /tmp/smoke-results.txt
+          }
+
+          check_status "https://hesapnokta.com/" "200" "-L"
+          check_status "https://hesapnokta.com/kredi-hesaplama" "200" "-L"
+          check_status "https://hesapnokta.com/rehber" "200" "-L"
+          check_status "https://hesapnokta.com/sitemap.xml" "200" "-L"
+          check_status "https://hesapnokta.com/ads.txt" "200" "-L"
+          check_status "https://hesapnokta.com/beton-hesaplama" "301 308" ""
+
+          if grep -q "^FAIL" /tmp/smoke-results.txt; then
+            exit 1
+          fi
+
+      - name: Başarısızlık durumunda issue aç
+        if: steps.smoke.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          BODY_FILE="/tmp/issue-body.md"
+          {
+            echo "Commit: \`${{ github.sha }}\`"
+            echo ""
+            echo "Çalıştırma: $RUN_URL"
+            echo ""
+            echo "### Duman testi sonuçları"
+            echo '```'
+            cat /tmp/smoke-results.txt
+            echo '```'
+          } > "$BODY_FILE"
+
+          gh label create "deploy-kontrolu" --color "b60205" --description "Deploy sonrası duman testi" >/dev/null 2>&1 || true
+
+          EXISTING=$(gh issue list --label "deploy-kontrolu" --state open --json number --jq '.[0].number' 2>/dev/null)
+
+          TITLE="🚨 Deploy sonrası kontrol başarısız"
+
+          if [ -n "$EXISTING" ] && [ "$EXISTING" != "null" ]; then
+            gh issue comment "$EXISTING" --body-file "$BODY_FILE"
+            echo "Mevcut açık issue #$EXISTING güncellendi."
+          else
+            gh issue create --title "$TITLE" --label "deploy-kontrolu" --body-file "$BODY_FILE"
+            echo "Yeni issue açıldı."
+          fi
+
+      - name: Sonucu işaretle
+        if: steps.smoke.outcome == 'failure'
+        run: exit 1

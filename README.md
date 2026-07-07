@@ -131,3 +131,54 @@ git push
 Build sırasında yazı otomatik olarak işlenir, `/rehber` listesine,
 sitemap.xml'e ve ilgili hesaplayıcı sayfalarına eklenir — başka hiçbir
 şey yapmanıza gerek yoktur.
+
+## Otomatik kontroller (GitHub Actions)
+
+Proje, `.github/workflows/` altında iki otomatik kontrol içerir. **Bu
+kontrollerin hiçbiri siteyi kendiliğinden değiştirmez** — yalnızca
+denetleyip sorun bulurlarsa bir GitHub issue açarlar.
+
+### Haftalık sağlık kontrolü
+
+Her **Pazartesi saat 06:00 UTC**'de (Türkiye saatiyle 09:00) otomatik
+çalışır; Actions sekmesinden "Haftalık Sağlık Kontrolü" workflow'unu
+seçip "Run workflow" ile elle de tetiklenebilir. Şunları kontrol eder:
+
+- **Build sağlığı**: testler ve production build başarıyla tamamlanıyor mu?
+- **Kırık iç link taraması**: build çıktısındaki sayfalarda hedefi
+  bulunamayan bir iç link var mı?
+- **Güncel veri tazeliği**: `src/data/guncelVeriler.js` içindeki
+  değerlerden 90 günden uzun süredir güncellenmemiş ya da `period`
+  alanı geçmiş bir yılı gösteren var mı?
+- **Sitemap tutarlılığı**: `sitemap.xml`'deki URL sayısı, build'de
+  üretilen statik sayfa sayısıyla uyuşuyor mu?
+
+Sorun bulunursa **"🔎 Haftalık sağlık kontrolü: N sorun bulundu"**
+başlıklı bir issue açılır (`saglik-kontrolu` etiketiyle); aynı hafta
+içinde zaten açık bir issue varsa yeni issue açılmaz, onun yerine
+üzerine yorum eklenir. Sorun yoksa hiçbir şey yapılmaz.
+
+**Issue geldiğinde ne yapmalı?** Issue'nun içeriği hangi kontrolün
+başarısız olduğunu ve (varsa) hangi linklerin/verilerin sorunlu
+olduğunu listeler. Genellikle şunlardan biridir: `guncelVeriler.js`
+içinde güncellenmesi gereken bir oran (bkz. yukarıdaki "Güncel
+verileri güncelleme" bölümü), bir hesaplayıcı/rehber sayfasında
+düzeltilmesi gereken bozuk bir link, ya da testler/build'i kıran bir
+kod değişikliği. Sorunu giderip commit + push yaptıktan sonra issue'yu
+elle kapatabilirsiniz.
+
+### Deploy sonrası kontrol
+
+`main` branch'ine yapılan **her push'tan sonra** otomatik çalışır;
+Vercel'in deploy'u tamamlaması için 3 dakika bekleyip canlı sitede
+(`hesapnokta.com`) birkaç kritik URL'nin (ana sayfa, örnek bir
+hesaplayıcı, `/rehber`, `sitemap.xml`, `ads.txt` ve eski bir URL'nin
+301/308 yönlendirmesi) beklenen durum kodunu döndürüp döndürmediğini
+kontrol eder.
+
+Başarısızlık durumunda **"🚨 Deploy sonrası kontrol başarısız"**
+başlıklı bir issue açılır (`deploy-kontrolu` etiketiyle, aynı mantıkla
+tekrarları önler). Bu issue geldiğinde, canlı sitenin (muhtemelen
+deploy henüz tamamlanmadığı ya da bir hata nedeniyle) beklendiği gibi
+çalışmadığı anlamına gelir; Vercel panelindeki son deploy'un loglarını
+kontrol etmeniz önerilir.
