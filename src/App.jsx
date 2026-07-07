@@ -8,6 +8,9 @@ import NotFoundPage from './pages/NotFoundPage.jsx';
 
 const RehberIndexPage = lazy(() => import('./pages/RehberIndexPage.jsx'));
 const RehberPostPage = lazy(() => import('./pages/RehberPostPage.jsx'));
+const AboutPage = lazy(() => import('./pages/AboutPage.jsx'));
+const ContactPage = lazy(() => import('./pages/ContactPage.jsx'));
+const PrivacyPolicyPage = lazy(() => import('./pages/PrivacyPolicyPage.jsx'));
 
 // Finans
 const KrediHesaplama = lazy(() => import('./pages/calculators/finans/KrediHesaplama.jsx'));
@@ -135,6 +138,10 @@ export default function App() {
 
             <Route path="/rehber" element={<RehberIndexPage />} />
             <Route path="/rehber/:slug" element={<RehberPostPage />} />
+
+            <Route path="/hakkinda" element={<AboutPage />} />
+            <Route path="/iletisim" element={<ContactPage />} />
+            <Route path="/gizlilik-politikasi" element={<PrivacyPolicyPage />} />
 
             <Route path="*" element={<NotFoundPage />} />
           </Routes>

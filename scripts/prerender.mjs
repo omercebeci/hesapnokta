@@ -59,6 +59,9 @@ async function main() {
     ...calculators.map((c) => `/${c.id}`),
     '/rehber',
     ...rehberYazilari.map((post) => `/rehber/${post.slug}`),
+    '/hakkinda',
+    '/iletisim',
+    '/gizlilik-politikasi',
   ];
   let count = 0;
 

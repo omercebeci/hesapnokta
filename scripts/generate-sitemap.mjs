@@ -20,6 +20,9 @@ function main() {
     ...calculators.map((c) => `/${c.id}`),
     '/rehber',
     ...rehberYazilari.map((post) => `/rehber/${post.slug}`),
+    '/hakkinda',
+    '/iletisim',
+    '/gizlilik-politikasi',
   ];
 
   const body = urls.map((url) => `  <url><loc>${SITE_URL}${url}</loc></url>`).join('\n');

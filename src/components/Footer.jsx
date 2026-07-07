@@ -28,6 +28,11 @@ export default function Footer() {
       </div>
       <div className="container footer-bottom">
         <p>© {currentYear} HesapNokta — Sonuçlar bilgilendirme amaçlıdır, resmi/hukuki tavsiye yerine geçmez.</p>
+        <nav className="footer-legal-links" aria-label="Kurumsal bağlantılar">
+          <Link to="/hakkinda">Hakkında</Link>
+          <Link to="/iletisim">İletişim</Link>
+          <Link to="/gizlilik-politikasi">Gizlilik Politikası</Link>
+        </nav>
       </div>
     </footer>
   );

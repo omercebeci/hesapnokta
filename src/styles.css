@@ -685,6 +685,29 @@ h1, h2, h3, h4 {
   font-size: 0.95rem;
   line-height: 1.7;
 }
+.legal-content { margin-top: 0; padding-top: 0; border-top: none; }
+.legal-content .seo-content-block ul {
+  margin: 8px 0 0 20px;
+  display: grid;
+  gap: 6px;
+}
+.legal-content .seo-content-block li {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+.legal-content .seo-content-block p + p { margin-top: 10px; }
+.legal-content .seo-content-block a { color: var(--accent-hover); font-weight: 600; }
+
+.contact-page-form {
+  max-width: 480px;
+  margin-top: 32px;
+  padding: 24px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
 .example-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -965,7 +988,19 @@ h1, h2, h3, h4 {
   font-size: .81rem;
   color: var(--text-dim);
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
 }
+.footer-legal-links {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.footer-legal-links a { color: var(--text-dim); font-weight: 500; transition: color .15s var(--ease); }
+.footer-legal-links a:hover { color: var(--accent-hover); }
 
 /* ── İletişim modalı ── */
 .modal-backdrop {
