@@ -59,7 +59,7 @@ export default function BrutNetMaasHesaplama() {
               { label: `Damga vergisi (‰${formatNumber(DAMGA_ORANI.value * 1000, { decimals: 2 })})`, value: formatCurrency(result.stampTax) },
             ]}
           />
-          <DataPeriodNote period={VERGI_DILIMLERI.period} lastUpdated={VERGI_DILIMLERI.lastUpdated} />
+          <DataPeriodNote period={VERGI_DILIMLERI.period} lastUpdated={VERGI_DILIMLERI.lastUpdated} source={VERGI_DILIMLERI.source} />
         </div>
       )}
 

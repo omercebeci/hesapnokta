@@ -84,7 +84,7 @@ export default function KrediKartiAsgariOdemeHesaplama() {
               { label: 'Sonraki dönem toplam borç', value: formatCurrency(result.totalNextCycleDebt) },
             ]}
           />
-          <DataPeriodNote period={FAIZ_ORANLARI.period} lastUpdated={FAIZ_ORANLARI.lastUpdated} />
+          <DataPeriodNote period={FAIZ_ORANLARI.period} lastUpdated={FAIZ_ORANLARI.lastUpdated} source={FAIZ_ORANLARI.source} />
           <p className="rate-disclaimer">⚠️ Akdi/gecikme faizi oranları TCMB tarafından belirlenen azami oranlardır ve bankanız daha düşük uygulayabilir; oranlar değişmiş olabilir, güncel değerleri kart ekstrenizden kontrol edin.</p>
         </div>
       )}

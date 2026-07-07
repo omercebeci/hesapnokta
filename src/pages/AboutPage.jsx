@@ -37,6 +37,7 @@ export default function AboutPage() {
 
         <section className="seo-content legal-content" aria-label="HesapNokta hakkında bilgi">
           <div className="seo-content-block">
+            <h2>Amacımız</h2>
             <p>
               HesapNokta, günlük hayatta sık karşılaşılan hesaplama ihtiyaçlarını tek bir yerde,
               hızlı ve ücretsiz şekilde çözmek için hazırlanmış bir araç koleksiyonudur. Kayıt
@@ -45,14 +46,41 @@ export default function AboutPage() {
             </p>
             <p>
               Şu anda finans (kredi, maaş, vergi, kira), alışveriş (indirim, taksit), günlük
-              yaşam (yakıt, elektrik), sağlık (BMI, kalori, uyku), matematik (yüzde, oran) ve
-              zaman (yaş, tarih farkı) kategorilerinde {calculators.length} hesaplayıcı sunuyoruz.
-              Site sürekli güncelleniyor; yeni hesaplayıcılar ve rehber içerikleri düzenli
-              olarak ekleniyor.
+              yaşam (yakıt, elektrik), sağlık (BMI, kalori, uyku), matematik (yüzde, oran),
+              eğitim (not ortalaması, sınav puanı) ve zaman (yaş, tarih farkı) kategorilerinde
+              {' '}{calculators.length} hesaplayıcı sunuyoruz. Site sürekli güncelleniyor; yeni
+              hesaplayıcılar ve rehber içerikleri düzenli olarak ekleniyor.
+            </p>
+          </div>
+
+          <div className="seo-content-block">
+            <h2>Veriler nasıl güncel tutuluyor?</h2>
+            <p>
+              Asgari ücret, vergi dilimleri, SGK oranları, kira artış sınırı gibi mevzuata bağlı
+              tüm değerler sitede tek bir merkezi veri dosyasında tutulur; bir oran değiştiğinde
+              yalnızca bu dosya güncellenir, ilgili hesaplayıcıların tamamı otomatik olarak yeni
+              değeri kullanır. Bu değerlerin yanında hangi resmi kaynaktan alındığı ve en son ne
+              zaman güncellendiği de sayfalarda ayrıca gösterilir.
             </p>
             <p>
-              Hesaplama sonuçları genel bilgilendirme amaçlıdır ve resmi, hukuki ya da mali
-              danışmanlık yerine geçmez; önemli kararlarda ilgili kurum veya uzmana
+              Buna ek olarak her hafta otomatik bir sağlık kontrolü çalışır ve 90 günden uzun
+              süredir güncellenmemiş ya da dönemi geçmiş görünen bir veri olup olmadığını
+              denetler; bir şey bulursa bize bildirim gelir. Bu süreç veri güncelliğini takip
+              etmemize yardımcı olsa da, önemli mali veya hukuki kararlar öncesinde güncel
+              oranı ilgili resmi kaynaktan teyit etmenizi öneririz.
+            </p>
+          </div>
+
+          <div className="seo-content-block">
+            <h2>İletişim</h2>
+            <p>
+              Bir hesaplayıcıda hata gördüyseniz, eksik bir veri fark ettiyseniz ya da eklenmesini
+              istediğiniz bir araç varsa <Link to="/iletisim">iletişim sayfasından</Link> ya da
+              her hesaplayıcının altındaki geri bildirim bölümünden bize kolayca ulaşabilirsiniz.
+            </p>
+            <p>
+              Hesaplama sonuçları genel bilgilendirme amaçlıdır ve resmi, hukuki, mali ya da
+              tıbbi danışmanlık yerine geçmez; önemli kararlarda ilgili kurum veya uzmana
               danışmanızı öneririz.
             </p>
           </div>

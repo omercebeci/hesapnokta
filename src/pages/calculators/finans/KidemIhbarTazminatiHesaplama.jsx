@@ -65,7 +65,7 @@ export default function KidemIhbarTazminatiHesaplama() {
               { label: 'Toplam kıdem', value: `${formatNumber(result.totalYears)} yıl` },
             ]}
           />
-          <DataPeriodNote period={KIDEM_TAVANI.period} lastUpdated={KIDEM_TAVANI.lastUpdated} />
+          <DataPeriodNote period={KIDEM_TAVANI.period} lastUpdated={KIDEM_TAVANI.lastUpdated} source={KIDEM_TAVANI.source} />
         </div>
       )}
 

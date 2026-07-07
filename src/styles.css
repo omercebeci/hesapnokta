@@ -634,7 +634,7 @@ h1, h2, h3, h4 {
   text-align: center;
 }
 
-.rate-disclaimer {
+.rate-disclaimer, .health-disclaimer {
   background: var(--accent-soft);
   color: var(--text-secondary);
   border: 1px solid var(--accent-border);

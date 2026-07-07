@@ -143,6 +143,11 @@ export default function CalculatorLayout({ calculatorId, children }) {
                 ))}
               </div>
             </div>
+            {calculator.category === 'saglik' && (
+              <p className="health-disclaimer">
+                ⚕️ Bu sonuçlar genel formüllere dayanan yaklaşık tahminlerdir, tıbbi tavsiye yerine geçmez. Kişisel sağlık durumunuzla ilgili kararlar için bir hekime danışın.
+              </p>
+            )}
           </section>
         )}
 

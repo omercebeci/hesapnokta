@@ -155,7 +155,7 @@ export const calculatorContent = {
   },
   'mevduat-faizi-hesaplama': {
     about: 'Mevduat faizi hesaplama aracı, bankaya yatırdığınız bir anaparanın belirli bir vade ve faiz oranında ne kadar net getiri sağlayacağını, stopaj kesintisi düşüldükten sonra gösterir.',
-    method: 'Brüt faiz, anapara × yıllık oran × (vade günü ÷ 365) formülüyle hesaplanır. Bu tutardan stopaj oranına göre vergi kesilir; kalan net faiz, vade sonunda anaparaya eklenerek toplam tutarı oluşturur.',
+    method: 'Basit faiz yöntemi kullanılır: brüt faiz, anapara × yıllık oran × (vade günü ÷ 365) formülüyle hesaplanır (faiz üzerinden tekrar faiz işlemez). Bu tutardan stopaj oranına göre vergi kesilir; kalan net faiz, vade sonunda anaparaya eklenerek toplam tutarı oluşturur.',
     faq: [
       { q: 'Stopaj oranı neden %5 varsayılan?', a: 'TL mevduatlarda yaygın uygulanan stopaj oranı budur, ancak vade ve mevzuata göre değişebilir; güncel oranı bankanızdan teyit edip alanı güncelleyebilirsiniz.' },
       { q: 'Vadeden önce bozdurursam bu hesap geçerli mi?', a: 'Hayır, vade bozumunda bankalar genellikle daha düşük bir faiz oranı uygular; bu araç tam vade sonu senaryosunu esas alır.' },
@@ -365,7 +365,7 @@ export const calculatorContent = {
   },
   'vucut-yag-orani-hesaplama': {
     about: 'Vücut yağ oranı hesaplama aracı, mezura ile alacağınız birkaç basit ölçümle (US Navy yöntemi) vücudunuzdaki yağ oranını tahmin etmenizi sağlar; VKİ\'ye göre kas-yağ ayrımı konusunda daha isabetli bir fikir verir.',
-    method: 'Erkeklerde bel ve boyun çevresi, kadınlarda ayrıca kalça çevresi ölçümü kullanılarak logaritmik bir formülle yağ oranı hesaplanır. Sonuç, cinsiyete özgü referans aralıklarıyla (atletik, fit, ortalama, yüksek) karşılaştırılır.',
+    method: 'US Navy yöntemi kullanılır: erkeklerde bel ve boyun çevresi, kadınlarda ayrıca kalça çevresi ölçümü, boy ile birlikte logaritmik bir formülde değerlendirilerek yağ oranı hesaplanır. Sonuç, cinsiyete özgü referans aralıklarıyla (atletik, fit, ortalama, yüksek) karşılaştırılır.',
     faq: [
       { q: 'Ölçümleri nasıl doğru almalıyım?', a: 'Mezurayı cilde hafifçe temas edecek şekilde, karın kaslarını sıkmadan ve nefes verirken bel/boyun/kalça çevrenizin en geniş noktasından ölçmeniz önerilir.' },
       { q: 'US Navy yöntemi ne kadar isabetlidir?', a: 'DEXA tarama gibi klinik yöntemlere göre daha az hassastır, ama ölçüm hatası düşükse günlük takip için makul bir tahmin sunar.' },

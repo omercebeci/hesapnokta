@@ -64,7 +64,7 @@ export default function KiraArtisHesaplama() {
               { label: 'Yıllık fark', value: formatCurrency(result.yearlyDifference) },
             ]}
           />
-          <DataPeriodNote period={KIRA_TAVANI.period} lastUpdated={KIRA_TAVANI.lastUpdated} />
+          <DataPeriodNote period={KIRA_TAVANI.period} lastUpdated={KIRA_TAVANI.lastUpdated} source={KIRA_TAVANI.source} />
           <p className="rate-disclaimer">⚠️ TÜFE 12 aylık ortalama oranı her ay güncellenir; girdiğiniz oran değişmiş olabilir, işlem öncesi güncel değeri TÜİK/resmi kaynaklardan kontrol edin.</p>
         </div>
       )}
