@@ -73,6 +73,17 @@ const TarihFarkiHesaplama = lazy(() => import('./pages/calculators/zaman/TarihFa
 const SaatFarkiHesaplama = lazy(() => import('./pages/calculators/zaman/SaatFarkiHesaplama.jsx'));
 const GunSayaciHesaplama = lazy(() => import('./pages/calculators/zaman/GunSayaciHesaplama.jsx'));
 
+// İnşaat & Tadilat
+const BoyaHesaplama = lazy(() => import('./pages/calculators/insaat-tadilat/BoyaHesaplama.jsx'));
+const FayansSeramikHesaplama = lazy(() => import('./pages/calculators/insaat-tadilat/FayansSeramikHesaplama.jsx'));
+const DuvarTuglaGazbetonHesaplama = lazy(() => import('./pages/calculators/insaat-tadilat/DuvarTuglaGazbetonHesaplama.jsx'));
+const BetonSapHesaplama = lazy(() => import('./pages/calculators/insaat-tadilat/BetonSapHesaplama.jsx'));
+const ParkeLaminatHesaplama = lazy(() => import('./pages/calculators/insaat-tadilat/ParkeLaminatHesaplama.jsx'));
+const BanyoTadilatButcesiHesaplama = lazy(() => import('./pages/calculators/insaat-tadilat/BanyoTadilatButcesiHesaplama.jsx'));
+const MutfakTadilatButcesiHesaplama = lazy(() => import('./pages/calculators/insaat-tadilat/MutfakTadilatButcesiHesaplama.jsx'));
+const CatiHesaplama = lazy(() => import('./pages/calculators/insaat-tadilat/CatiHesaplama.jsx'));
+const EvYapimMaliyetiPlanlayici = lazy(() => import('./pages/calculators/insaat-tadilat/EvYapimMaliyetiPlanlayici.jsx'));
+
 export default function App() {
   return (
     <ThemeProvider>
@@ -135,6 +146,16 @@ export default function App() {
             <Route path="/tarih-farki-hesaplama" element={<TarihFarkiHesaplama />} />
             <Route path="/saat-farki-hesaplama" element={<SaatFarkiHesaplama />} />
             <Route path="/gun-sayaci-hesaplama" element={<GunSayaciHesaplama />} />
+
+            <Route path="/boya-hesaplama" element={<BoyaHesaplama />} />
+            <Route path="/fayans-seramik-hesaplama" element={<FayansSeramikHesaplama />} />
+            <Route path="/duvar-tugla-gazbeton-hesaplama" element={<DuvarTuglaGazbetonHesaplama />} />
+            <Route path="/beton-sap-hesaplama" element={<BetonSapHesaplama />} />
+            <Route path="/parke-laminat-hesaplama" element={<ParkeLaminatHesaplama />} />
+            <Route path="/banyo-tadilat-butcesi-hesaplama" element={<BanyoTadilatButcesiHesaplama />} />
+            <Route path="/mutfak-tadilat-butcesi-hesaplama" element={<MutfakTadilatButcesiHesaplama />} />
+            <Route path="/cati-hesaplama" element={<CatiHesaplama />} />
+            <Route path="/ev-yapim-maliyeti-planlayici" element={<EvYapimMaliyetiPlanlayici />} />
 
             <Route path="/rehber" element={<RehberIndexPage />} />
             <Route path="/rehber/:slug" element={<RehberPostPage />} />

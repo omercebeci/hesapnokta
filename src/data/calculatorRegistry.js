@@ -9,6 +9,7 @@ export const categories = [
   { id: 'matematik', label: 'Matematik', icon: 'sigma', description: 'Yüzde, oran ve geometri hesaplamaları' },
   { id: 'egitim', label: 'Eğitim', icon: 'graduation-cap', description: 'Not ortalaması ve sınav puanı hesaplamaları' },
   { id: 'zaman', label: 'Zaman', icon: 'calendar-clock', description: 'Yaş ve tarih hesaplamaları' },
+  { id: 'insaat-tadilat', label: 'İnşaat & Tadilat', icon: 'hammer', description: 'Boya, fayans, beton ve tadilat maliyeti hesaplamaları' },
 ];
 
 export const calculators = [
@@ -408,6 +409,80 @@ export const calculators = [
     category: 'egitim',
     icon: 'clipboard-check',
     keywords: ['sınav neti', 'doğru yanlış', 'test puanı'],
+  },
+
+  // ── İnşaat & Tadilat ──
+  {
+    id: 'boya-hesaplama',
+    title: 'Boya Hesaplama',
+    description: 'Duvar ölçüleri, kapı/pencere düşümü ve kat sayısına göre gereken boya litresini ve ambalaj kombinasyonunu hesaplayın.',
+    category: 'insaat-tadilat',
+    icon: 'paint-roller',
+    keywords: ['boya hesaplama', 'boya litre', 'duvar boyası', 'kaç litre boya'],
+  },
+  {
+    id: 'fayans-seramik-hesaplama',
+    title: 'Fayans/Seramik Hesaplama',
+    description: 'Alan, fayans ebadı ve fire payına göre gereken fayans adedini, kutu sayısını ve derz dolgusu miktarını hesaplayın.',
+    category: 'insaat-tadilat',
+    icon: 'grid-3x3',
+    keywords: ['fayans hesaplama', 'seramik hesaplama', 'fire payı', 'derz dolgusu', 'kutu sayısı'],
+  },
+  {
+    id: 'duvar-tugla-gazbeton-hesaplama',
+    title: 'Duvar (Tuğla/Gazbeton) Hesaplama',
+    description: 'Duvar alanı ve blok ebadına göre gereken tuğla/gazbeton bloğu adedini ve harç/yapıştırıcı miktarını hesaplayın.',
+    category: 'insaat-tadilat',
+    icon: 'blocks',
+    keywords: ['gazbeton hesaplama', 'tuğla hesaplama', 'duvar örme', 'harç sarfiyatı'],
+  },
+  {
+    id: 'beton-sap-hesaplama',
+    title: 'Beton/Şap Hesaplama',
+    description: 'Alan ve kalınlığa göre gereken beton/şap hacmini (m³), hazır beton mikser karşılığını ve elle karım malzeme oranlarını hesaplayın.',
+    category: 'insaat-tadilat',
+    icon: 'truck',
+    keywords: ['beton hesaplama', 'şap hesaplama', 'metreküp hesaplama', 'hazır beton', 'çimento kum çakıl'],
+  },
+  {
+    id: 'parke-laminat-hesaplama',
+    title: 'Parke/Laminat Hesaplama',
+    description: 'Alan, paket kapsamı ve fire payına göre gereken parke/laminat paket sayısını ve süpürgelik metresini hesaplayın.',
+    category: 'insaat-tadilat',
+    icon: 'layers',
+    keywords: ['parke hesaplama', 'laminat hesaplama', 'paket sayısı', 'süpürgelik metresi'],
+  },
+  {
+    id: 'banyo-tadilat-butcesi-hesaplama',
+    title: 'Banyo Tadilat Bütçesi Hesaplama',
+    description: 'Yıkım, tesisat, seramik, vitrifiye ve mobilya gibi kalemleri açıp kapatarak banyo tadilatı toplam bütçenizi ve kalem dağılımını hesaplayın.',
+    category: 'insaat-tadilat',
+    icon: 'bath',
+    keywords: ['banyo tadilat maliyeti', 'banyo yenileme bütçesi', 'tadilat bütçesi'],
+  },
+  {
+    id: 'mutfak-tadilat-butcesi-hesaplama',
+    title: 'Mutfak Tadilat Bütçesi Hesaplama',
+    description: 'Dolap/tezgah, ankastre, tesisat ve elektrik gibi kalemleri açıp kapatarak mutfak tadilatı toplam bütçenizi ve kalem dağılımını hesaplayın.',
+    category: 'insaat-tadilat',
+    icon: 'cooking-pot',
+    keywords: ['mutfak tadilat maliyeti', 'mutfak yenileme bütçesi', 'mutfak dolabı bütçesi'],
+  },
+  {
+    id: 'cati-hesaplama',
+    title: 'Çatı Hesaplama',
+    description: 'Çatı taban ölçüleri ve eğimine göre gerçek çatı alanını, kiremit adedini ve membran/OSB ihtiyacını hesaplayın.',
+    category: 'insaat-tadilat',
+    icon: 'triangle',
+    keywords: ['çatı hesaplama', 'çatı alanı', 'kiremit hesaplama', 'çatı eğimi'],
+  },
+  {
+    id: 'ev-yapim-maliyeti-planlayici',
+    title: 'Ev Yapım Maliyeti Planlayıcı',
+    description: 'Temel, kaba yapı, çatı, tesisat ve ince işler gibi kalemleri açıp kapatarak sıfırdan ev yapım maliyetinizi ve kalem dağılımını planlayın.',
+    category: 'insaat-tadilat',
+    icon: 'hard-hat',
+    keywords: ['ev yapım maliyeti', 'köyde ev yapmak', 'kaba inşaat maliyeti', 'yapı maliyeti'],
   },
 ];
 

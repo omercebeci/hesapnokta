@@ -724,6 +724,220 @@ export const calculatorContent = {
       { q: 'Doğru ve yanlış toplamı soru sayısını aşarsa ne olur?', a: 'Bu durumda araç geçersiz bir girdi olduğunu belirten bir uyarı gösterir; doğru + yanlış + boş toplamının toplam soru sayısına eşit olması gerekir.' },
     ],
   },
+  // ── İnşaat & Tadilat ──
+  'boya-hesaplama': {
+    about: 'Boya hesaplama aracı, oda ölçülerinize (veya doğrudan girdiğiniz duvar alanına) göre kaç litre boyaya ihtiyacınız olduğunu ve bu ihtiyacı karşılayacak 2,5L/7,5L/15L ambalaj kombinasyonunu hesaplar. Bu araç yalnızca miktar hesaplar; hiçbir boya markası veya fiyatı önermez.',
+    method: 'Önce duvar alanı bulunur: oda ölçülerinden hesaplıyorsanız çevre (2×(uzunluk+genişlik)) tavan yüksekliğiyle çarpılır; doğrudan m² giriyorsanız bu adım atlanır. Bu alandan kapı/pencere düşümü çıkarılarak net boyanacak alan bulunur. Net alan, kat sayısıyla çarpılıp boya verimine (m²/L) bölünerek gereken litre miktarı elde edilir. Son olarak bu litre miktarını asla eksik bırakmayacak şekilde 15L, 7,5L ve 2,5L ambalajlardan oluşan bir kombinasyon önerilir.',
+    examples: [
+      {
+        title: 'Oda ölçülerinden: 4m × 5m oda, 2,5m tavan, 2 kat',
+        intro: 'Kapı/pencere düşümü 5 m², boya verimi 10 m²/L kabul edilmiştir.',
+        rows: [
+          { label: 'Duvar alanı', value: '45 m²' },
+          { label: 'Net boyanacak alan', value: '40 m²' },
+          { label: 'Gereken boya', value: '8 L' },
+          { label: 'Ambalaj önerisi', value: '1 × 7,5L + 1 × 2,5L (toplam 10 L)' },
+        ],
+      },
+      {
+        title: 'Doğrudan alan girişi: 90 m² duvar, 2 kat',
+        intro: 'Kapı/pencere düşümü 8 m², boya verimi 10 m²/L kabul edilmiştir.',
+        rows: [
+          { label: 'Net boyanacak alan', value: '82 m²' },
+          { label: 'Gereken boya', value: '16,4 L' },
+          { label: 'Ambalaj önerisi', value: '1 × 15L + 1 × 2,5L (toplam 17,5 L)' },
+        ],
+      },
+    ],
+    faq: [
+      { q: 'Boya verimi neden ambalajın üzerinde yazandan farklı çıkabilir?', a: 'Ambalajdaki değer düz, emiciliği az bir yüzey için verilmiş idealize bir rakamdır. Sıva emiciliği yüksek yeni duvarlarda, koyu renkten açık renge geçişte veya pürüzlü yüzeylerde gerçek verim düşebilir; bu araçtaki verim alanını kendi durumunuza göre azaltarak daha gerçekçi bir sonuç alabilirsiniz.' },
+      { q: 'Kapı ve pencere alanını nasıl hesaplarım?', a: 'Standart bir iç kapı yaklaşık 1,6-2 m², standart bir pencere yaklaşık 1,5 m² alan kaplar; odanızdaki kapı ve pencere sayısını bu tipik değerlerle çarpıp toplayarak düşüm alanını bulabilirsiniz.' },
+      { q: 'Astar boyası bu hesaba dahil mi?', a: 'Hayır, bu araç yalnızca son kat (kaplama) boyasını hesaplar. Astar genellikle daha yüksek verimle tek kat uygulanır ve ayrı bir ürün olduğu için ayrıca hesaplanmalıdır.' },
+      { q: 'Neden genellikle 2 kat öneriliyor?', a: 'Tek kat uygulamada alttaki eski renk veya leke izleri çoğu zaman tam kapanmaz; iki kat, homojen ve kalıcı bir görünüm için sektörde yaygın kabul gören uygulamadır. Koyu renkten çok açık bir renge geçiyorsanız 3 kat gerekebilir.' },
+      { q: 'Tavan boyası bu hesaba dahil mi?', a: 'Hayır, bu araç yalnızca duvar alanını hesaplar. Tavanı da boyayacaksanız zemin alanınızı (uzunluk × genişlik) ayrıca bu araca "duvar alanı" gibi girip hesaplayabilir, iki sonucu toplayabilirsiniz.' },
+      { q: 'Ambalaj önerisi neden ihtiyaçtan biraz fazla litre öneriyor?', a: 'Boya, kutu boyutlarının (2,5L/7,5L/15L) izin verdiği en yakın kombinasyonla satılır; ihtiyacı asla eksik bırakmamak için kombinasyon her zaman gereken litreye eşit ya da fazlasını karşılayacak şekilde yukarı yuvarlanır.' },
+      { q: 'Dış cephe boyası için bu araç kullanılabilir mi?', a: 'Evet, alan ve kat mantığı aynıdır; ancak dış cephe boyalarının verimi genellikle iç cephe boyalarından farklıdır, bu yüzden verim alanına ürününüzün ambalajındaki değeri girmeniz önemlidir.' },
+      { q: 'Fire payı neden bu araçta yok?', a: 'Boyada malzeme, tenekeden doğrudan uygulandığı için fayans/parke gibi kesim/kırılma kaynaklı bir fireye uğramaz; bunun yerine gerçek tüketimi etkileyen kapı/pencere düşümü ve kat sayısı ayrı alanlar olarak modellenmiştir.' },
+    ],
+  },
+  'fayans-seramik-hesaplama': {
+    about: 'Fayans/seramik hesaplama aracı, döşeyeceğiniz alana ve seçtiğiniz fayans ebadına göre gereken fayans adedini, kutu sayısını ve derz dolgusu miktarını hesaplar. Fire payını döşeme şekline (düz veya desenli/çapraz) göre ayarlayabilirsiniz.',
+    method: 'Bir fayansın alanı, boy × en (cm cinsinden girilip m²\'ye çevrilerek) ile bulunur. Döşenecek alan, seçtiğiniz fire payı kadar büyütülür ve bir fayansın alanına bölünüp yukarı yuvarlanarak gereken adet bulunur; bu adet, kutu başına adet sayısına bölünüp yukarı yuvarlanarak kutu sayısı elde edilir. Derz dolgusu, sektörde yaygın kullanılan ((boy+en) ÷ (boy×en)) × derz genişliği × derz derinliği × yoğunluk formülüyle tahmini olarak hesaplanır.',
+    examples: [
+      {
+        title: '20 m² alan, 60×30 cm fayans, %10 fire',
+        rows: [
+          { label: 'Bir fayansın alanı', value: '0,18 m²' },
+          { label: 'Fire payı dahil alan', value: '22 m²' },
+          { label: 'Gereken fayans adedi', value: '123 adet' },
+          { label: 'Kutu sayısı (6 adet/kutu)', value: '21 kutu' },
+        ],
+      },
+      {
+        title: 'Aynı alan, desenli/çapraz döşeme (%15 fire)',
+        intro: 'Desenli veya çapraz döşemede kesim kaybı arttığından fire payı yükseltilmelidir.',
+        rows: [
+          { label: 'Fire payı dahil alan', value: '23 m²' },
+          { label: 'Gereken fayans adedi', value: '128 adet' },
+        ],
+      },
+    ],
+    faq: [
+      { q: 'Fire payını nasıl seçmeliyim?', a: 'Düz (paralel) döşemede %5-10 genellikle yeterlidir. Desenli, çapraz (baklava dilimi) veya balıksırtı gibi döşemelerde kesim kaybı arttığından %15 seçmeniz önerilir.' },
+      { q: 'Kutu başına adet sayısını bilmiyorum, nereden bulabilirim?', a: 'Bu bilgi genellikle fayans kutusunun üzerinde veya satıcının ürün sayfasında "adet/kutu" ya da "m²/kutu" olarak belirtilir; m²/kutu veriliyorsa bunu bir fayansın alanına bölerek adet/kutu değerine ulaşabilirsiniz.' },
+      { q: 'Derz dolgusu tahmini ne kadar kesin?', a: 'Bu, sektörde yaygın kullanılan bir referans formülüdür ve derz genişliği/derinliğine göre değişir; kesin ihtiyaç için ürün ambalajındaki sarfiyat tablosuna bakmanız veya ustanıza danışmanız önerilir.' },
+      { q: 'Duvar ve zemin fayansı için aynı formül mü geçerli?', a: 'Evet, adet ve kutu hesabı için formül aynıdır; yalnızca alanı (duvar m² veya zemin m²) doğru girmeniz yeterlidir.' },
+      { q: 'Kırık/hasarlı fayans için ekstra pay eklemeli miyim?', a: 'Girdiğiniz fire payı zaten kesim kayıplarını kapsar; nakliye veya montaj sırasında kırılma riskine karşı ek olarak birkaç fayans daha sipariş etmek isteyebilirsiniz.' },
+      { q: 'Farklı ebatlarda fayans karıştırıyorsam bu araç nasıl kullanılır?', a: 'Bu araç tek bir ebat için hesaplama yapar; farklı ebatlardaki alanları ayrı ayrı hesaplayıp sonuçları toplamanız gerekir.' },
+      { q: 'Derz rengi/genişliği sonucu nasıl etkiler?', a: 'Derz genişliği arttıkça (örneğin 3mm yerine 5mm) derz dolgusu tüketimi de artar; bu araçtaki varsayılan değerler tipik ince derzler içindir.' },
+    ],
+  },
+  'duvar-tugla-gazbeton-hesaplama': {
+    about: 'Duvar (tuğla/gazbeton) hesaplama aracı, örülecek duvar alanına ve kullanacağınız blok ebadına göre gereken blok adedini ve harç/yapıştırıcı sarfiyatını hesaplar. Hem gazbeton hem geleneksel tuğla duvarlar için kullanılabilir.',
+    method: 'Bir bloğun duvarda görünen yüz alanı, genişlik × yükseklik (cm cinsinden girilip m²\'ye çevrilerek) ile bulunur. Duvar alanı, girdiğiniz fire payı kadar büyütülür ve bir bloğun yüz alanına bölünüp yukarı yuvarlanarak gereken blok adedi elde edilir. Harç/yapıştırıcı miktarı ise duvar alanının, girdiğiniz kg/m² sarfiyat değeriyle çarpılmasıyla tahmin edilir.',
+    examples: [
+      {
+        title: '30 m² duvar, 60×20 cm gazbeton blok, %5 fire',
+        intro: 'Yapıştırıcı sarfiyatı 5 kg/m² kabul edilmiştir.',
+        rows: [
+          { label: 'Bloğun yüz alanı', value: '0,12 m²' },
+          { label: 'Fire payı dahil alan', value: '31,5 m²' },
+          { label: 'Gereken blok adedi', value: '263 adet' },
+          { label: 'Tahmini yapıştırıcı', value: '150 kg' },
+        ],
+      },
+    ],
+    faq: [
+      { q: 'Gazbeton ile geleneksel tuğla arasındaki hesap farkı nedir?', a: 'Adet hesabı için formül aynıdır (alan ÷ blok yüz alanı); asıl fark harç/yapıştırıcı sarfiyatındadır. Gazbeton ince yatak yapıştırıcısı genellikle 4-6 kg/m² kullanırken, geleneksel harçla örülen tuğla duvarlarda bu değer 20-30 kg/m²\'ye kadar çıkabilir.' },
+      { q: 'Blok ebadını nereden öğrenirim?', a: 'Blok ambalajı veya ürün etiketi üzerinde genellikle "genişlik × yükseklik × derinlik" (ör. 60×20×10 cm) olarak belirtilir; derinlik duvar kalınlığını gösterir, adet hesabında kullanılmaz.' },
+      { q: 'Fire payı olarak %5 yeterli mi?', a: 'Düz duvarlarda %5 genellikle yeterlidir; çok sayıda kapı/pencere boşluğu, köşe veya kesim gerektiren düzensiz bir duvar planında %8-10 seçmeniz daha güvenli olur.' },
+      { q: 'Kapı ve pencere boşluklarını duvar alanından düşmeli miyim?', a: 'Evet, gerçek ihtiyacı bulmak için duvar alanına yalnızca örülecek net alanı (boşluklar düşülmüş) girmeniz gerekir.' },
+      { q: 'Derz/yatay harç miktarı bu hesaba dahil mi?', a: 'Girdiğiniz kg/m² sarfiyat değeri, yatay ve düşey derzler dahil toplam harç/yapıştırıcı tüketimini temsil eder; bu değeri ürün ambalajındaki teknik veriye göre ayarlayabilirsiniz.' },
+      { q: 'Taşıyıcı duvar hesaplarında bu araç yeterli mi?', a: 'Hayır, bu araç yalnızca malzeme miktarı tahmini yapar; taşıyıcı sistem, statik hesap ve donatı gibi mühendislik kararları için mutlaka bir inşaat mühendisine danışmalısınız.' },
+    ],
+  },
+  'beton-sap-hesaplama': {
+    about: 'Beton/şap hesaplama aracı, döşenecek alan ve kalınlığa göre gereken beton/şap hacmini (m³) ve bunun hazır beton mikser karşılığını hesaplar. Hazır beton yerine elle karım yapacaklar için tipik çimento/kum/çakıl/su oranlarını da gösterir.',
+    method: 'Hacim, alan × kalınlık formülüyle bulunur ve girdiğiniz fire payı kadar büyütülür. Bu hacim, mikser kapasitesine bölünerek kaç mikser sipariş etmeniz gerektiği (yukarı yuvarlanarak) hesaplanır. Elle karım seçeneğinde aynı hacim, genel amaçlı C25/30 sınıfı beton için yaygın kabul gören çimento (kg/m³), kum (m³/m³), çakıl (m³/m³) ve su (L/m³) oranlarıyla çarpılarak yaklaşık malzeme miktarları tahmin edilir.',
+    examples: [
+      {
+        title: '50 m² alan, 10 cm kalınlık, %5 fire',
+        rows: [
+          { label: 'Gereken hacim', value: '5,25 m³' },
+          { label: 'Mikser sayısı (6 m³ kapasite)', value: '1 mikser sipariş edin (yaklaşık 0,88 mikser karşılığı)' },
+        ],
+      },
+      {
+        title: 'Elle karım için malzeme (5 m³ üzerinden)',
+        rows: [
+          { label: 'Çimento', value: '1.750 kg (35 torba × 50 kg)' },
+          { label: 'Kum', value: '2,5 m³' },
+          { label: 'Çakıl', value: '4 m³' },
+          { label: 'Su', value: '900 L' },
+        ],
+      },
+    ],
+    faq: [
+      { q: 'Bu araç hem beton hem şap için mi kullanılır?', a: 'Evet, ikisi de aynı formülle (alan × kalınlık) hacim olarak hesaplanır; kalınlık alanına şap için genellikle 3-8 cm, döşeme betonu için 10-20 cm gibi kendi projenize uygun değeri girmeniz yeterlidir.' },
+      { q: 'Neden fire payı ekleniyor?', a: 'Zemindeki kot farkları, taşıma/dökme sırasındaki kayıplar ve kalıp sızıntıları nedeniyle gerçek tüketim hesaplanan net hacimden bir miktar fazla olur; %5 tipik bir başlangıç değeridir.' },
+      { q: 'Mikser kapasitesini neden değiştirebiliyorum?', a: 'Hazır beton mikserleri genellikle 6 m³ taşır, ancak bazı bölgelerde veya dar sokaklarda daha küçük (ör. 4 m³) mikserler kullanılabilir; firmanızın kullandığı kapasiteyi girerek doğru sipariş adedini görebilirsiniz.' },
+      { q: 'Elle karım oranları her beton için geçerli mi?', a: 'Hayır, bu oranlar genel amaçlı C25/30 sınıfı beton için yaygın kullanılan referans değerlerdir; taşıyıcı elemanlar veya farklı dayanım sınıfları için oranlar değişir ve bir mühendisin belirlediği karışım tasarımına uyulmalıdır.' },
+      { q: 'Donatı (demir) miktarı bu hesaba dahil mi?', a: 'Hayır, bu araç yalnızca beton/şap hacmini ve karışım malzemelerini hesaplar; donatı, taşıyıcı sistem gerektiren dökümlerde ayrı bir statik hesapla belirlenmelidir.' },
+      { q: 'Zemin ısıtmalı (yerden ısıtma) şap için farklı bir hesap mı gerekir?', a: 'Hacim hesabı aynıdır; ancak yerden ısıtmalı sistemlerde şap kalınlığı genellikle biraz daha fazla tutulur (boru üstü payı dahil), bu değeri kalınlık alanına siz girmelisiniz.' },
+      { q: 'Kaç torba çimento gerektiği nasıl bulunuyor?', a: 'Toplam çimento miktarı (kg), standart 50 kg\'lık torba ağırlığına bölünüp yukarı yuvarlanarak torba sayısına çevrilir.' },
+    ],
+  },
+  'parke-laminat-hesaplama': {
+    about: 'Parke/laminat hesaplama aracı, döşeyeceğiniz alana, seçtiğiniz ürünün paket kapsamına (m²/paket) ve fire payına göre gereken paket sayısını hesaplar; ayrıca oda çevrenizden süpürgelik metrenizi hesaplamanıza yardımcı olur.',
+    method: 'Alan, girdiğiniz fire payı kadar büyütülür ve paket kapsamına (m²/paket) bölünüp yukarı yuvarlanarak gereken paket sayısı bulunur; böylece açık paket almadan alanınızın tamamı kaplanabilir. Süpürgelik metresi, girdiğiniz oda çevresinden doğrudan alınır.',
+    examples: [
+      {
+        title: '20 m² alan, 2,2 m²/paket kapsam, %10 fire',
+        rows: [
+          { label: 'Fire payı dahil alan', value: '22 m²' },
+          { label: 'Gereken paket sayısı', value: '10 paket' },
+        ],
+      },
+      {
+        title: 'Balıksırtı döşeme, aynı alan (%15 fire)',
+        intro: 'Balıksırtı veya çapraz döşemede kesim kaybı arttığından fire payı yükseltilmelidir.',
+        rows: [
+          { label: 'Fire payı dahil alan', value: '23 m²' },
+          { label: 'Gereken paket sayısı', value: '11 paket' },
+        ],
+      },
+    ],
+    faq: [
+      { q: 'Paket kapsamını (m²/paket) nereden bulurum?', a: 'Bu değer genellikle paket üzerinde veya ürünün satış sayfasında belirtilir; parke/laminat tahtalarının tek tek m² ölçüsü ile paketteki tahta sayısının çarpımıdır.' },
+      { q: 'Fire payı olarak %10 her zaman yeterli mi?', a: 'Düz (paralel) döşemede genellikle yeterlidir; balıksırtı, çapraz veya dar/düzensiz odalarda kesim kaybı arttığından %15 veya üzeri seçmeniz önerilir.' },
+      { q: 'Süpürgelik metresini nasıl hesaplarım?', a: 'Oda çevresi, 2 × (uzunluk + genişlik) formülüyle bulunur. Kapı boşluklarında süpürgelik kullanılmayacaksa bu boşlukların genişliğini toplam çevreden çıkarabilirsiniz.' },
+      { q: 'Zıvana/klik sistem farkı hesaplamayı etkiler mi?', a: 'Hayır, bu araç yalnızca alan bazlı paket sayısını hesaplar; döşeme sistemi (klik, yapıştırma vb.) paket sayısını değiştirmez.' },
+      { q: 'Ara altlık (şilte) malzemesi bu hesaba dahil mi?', a: 'Hayır, ara altlık ayrı bir üründür ve genellikle rulo halinde m² üzerinden satılır; toplam alanınızı (fire payı eklemeden) altlık hesabında da kullanabilirsiniz.' },
+      { q: 'Kapalı balkon veya nem oranı yüksek alanlarda bu araç kullanılabilir mi?', a: 'Hesap mantığı aynıdır, ancak bu tür alanlarda laminat yerine nem dayanımlı ürünler tercih edilmesi önerilir; bu tercih paket kapsamını değil yalnızca ürün seçiminizi etkiler.' },
+    ],
+  },
+  'banyo-tadilat-butcesi-hesaplama': {
+    about: 'Banyo tadilat bütçesi hesaplama aracı, yıkım, tesisat, elektrik, seramik, vitrifiye, duşakabin, mobilya ve boya gibi tipik banyo tadilat kalemlerini tek tek açıp kapatmanıza ve her kalem için kendi teklif tutarınızı girmenize olanak tanır; toplam bütçenizi ve kalemlerin bütçe içindeki payını gösterir.',
+    method: 'İhtiyacınız olmayan kalemleri kapatabilirsiniz; kapalı kalemler toplama dahil edilmez. Açık kalemlerin girdiğiniz tutarları toplanarak genel bütçe bulunur; her kalemin toplam içindeki oranı da (kalem tutarı ÷ toplam × 100) ayrı ayrı gösterilir. Bu araçta hiçbir kalem için önerilen bir fiyat yoktur; tüm tutarları siz, aldığınız tekliflere göre girersiniz.',
+    faq: [
+      { q: 'Varsayılan tutarlar bir fiyat önerisi mi?', a: 'Hayır, alanlarda görünen değerler yalnızca örnek/başlangıç değerleridir; bölgeye, malzeme kalitesine ve ustaya göre gerçek fiyatlar çok değişir. Bu tutarları mutlaka aldığınız gerçek tekliflerle değiştirin.' },
+      { q: 'Bir kalemi kapatırsam ne olur?', a: 'Kapalı kalemin tutarı toplam bütçeye ve oran grafiğine dahil edilmez; örneğin mevcut mobilyanızı kullanmaya devam edecekseniz "Banyo mobilyası" kalemini kapatabilirsiniz.' },
+      { q: 'Malzeme ve işçiliği ayrı kalemler olarak girebilir miyim?', a: 'Bu araçtaki kalemler malzeme+işçiliği birlikte temsil eder; isterseniz bir kalemin tutarına yalnızca malzeme, ayrı bir hesaplamada yalnızca işçilik tutarını girip iki sonucu kendiniz toplayabilirsiniz.' },
+      { q: 'Hangi sırayla tadilat yaptırmalıyım?', a: 'Genel olarak yıkım/moloz atımı → su/elektrik tesisatı → seramik → vitrifiye/duşakabin → mobilya → boya sırası izlenir; tesisat işleri seramik döşenmeden önce tamamlanmalıdır.' },
+      { q: 'Birden fazla firmadan teklif almalı mıyım?', a: 'Evet, özellikle seramik+işçilik ve vitrifiye gibi büyük kalemlerde en az 2-3 farklı teklif karşılaştırmanız, gerçekçi bir bütçe oluşturmanıza yardımcı olur.' },
+      { q: 'Sonuçları paylaşabilir miyim?', a: 'Evet, sayfanın adres çubuğundaki bağlantı girdiğiniz tüm kalem ve tutarları içerir; bu bağlantıyı kopyalayıp ustanızla veya aile üyelerinizle paylaşabilirsiniz.' },
+      { q: 'Küçük bir banyo yenilemesi (yalnızca boya+armatür) için de kullanılabilir mi?', a: 'Evet, kapsamınız dışındaki tüm kalemleri kapatıp yalnızca ilgili kalemleri (ör. boya, vitrifiye) açık bırakarak daha dar kapsamlı bir bütçe de oluşturabilirsiniz.' },
+    ],
+  },
+  'mutfak-tadilat-butcesi-hesaplama': {
+    about: 'Mutfak tadilat bütçesi hesaplama aracı, dolap/tezgah, ankastre setler, tesisat, fayans, elektrik, boya ve işçilik gibi tipik mutfak tadilat kalemlerini tek tek açıp kapatmanıza ve her kalem için kendi teklif tutarınızı girmenize olanak tanır; toplam bütçenizi ve kalemlerin bütçe içindeki payını gösterir.',
+    method: 'İhtiyacınız olmayan kalemleri kapatabilirsiniz; kapalı kalemler toplama dahil edilmez. Açık kalemlerin girdiğiniz tutarları toplanarak genel bütçe bulunur; her kalemin toplam içindeki oranı da (kalem tutarı ÷ toplam × 100) ayrı ayrı gösterilir. Bu araçta hiçbir kalem için önerilen bir fiyat yoktur; tüm tutarları siz, aldığınız tekliflere göre girersiniz.',
+    faq: [
+      { q: 'Varsayılan tutarlar bir fiyat önerisi mi?', a: 'Hayır, alanlarda görünen değerler yalnızca örnek/başlangıç değerleridir; mutfak dolabı özellikle malzeme (MDF, lake, masif vb.) ve metraja göre çok değişir. Bu tutarları mutlaka aldığınız gerçek tekliflerle değiştirin.' },
+      { q: 'Ankastre cihazları neden ayrı bir kalem?', a: 'Fırın, ocak ve davlumbaz gibi ankastre setler genellikle dolap üreticisinden bağımsız, ayrı marka ve fiyat aralıklarından satın alınır; bu yüzden ayrı bir bütçe kalemi olarak modellenmiştir.' },
+      { q: 'Mevcut dolaplarımı yeniletmek (kapak değişimi) için bu araç uygun mu?', a: 'Evet, "Mutfak dolabı ve tezgah" kalemine yalnızca kapak/tezgah yenileme teklifini girip diğer kalemleri ihtiyacınıza göre kapatarak kullanabilirsiniz.' },
+      { q: 'Hangi sırayla tadilat yaptırmalıyım?', a: 'Genel olarak su/elektrik altyapısı → fayans → dolap/tezgah montajı → ankastre cihazların yerleştirilmesi → boya sırası izlenir.' },
+      { q: 'Beyaz eşya (buzdolabı, bulaşık makinesi) bu bütçeye dahil mi?', a: 'Hayır, ankastre olmayan bağımsız beyaz eşyalar bu listede yer almaz; isterseniz benzer mantıkla kendi ek kalemlerinizi zihninizde toplayıp genel bütçenize ekleyebilirsiniz.' },
+      { q: 'Birden fazla firmadan teklif almalı mıyım?', a: 'Evet, özellikle dolap/tezgah ve ankastre setler gibi büyük kalemlerde birden fazla teklif karşılaştırmanız önemli bir tasarruf sağlayabilir.' },
+    ],
+  },
+  'cati-hesaplama': {
+    about: 'Çatı hesaplama aracı, çatı taban (plan) ölçülerinize ve çatı eğiminize göre gerçek çatı yüzey alanını hesaplar; bu alandan yola çıkarak yaklaşık kiremit/panel adedini ve membran/OSB levha ihtiyacınızı tahmin eder.',
+    method: 'Taban (plan) alanı, uzunluk × genişlik ile bulunur. Eğimli bir çatının gerçek yüzey alanı, taban alanının eğim açısının kosinüsüne bölünmesiyle hesaplanır (alan ÷ cos(açı)); açı arttıkça gerçek alan taban alanından belirgin şekilde büyür. Bu alana fire payı eklenip kiremit yoğunluğuyla (adet/m²) çarpılarak yaklaşık kiremit adedi, standart 122×244 cm OSB levha alanına bölünerek de levha sayısı tahmin edilir.',
+    examples: [
+      {
+        title: '10m × 8m taban, 30° eğim, %10 fire',
+        rows: [
+          { label: 'Taban alanı', value: '80 m²' },
+          { label: 'Gerçek çatı alanı', value: '92,38 m²' },
+          { label: 'Fire payı dahil alan', value: '101,61 m²' },
+          { label: 'Tahmini kiremit adedi (10 adet/m²)', value: '1.017 adet' },
+        ],
+      },
+    ],
+    faq: [
+      { q: 'Çatı eğimini nereden öğrenirim?', a: 'Eğim, mimari projenizde derece veya yüzde olarak belirtilir; yüzde cinsinden biliyorsanız yaklaşık derece karşılığı, açı = arctan(eğim%/100) formülüyle bulunabilir (ör. %50 eğim ≈ 27 derece).' },
+      { q: 'Gerçek çatı alanı neden taban alanından büyük çıkıyor?', a: 'Eğimli bir yüzeyin gerçek alanı, aynı ölçüdeki düz (yatay) tabandan her zaman büyüktür; eğim arttıkça bu fark da büyür. Bu araç, taban alanınızı eğim açısına göre düzelterek gerçek yüzey alanını hesaplar.' },
+      { q: 'Kiremit yoğunluğu (adet/m²) neden değişir?', a: 'Bu değer kiremit tipine (Marsilya, alaturka, düz vb.) ve ebadına göre değişir; ürününüzün ambalajında veya teknik föyünde belirtilen "adet/m²" değerini girerek daha doğru bir sonuç alabilirsiniz.' },
+      { q: 'Saçak ve mahya bu hesaba dahil mi?', a: 'Hayır, bu araç yalnızca ana çatı yüzeyini hesaplar; saçak çıkıntıları, mahya kiremidi ve dere (valley) gibi ek malzemeler ayrıca hesaplanmalıdır.' },
+      { q: 'Kırma (dört yüzeyli) çatılarda bu araç nasıl kullanılır?', a: 'Bu araç tek bir eğim ve tek bir taban alanı üzerinden basitleştirilmiş bir hesap yapar; karmaşık kırma çatılarda her yüzeyi ayrı ayrı hesaplayıp toplamanız daha doğru sonuç verir.' },
+      { q: 'Membran/su yalıtım örtüsü miktarı OSB ile aynı mı hesaplanır?', a: 'Bu araçtaki levha sayısı OSB\'ye göredir; rulo halinde satılan membranlar için gerçek alanı (areaWithWaste), rulonun kapladığı m² değerine bölerek gereken rulo sayısını kendiniz hesaplayabilirsiniz.' },
+      { q: 'Güneş paneli (GES) kurulumu için çatı alanı hesabında bu araç kullanılabilir mi?', a: 'Gerçek çatı alanı hesaplaması aynı mantıkla kullanılabilir, ancak panel yerleşimi gölgelenme, yönelim ve montaj boşlukları gibi ek faktörlere bağlıdır; kesin panel sayısı için bir GES firmasına danışmanız önerilir.' },
+    ],
+  },
+  'ev-yapim-maliyeti-planlayici': {
+    about: 'Ev yapım maliyeti planlayıcı, temel/hafriyat, kaba yapı, çatı, tesisat, elektrik, sıva/boya, zemin, doğrama ve dış cephe gibi sıfırdan ev yapımının tipik aşamalarını tek tek açıp kapatmanıza ve her aşama için kendi tahmini/teklif tutarınızı girmenize olanak tanır; özellikle köyde veya müstakil arsada ev yaptırmayı planlayanlar için tasarlanmıştır.',
+    method: 'İhtiyacınız olmayan aşamaları kapatabilirsiniz (örneğin hazır bir temeliniz varsa "Hafriyat ve temel"i kapatabilirsiniz); kapalı kalemler toplama dahil edilmez. Açık kalemlerin girdiğiniz tutarları toplanarak toplam tahmini yapım maliyeti bulunur; her kalemin toplam içindeki oranı da ayrı ayrı gösterilir. Bu araçta hiçbir kalem için önerilen bir fiyat yoktur; tüm tutarları siz, bölgenizdeki müteahhit/ustalardan aldığınız tekliflere göre girersiniz.',
+    faq: [
+      { q: 'Köyde ev yapmak şehirde yapmaktan farklı mı bütçelenir?', a: 'Aşamalar aynıdır, ancak köyde/arsada altyapı (yol, su, elektrik bağlantısı) hazır olmayabilir; bu durumda dış cephe ve temel kalemlerinize ek olarak altyapı bağlantı maliyetlerini de ayrı bir kalem olarak bütçenize eklemeniz gerekebilir.' },
+      { q: 'Varsayılan tutarlar bir maliyet tahmini/önerisi mi?', a: 'Hayır, alanlarda görünen değerler yalnızca örnek/başlangıç değerleridir; arsa büyüklüğü, ev metrekaresi, malzeme kalitesi ve bölgeye göre gerçek maliyetler çok değişir. Bu tutarları mutlaka aldığınız gerçek tekliflerle değiştirin.' },
+      { q: 'Hangi sırayla ilerlemeliyim?', a: 'Genel olarak temel → kaba yapı (duvar/karkas) → çatı → tesisat/elektrik altyapısı → sıva/boya → zemin kaplaması → doğrama sırası izlenir; dış cephe genellikle kaba yapı bittikten sonra planlanır.' },
+      { q: 'Diğer inşaat hesaplayıcılarını (boya, fayans, beton...) bu araçla birlikte kullanabilir miyim?', a: 'Evet, örneğin "Beton/Şap Hesaplama" ile temel/döşeme betonu hacmini, "Çatı Hesaplama" ile kiremit ihtiyacını ayrı ayrı hesaplayıp buradaki ilgili kaleme tahmini tutar olarak girebilirsiniz.' },
+      { q: 'Arsa alım maliyeti bu bütçeye dahil mi?', a: 'Hayır, bu araç yalnızca yapım (inşaat) maliyetini kapsar; arsa bedeli, tapu harcı gibi kalemler dahil değildir.' },
+      { q: 'Mimari proje ve ruhsat masrafları nereye eklenir?', a: 'Bu araçta ayrı bir kalem olarak yer almaz; isterseniz bu masrafları mevcut kalemlerden birine (ör. "Hafriyat ve temel") dahil ederek veya toplam sonucu elle bu tutar kadar artırarak dikkate alabilirsiniz.' },
+      { q: 'Birden fazla müteahhitten teklif almalı mıyım?', a: 'Evet, özellikle kaba yapı ve çatı gibi büyük kalemlerde birden fazla müteahhit/ustadan teklif almanız, gerçekçi bir toplam bütçe oluşturmanıza yardımcı olur.' },
+    ],
+  },
 };
 
 export function getCalculatorContent(id) {

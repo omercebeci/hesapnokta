@@ -9,6 +9,7 @@ import {
   CreditCard, ArrowUpRight, TrendingDown, Users, GitCompare, Zap, Car,
   Tags, Paintbrush, BedDouble, Coffee, Footprints, GraduationCap, ClipboardCheck,
   BookOpen,
+  Hammer, PaintRoller, Grid3x3, Blocks, Truck, Layers, Bath, CookingPot, Triangle, HardHat,
 } from 'lucide-react';
 
 const ICONS = {
@@ -70,6 +71,16 @@ const ICONS = {
   'graduation-cap': GraduationCap,
   'clipboard-check': ClipboardCheck,
   'book-open': BookOpen,
+  hammer: Hammer,
+  'paint-roller': PaintRoller,
+  'grid-3x3': Grid3x3,
+  blocks: Blocks,
+  truck: Truck,
+  layers: Layers,
+  bath: Bath,
+  'cooking-pot': CookingPot,
+  triangle: Triangle,
+  'hard-hat': HardHat,
 };
 
 export default function Icon({ name, size = 20, strokeWidth = 1.75, className, ...rest }) {
