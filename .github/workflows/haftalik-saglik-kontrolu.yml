@@ -18,12 +18,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Kodu al
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Node.js kur
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
 
       - name: Bağımlılıkları yükle
@@ -127,17 +127,31 @@ jobs:
 
           TITLE="🔎 Haftalık sağlık kontrolü: ${PROBLEM_COUNT} sorun bulundu"
 
-          gh label create "saglik-kontrolu" --color "d73a4a" --description "Haftalık otomatik sağlık kontrolü" >/dev/null 2>&1 || true
+          # Etiket muhtemelen zaten var (rutin durum); yine de gerçek bir izin
+          # hatası olursa görünür olsun diye çıktısını bastırmıyoruz.
+          LABEL_OUTPUT=$(gh label create "saglik-kontrolu" --color "d73a4a" --description "Haftalık otomatik sağlık kontrolü" 2>&1)
+          LABEL_STATUS=$?
+          if [ "$LABEL_STATUS" -ne 0 ]; then
+            echo "Not: etiket oluşturulamadı (muhtemelen zaten var): $LABEL_OUTPUT"
+          fi
 
-          EXISTING=$(gh issue list --label "saglik-kontrolu" --state open --json number --jq '.[0].number' 2>/dev/null)
+          EXISTING=$(gh issue list --label "saglik-kontrolu" --state open --json number --jq '.[0].number')
+          LIST_STATUS=$?
+          if [ "$LIST_STATUS" -ne 0 ]; then
+            echo "⚠️ gh issue list başarısız oldu (çıkış kodu $LIST_STATUS) — GITHUB_TOKEN'ın 'issues: write' iznini ve repo/organizasyon Actions izin ayarlarını kontrol edin."
+          fi
 
           if [ -n "$EXISTING" ] && [ "$EXISTING" != "null" ]; then
-            gh issue comment "$EXISTING" --body-file "$BODY_FILE"
-            gh issue edit "$EXISTING" --title "$TITLE"
-            echo "Mevcut açık issue #$EXISTING güncellendi."
+            gh issue comment "$EXISTING" --body-file "$BODY_FILE" \
+              && echo "✅ Mevcut açık issue #$EXISTING'e yorum eklendi." \
+              || echo "❌ Issue #$EXISTING'e yorum eklenemedi (izin sorunu olabilir)."
+            gh issue edit "$EXISTING" --title "$TITLE" \
+              && echo "✅ Issue #$EXISTING başlığı güncellendi." \
+              || echo "❌ Issue #$EXISTING başlığı güncellenemedi."
           else
-            gh issue create --title "$TITLE" --label "saglik-kontrolu" --body-file "$BODY_FILE"
-            echo "Yeni issue açıldı."
+            gh issue create --title "$TITLE" --label "saglik-kontrolu" --body-file "$BODY_FILE" \
+              && echo "✅ Yeni issue açıldı." \
+              || echo "❌ Issue açılamadı — GITHUB_TOKEN'ın 'issues: write' iznini ve repo Settings > Actions > General > Workflow permissions ayarını kontrol edin."
           fi
 
           echo "$PROBLEM_COUNT sorun bulundu."

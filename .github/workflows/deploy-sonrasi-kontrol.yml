@@ -69,18 +69,28 @@ jobs:
             echo '```'
           } > "$BODY_FILE"
 
-          gh label create "deploy-kontrolu" --color "b60205" --description "Deploy sonrası duman testi" >/dev/null 2>&1 || true
+          LABEL_OUTPUT=$(gh label create "deploy-kontrolu" --color "b60205" --description "Deploy sonrası duman testi" 2>&1)
+          LABEL_STATUS=$?
+          if [ "$LABEL_STATUS" -ne 0 ]; then
+            echo "Not: etiket oluşturulamadı (muhtemelen zaten var): $LABEL_OUTPUT"
+          fi
 
-          EXISTING=$(gh issue list --label "deploy-kontrolu" --state open --json number --jq '.[0].number' 2>/dev/null)
+          EXISTING=$(gh issue list --label "deploy-kontrolu" --state open --json number --jq '.[0].number')
+          LIST_STATUS=$?
+          if [ "$LIST_STATUS" -ne 0 ]; then
+            echo "⚠️ gh issue list başarısız oldu (çıkış kodu $LIST_STATUS) — GITHUB_TOKEN'ın 'issues: write' iznini kontrol edin."
+          fi
 
           TITLE="🚨 Deploy sonrası kontrol başarısız"
 
           if [ -n "$EXISTING" ] && [ "$EXISTING" != "null" ]; then
-            gh issue comment "$EXISTING" --body-file "$BODY_FILE"
-            echo "Mevcut açık issue #$EXISTING güncellendi."
+            gh issue comment "$EXISTING" --body-file "$BODY_FILE" \
+              && echo "✅ Mevcut açık issue #$EXISTING'e yorum eklendi." \
+              || echo "❌ Issue #$EXISTING'e yorum eklenemedi (izin sorunu olabilir)."
           else
-            gh issue create --title "$TITLE" --label "deploy-kontrolu" --body-file "$BODY_FILE"
-            echo "Yeni issue açıldı."
+            gh issue create --title "$TITLE" --label "deploy-kontrolu" --body-file "$BODY_FILE" \
+              && echo "✅ Yeni issue açıldı." \
+              || echo "❌ Issue açılamadı — GITHUB_TOKEN'ın 'issues: write' iznini ve repo Settings > Actions > General > Workflow permissions ayarını kontrol edin."
           fi
 
       - name: Sonucu işaretle
