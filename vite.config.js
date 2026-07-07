@@ -2,10 +2,11 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 
-export default defineConfig({
+export default defineConfig(({ isSsrBuild }) => ({
   plugins: [
     react(),
-    VitePWA({
+    // PWA eklentisi bir index.html/istemci paketi üretir; SSR (prerender) derlemesinde atlanır.
+    !isSsrBuild && VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'icons/icon-192.svg', 'icons/icon-512.svg'],
       manifest: {
@@ -41,9 +42,9 @@ export default defineConfig({
         ],
       },
     }),
-  ],
+  ].filter(Boolean),
   server: {
     host: '0.0.0.0',
     allowedHosts: true,
   },
-});
+}));

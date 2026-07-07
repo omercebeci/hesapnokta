@@ -8,6 +8,7 @@ import {
   Calculator, Shuffle, RefreshCw, Clock, Hourglass,
   CreditCard, ArrowUpRight, TrendingDown, Users, GitCompare, Zap, Car,
   Tags, Paintbrush, BedDouble, Coffee, Footprints, GraduationCap, ClipboardCheck,
+  BookOpen,
 } from 'lucide-react';
 
 const ICONS = {
@@ -68,6 +69,7 @@ const ICONS = {
   footprints: Footprints,
   'graduation-cap': GraduationCap,
   'clipboard-check': ClipboardCheck,
+  'book-open': BookOpen,
 };
 
 export default function Icon({ name, size = 20, strokeWidth = 1.75, className, ...rest }) {

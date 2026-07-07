@@ -1,15 +1,21 @@
 import React, { useMemo, useState } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
+import DataPeriodNote from '../../../components/DataPeriodNote.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculateCreditCardPayment } from '../../../lib/finansCalculators.js';
-import { formatCurrency, formatInteger, parseLocaleNumber } from '../../../utils/format.js';
+import { formatCurrency, formatInteger, formatNumber, parseLocaleNumber } from '../../../utils/format.js';
+import { GUNCEL_VERILER } from '../../../data/guncelVeriler.js';
+
+const FAIZ_ORANLARI = GUNCEL_VERILER.krediKartiFaizOranlari;
+const ASGARI_ODEME = GUNCEL_VERILER.krediKartiAsgariOdeme;
+const EN_DUSUK_DILIM = FAIZ_ORANLARI.value[0];
 
 export default function KrediKartiAsgariOdemeHesaplama() {
   const [cardLimit, setCardLimit] = useState('30000');
   const [statementBalance, setStatementBalance] = useState('10000');
-  const [monthlyInterestRate, setMonthlyInterestRate] = useState('3,25');
-  const [lateInterestRate, setLateInterestRate] = useState('3,55');
+  const [monthlyInterestRate, setMonthlyInterestRate] = useState(String(EN_DUSUK_DILIM.akdiFaiz * 100));
+  const [lateInterestRate, setLateInterestRate] = useState(String(EN_DUSUK_DILIM.gecikmeFaizi * 100));
   const [daysLate, setDaysLate] = useState('0');
 
   const { result, error } = useMemo(() => {
@@ -30,8 +36,8 @@ export default function KrediKartiAsgariOdemeHesaplama() {
       result: calculateCreditCardPayment({
         cardLimit: parsedLimit,
         statementBalance: parsedBalance,
-        monthlyInterestRate: Number.isFinite(parsedMonthlyRate) ? parsedMonthlyRate : 3.25,
-        lateInterestRate: Number.isFinite(parsedLateRate) ? parsedLateRate : 3.55,
+        monthlyInterestRate: Number.isFinite(parsedMonthlyRate) ? parsedMonthlyRate : EN_DUSUK_DILIM.akdiFaiz * 100,
+        lateInterestRate: Number.isFinite(parsedLateRate) ? parsedLateRate : EN_DUSUK_DILIM.gecikmeFaizi * 100,
         daysLate: Number.isFinite(parsedDaysLate) ? parsedDaysLate : 0,
       }),
       error: null,
@@ -78,6 +84,7 @@ export default function KrediKartiAsgariOdemeHesaplama() {
               { label: 'Sonraki dönem toplam borç', value: formatCurrency(result.totalNextCycleDebt) },
             ]}
           />
+          <DataPeriodNote period={FAIZ_ORANLARI.period} lastUpdated={FAIZ_ORANLARI.lastUpdated} />
           <p className="rate-disclaimer">⚠️ Akdi/gecikme faizi oranları TCMB tarafından belirlenen azami oranlardır ve bankanız daha düşük uygulayabilir; oranlar değişmiş olabilir, güncel değerleri kart ekstrenizden kontrol edin.</p>
         </div>
       )}
@@ -85,7 +92,7 @@ export default function KrediKartiAsgariOdemeHesaplama() {
       <div className="info-card">
         <h2>Nasıl yorumlanır?</h2>
         <ul>
-          <li>Asgari ödeme oranı, 2026 BDDK düzenlemesine göre kart limiti 50.000 TL ve altında %20, üzerinde %40'tır.</li>
+          <li>Asgari ödeme oranı, {ASGARI_ODEME.period} BDDK düzenlemesine göre kart limiti {formatNumber(ASGARI_ODEME.esikTutar, { decimals: 0 })} TL ve altında %{formatNumber(ASGARI_ODEME.esikAltiOran * 100, { decimals: 0 })}, üzerinde %{formatNumber(ASGARI_ODEME.esikUstuOran * 100, { decimals: 0 })}'tir.</li>
           <li>Sadece asgari ödeme yapıp kalan bakiyeyi ödemezseniz, kalan tutara akdi faiz işlemeye devam eder.</li>
           <li>Ödemeyi geciktirirseniz, dönem borcunun tamamı üzerinden ayrıca gecikme (temerrüt) faizi hesaplanır.</li>
         </ul>

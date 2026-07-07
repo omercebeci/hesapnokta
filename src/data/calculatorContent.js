@@ -6,19 +6,70 @@ export const calculatorContent = {
   'kredi-hesaplama': {
     about: 'Kredi hesaplama aracı, banka veya finans kuruluşundan çekmeyi düşündüğünüz bir kredinin aylık taksitini ve toplam maliyetini önceden görmenizi sağlar. Farklı vade ve faiz senaryolarını deneyerek bütçenize en uygun seçeneği bulabilirsiniz.',
     method: 'Hesaplama, sabit taksitli anüite yöntemini kullanır: her ay aynı tutarda ödeme yapılır, ancak ödemenin faiz ve anapara payı zamanla değişir. Faiz üzerinden alınan BSMV ve KKDF gibi yasal kesintiler de aylık taksite dahil edilir.',
+    examples: [
+      {
+        title: '100.000 TL, 12 ay vade, %2,5 aylık faiz',
+        rows: [
+          { label: 'Aylık taksit', value: '10.196,72 TL' },
+          { label: 'Toplam ödeme', value: '122.360,63 TL' },
+          { label: 'Toplam faiz + BSMV/KKDF', value: '22.360,63 TL' },
+        ],
+      },
+      {
+        title: '500.000 TL, 60 ay vade, %2 aylık faiz',
+        rows: [
+          { label: 'Aylık taksit', value: '16.547,17 TL' },
+          { label: 'Toplam ödeme', value: '992.830,25 TL' },
+          { label: 'Toplam faiz + BSMV/KKDF', value: '492.830,25 TL' },
+        ],
+      },
+    ],
     faq: [
       { q: 'Taksit tutarı neden banka teklifinden farklı çıkabilir?', a: 'Bankalar dosya masrafı, hayat sigortası gibi ek kalemler uygulayabilir; bu araç yalnızca anapara, faiz ve yasal kesintileri (BSMV/KKDF) esas alır.' },
       { q: 'BSMV ve KKDF nedir?', a: 'İkisi de kredinin faiz tutarı üzerinden hesaplanan ve bankaların tahsil edip devlete aktardığı yasal kesintilerdir.' },
       { q: 'Erken kapatma bu hesaba dahil mi?', a: 'Hayır, bu araç kredinin tüm vade boyunca düzenli ödenmesini varsayar; erken kapatmada kalan faiz farklı hesaplanır.' },
+      { q: 'Vade uzadıkça toplam faiz neden bu kadar artıyor?', a: 'Vade uzadıkça anapara daha yavaş kapandığı için her ay faiz işleyen bakiye daha uzun süre yüksek kalır; aylık taksit düşse de toplamda ödenen faiz belirgin şekilde artar.' },
+      { q: 'Faiz oranını yıllık olarak biliyorsam ne yapmalıyım?', a: 'Yıllık oranı 12\'ye bölerek yaklaşık aylık oranı bulabilirsiniz; ancak bankalar genellikle aylık oranı doğrudan ilan eder, kampanya sayfasındaki "aylık" ibaresini kontrol edin.' },
+      { q: 'Değişken faizli krediler için bu araç uygun mu?', a: 'Hayır, bu araç sabit faizli krediler için tasarlanmıştır; değişken faizde taksitler dönem dönem güncellenir ve bu hesaplamadan sapabilir.' },
+      { q: 'Taksit sayısını değiştirince taksit tutarı neden orantısız değişiyor?', a: 'Anüite formülü doğrusal değildir; vade uzadıkça taksit azalır ama toplam faiz artar, bu yüzden ilişki basit bir bölme gibi çalışmaz.' },
+      { q: 'Kredi notu (findeks) bu hesaba dahil mi?', a: 'Hayır, bu araç yalnızca girdiğiniz tutar, vade ve faiz oranına göre hesaplama yapar; bankanın size sunacağı gerçek oran kredi notunuza göre değişebilir.' },
     ],
   },
   'kdv-hesaplama': {
     about: 'KDV hesaplama aracı, bir tutara katma değer vergisi eklemek ya da KDV dahil bir tutarın içinden vergiyi ayrıştırmak için kullanılır. Fatura kontrolü, fiyatlandırma veya alışveriş öncesi hızlı hesap yapmak isteyenler için pratik bir çözümdür.',
     method: '"KDV hariç" modunda girilen tutara, seçtiğiniz oranda vergi eklenir (tutar × oran). "KDV dahil" modunda ise toplam tutarın içinden matrah, tutar ÷ (1 + oran) formülüyle geri hesaplanır ve aradaki fark KDV tutarını verir.',
+    examples: [
+      {
+        title: 'KDV hariç 1.000 TL, genel oran %20',
+        rows: [
+          { label: 'KDV tutarı', value: '200 TL' },
+          { label: 'KDV dahil toplam', value: '1.200 TL' },
+        ],
+      },
+      {
+        title: 'KDV dahil 1.200 TL, genel oran %20',
+        rows: [
+          { label: 'KDV hariç tutar (matrah)', value: '1.000 TL' },
+          { label: 'KDV tutarı', value: '200 TL' },
+        ],
+      },
+      {
+        title: 'Temel gıda ürünü, KDV hariç 500 TL, indirimli oran %1',
+        rows: [
+          { label: 'KDV tutarı', value: '5 TL' },
+          { label: 'KDV dahil toplam', value: '505 TL' },
+        ],
+      },
+    ],
     faq: [
       { q: 'Türkiye\'de yaygın KDV oranları nelerdir?', a: 'Genel oran %20\'dir; bazı temel gıda ve hizmetlerde indirimli oranlar (%1, %10) uygulanabilir. Aracın varsayılan oranını ürününüze göre değiştirebilirsiniz.' },
       { q: 'KDV dahil ve KDV hariç fiyat arasındaki fark nedir?', a: 'KDV hariç fiyat, verginin eklenmediği net tutardır; KDV dahil fiyat ise vergiyle birlikte müşteriden tahsil edilen toplam tutardır.' },
       { q: 'Bu araç resmi fatura kesmek için kullanılabilir mi?', a: 'Hayır, yalnızca hızlı bir ön hesaplama sunar; resmi belgeler için muhasebe/e-fatura sisteminizin hesaplamaları esas alınmalıdır.' },
+      { q: '1000 TL\'ye KDV eklersem ne kadar tutar?', a: '%20 genel oranla 1.000 TL\'ye 200 TL KDV eklenir, KDV dahil toplam 1.200 TL olur; farklı bir oran uyguluyorsanız aracın oran alanını değiştirmeniz yeterlidir.' },
+      { q: 'KDV dahil fiyattan matrahı bulmak için tutarı neden 1,20\'ye bölüyoruz?', a: '%20 oranında, KDV dahil tutar matrahın 1,20 katıdır (matrah + matrahın %20\'si); bu yüzden matrahı bulmak için KDV dahil tutar 1,20\'ye bölünür, %20 ile çarpılmaz.' },
+      { q: 'e-Fatura ve e-Arşiv fatura kesimlerinde bu araç kullanılabilir mi?', a: 'Bu araç yalnızca hızlı bir ön hesaplama sunar; resmi fatura kesiminde kullandığınız muhasebe/e-fatura yazılımının hesapladığı tutarlar esas alınmalıdır.' },
+      { q: 'Farklı KDV oranlarına tabi ürünleri aynı fişte nasıl hesaplarım?', a: 'Her ürün grubunu (ör. %1, %10, %20) ayrı ayrı bu araca girip sonuçları toplamanız gerekir; tek bir işlemde karışık oranlar hesaplanamaz.' },
+      { q: 'Hizmet faturalarında (kira, danışmanlık vb.) KDV oranı farklı mı?', a: 'Çoğu hizmette genel oran %20 uygulanır, ancak konut kirası gibi bazı işlemler KDV\'den istisna olabilir; işleminize özgü oranı vergi dairesi veya mali müşavirinizden teyit etmeniz önerilir.' },
     ],
   },
   'indirim-hesaplama': {
@@ -60,10 +111,46 @@ export const calculatorContent = {
   'kira-artis-hesaplama': {
     about: 'Kira artışı hesaplama aracı, ev sahibi veya kiracıların yasal üst sınırı da göz önünde bulundurarak yeni kira tutarını hesaplamasına yardımcı olur.',
     method: 'İstenen artış oranı ile yasal üst sınır karşılaştırılır ve ikisinin küçük olanı uygulanır. Yeni kira, mevcut kiranın bu oranla çarpılıp eklenmesiyle bulunur; aylık ve yıllık fark ayrıca gösterilir.',
+    examples: [
+      {
+        title: 'Mevcut kira 10.000 TL, istenen artış %40, yasal tavan %32,03 (Temmuz 2026)',
+        intro: 'İstenen oran tavanın üzerinde olduğu için tavan uygulanır.',
+        rows: [
+          { label: 'Uygulanan oran', value: '%32,03' },
+          { label: 'Yeni kira', value: '13.203 TL' },
+          { label: 'Aylık fark', value: '+3.203 TL' },
+          { label: 'Yıllık fark', value: '+38.436 TL' },
+        ],
+      },
+      {
+        title: 'Mevcut kira 20.000 TL, istenen artış %25 (tavanın altında)',
+        rows: [
+          { label: 'Uygulanan oran', value: '%25' },
+          { label: 'Yeni kira', value: '25.000 TL' },
+          { label: 'Aylık fark', value: '+5.000 TL' },
+          { label: 'Yıllık fark', value: '+60.000 TL' },
+        ],
+      },
+      {
+        title: 'Mevcut kira 15.000 TL, istenen artış %50, yasal tavan girilmedi',
+        intro: 'Tavan alanı boş bırakıldığında sınır uygulanmaz.',
+        rows: [
+          { label: 'Uygulanan oran', value: '%50' },
+          { label: 'Yeni kira', value: '22.500 TL' },
+          { label: 'Aylık fark', value: '+7.500 TL' },
+          { label: 'Yıllık fark', value: '+90.000 TL' },
+        ],
+      },
+    ],
     faq: [
       { q: 'Yasal üst sınırı boş bırakırsam ne olur?', a: 'Bu durumda sınır uygulanmaz ve istediğiniz artış oranı doğrudan hesaplanır.' },
       { q: 'Güncel yasal kira artış sınırı nedir?', a: 'Bu oran mevzuat değişikliklerine göre güncellenir; hesaplama öncesi güncel oranı kendiniz teyit edip "yasal üst sınır" alanına girmeniz gerekir.' },
       { q: 'Kira sözleşmesi süresi hesaba dahil mi?', a: 'Hayır, bu araç yalnızca oran karşılaştırması yapar; sözleşmenizin yenileme tarihi ve şartlarını ayrıca kontrol etmelisiniz.' },
+      { q: 'Kira artış sınırı tüm kiracılara mı uygulanır?', a: 'Sınır, konut kiraları için yasayla belirlenen bir üst sınırdır; iş yeri kiraları ve bazı özel durumlar farklı kurallara tabi olabilir, sözleşmenizin türünü kontrol etmeniz önerilir.' },
+      { q: 'Ev sahibi tavanın üzerinde artış isterse ne yapmalıyım?', a: 'Yasal tavanın üzerindeki bir talep kiracıyı bağlamaz; anlaşmazlık durumunda sulh hukuk mahkemesine başvurulabilir, ancak önce tarafların uzlaşması genellikle daha hızlı bir çözümdür.' },
+      { q: '5 yılını dolduran kiralarda farklı bir kural var mı?', a: 'Evet, 5 yılını dolduran kira sözleşmelerinde taraflardan biri mahkemeden veya bilirkişiden rayiç bedele göre yeni bir kira tespiti isteyebilir; bu durumda TÜFE tavanı değil, emsal kira bedeli esas alınabilir.' },
+      { q: 'Kira artışı hangi tarihte uygulanır?', a: 'Artış, kira sözleşmenizin yıllık yenileme tarihinde (genellikle sözleşmenin başlangıç tarihinin yıl dönümünde) geçerli olur; ay ortasında keyfi bir tarihte uygulanamaz.' },
+      { q: 'Zam oranını enflasyonla mı yoksa TÜFE ile mi karşılaştırmalıyım?', a: 'Yasal tavan TÜFE\'nin (tüketici fiyat endeksi) 12 aylık ortalamasına göre belirlenir; günlük dilde kullanılan "enflasyon" haber başlıklarındaki yıllık TÜFE değişimiyle karıştırılmamalıdır.' },
     ],
   },
   'mevduat-faizi-hesaplama': {
@@ -123,19 +210,82 @@ export const calculatorContent = {
   'brut-net-maas-hesaplama': {
     about: 'Brüt-net maaş hesaplama aracı, 2026 yılı gelir vergisi dilimleri, SGK primi ve damga vergisi kesintilerini uygulayarak brüt maaştan net maaşa, ya da net maaştan brüt maaşa ulaşmanızı sağlar. İş görüşmelerinde teklif değerlendirmek veya bordronuzu kontrol etmek için kullanışlıdır.',
     method: 'Brüt maaştan önce %14 SGK ve %1 işsizlik sigortası kesintisi düşülür; kalan tutar üzerinden 2026 dilimlerine göre kümülatif gelir vergisi ve binde 7,59 damga vergisi hesaplanır. 2026 asgari ücrete isabet eden gelir ve damga vergisi tutarı istisna olarak düşülür. Net→brüt yönünde ise bu formülü tersine çeviren bir arama algoritması kullanılır.',
+    examples: [
+      {
+        title: '2026 asgari ücret: brüt 33.030 TL',
+        intro: 'Asgari ücrete isabet eden gelir ve damga vergisi tamamen istisna olduğundan hiç vergi kesilmez.',
+        rows: [
+          { label: 'SGK kesintisi (%14)', value: '4.624,20 TL' },
+          { label: 'İşsizlik sigortası (%1)', value: '330,30 TL' },
+          { label: 'Gelir + damga vergisi', value: '0 TL (istisna)' },
+          { label: 'Net maaş', value: '28.075,50 TL' },
+        ],
+      },
+      {
+        title: 'Brüt 50.000 TL',
+        rows: [
+          { label: 'SGK kesintisi', value: '7.000 TL' },
+          { label: 'İşsizlik sigortası', value: '500 TL' },
+          { label: 'Gelir vergisi', value: '2.163,68 TL' },
+          { label: 'Damga vergisi', value: '128,80 TL' },
+          { label: 'Net maaş', value: '40.207,52 TL' },
+        ],
+      },
+      {
+        title: 'Brüt 100.000 TL',
+        rows: [
+          { label: 'SGK kesintisi', value: '14.000 TL' },
+          { label: 'İşsizlik sigortası', value: '1.000 TL' },
+          { label: 'Gelir vergisi', value: '8.538,67 TL' },
+          { label: 'Damga vergisi', value: '508,30 TL' },
+          { label: 'Net maaş', value: '75.953,02 TL' },
+        ],
+      },
+    ],
     faq: [
       { q: 'Bu hesaplama neden yaklaşık kabul edilmeli?', a: 'Hesap, ilgili ayı yılın ilk ayı kabul eder; gerçek bordroda yıl içindeki önceki ayların kümülatif vergi matrahı da dikkate alınır ve dilim geçişleri farklı olabilir.' },
       { q: 'AGİ (asgari geçim indirimi) hâlâ uygulanıyor mu?', a: 'Hayır, 2022\'den itibaren AGİ kaldırılmış, yerine asgari ücrete isabet eden gelir/damga vergisinin doğrudan istisna edilmesi uygulaması getirilmiştir; bu araç güncel istisna yöntemini kullanır.' },
       { q: 'İkramiye ve prim bu hesaba dahil mi?', a: 'Hayır, yalnızca temel brüt/net maaş hesaplanır; ikramiye, prim veya yan haklar ayrıca ve genellikle farklı vergilendirme kurallarıyla hesaplanmalıdır.' },
+      { q: '30.000 TL net maaş almak için brüt kaç TL olmalı?', a: 'Bu araçta "Net → Brüt" modunu seçip 30.000 TL\'yi girerek kesin karşılığı görebilirsiniz; kesintiler doğrusal olmadığından basit bir çarpan ile tahmin sağlıklı sonuç vermez.' },
+      { q: 'Yılın ilerleyen aylarında net maaşım neden azalabilir?', a: 'Yıl içinde kümülatif gelir vergisi matrahınız arttıkça bir üst vergi dilimine geçebilirsiniz; bu durumda aynı brüt maaşla dahi net maaşınız bir önceki aya göre bir miktar düşebilir.' },
+      { q: 'Asgari ücretli bir çalışan hiç vergi ödemez mi?', a: 'Evet, 2026\'da asgari ücrete isabet eden gelir ve damga vergisi tamamen istisna edildiğinden, yalnızca asgari ücret alan bir çalışanın brüt-net farkı sadece SGK ve işsizlik sigortası kesintisinden oluşur.' },
+      { q: 'Stajyer veya çırak maaşları için bu araç uygun mu?', a: 'Hayır, stajyer ve çıraklarda SGK primi işveren tarafından farklı oranlarla ve genellikle daha düşük bir taban üzerinden yatırılır; bu araç normal işçi statüsündeki bordro hesabını esas alır.' },
+      { q: 'Özel sağlık sigortası veya BES kesintisi bu hesaba dahil mi?', a: 'Hayır, bu araç yalnızca yasal zorunlu kesintileri (SGK, işsizlik, gelir ve damga vergisi) hesaplar; işvereninizin uyguladığı isteğe bağlı kesintiler bordronuzda ayrıca düşülür.' },
     ],
   },
   'kidem-ihbar-tazminati-hesaplama': {
     about: 'Kıdem ve ihbar tazminatı hesaplama aracı, işten ayrılma durumunda çalışma sürenize ve brüt maaşınıza göre alabileceğiniz tazminat tutarlarını tahmin etmenizi sağlar.',
     method: 'Kıdem tazminatı, her tam çalışma yılı için 30 günlük brüt ücret üzerinden hesaplanır ve yasal tavanla sınırlandırılır. İhbar tazminatı ise İş Kanunu\'ndaki kıdem sürelerine bağlı sabit hafta tablosuna göre (2-8 hafta) hesaplanır ve tavana tabi değildir.',
+    examples: [
+      {
+        title: 'Brüt 50.000 TL, 6,5 yıl kıdem (tavanın altında)',
+        rows: [
+          { label: 'Kıdem tazminatı', value: '325.530,46 TL' },
+          { label: 'İhbar süresi', value: '8 hafta' },
+          { label: 'İhbar tazminatı', value: '93.333,33 TL' },
+          { label: 'Toplam', value: '418.863,79 TL' },
+        ],
+      },
+      {
+        title: 'Brüt 150.000 TL, 11,5 yıl kıdem (tavan üzerinde)',
+        intro: '2026 2. dönem kıdem tazminatı tavanı 73.729,87 TL olduğundan, tazminat gerçek maaş yerine tavan üzerinden hesaplanır.',
+        rows: [
+          { label: 'Kıdem tazminatı (tavana takılı)', value: '848.625,25 TL' },
+          { label: 'İhbar süresi', value: '8 hafta' },
+          { label: 'İhbar tazminatı', value: '280.000 TL' },
+          { label: 'Toplam', value: '1.128.625,25 TL' },
+        ],
+      },
+    ],
     faq: [
       { q: 'Kıdem tazminatı tavanı ne sıklıkla güncelleniyor?', a: 'Tavan, memur maaş katsayısındaki değişime bağlı olarak yılda iki kez (Ocak ve Temmuz) güncellenir.' },
       { q: 'Her işten ayrılışta kıdem tazminatı hak edilir mi?', a: 'Hayır, kıdem tazminatı genellikle en az 1 yıl çalışma şartına ve işveren tarafından haksız fesih ya da yasada sayılan haklı nedenlerle ayrılma durumuna bağlıdır; istifa gibi durumlarda hak edilmeyebilir.' },
       { q: 'İhbar süresi neden önemli?', a: 'İşveren bu süre kadar önceden bildirim yapmazsa, karşılığında ihbar tazminatı ödemek zorunda kalır; süre kıdeminize göre 2 ile 8 hafta arasında değişir.' },
+      { q: '5 yıl çalıştım, kıdem tazminatım ne kadar olur?', a: 'Bu araca brüt maaşınızı, işe giriş ve çıkış tarihlerinizi girerek 30 günlük brüt ücretin 5 (tam yıl) ile çarpılmasına dayalı kesin tutarınızı görebilirsiniz; kıst (küsürat) süreler de otomatik hesaba katılır.' },
+      { q: 'Maaşım tavanın üzerindeyse tazminatım neden maaşımla orantılı çıkmıyor?', a: 'Kıdem tazminatı tavanı üzerinde bir brüt ücretiniz varsa, hesaplama gerçek maaşınız yerine güncel tavan tutarı üzerinden yapılır; bu yüzden çok yüksek maaşlı çalışanlarda tazminat, maaşla orantılı büyümez.' },
+      { q: 'İstifa edersem ihbar tazminatı öder miyim, alır mıyım?', a: 'Siz istifa ederseniz genellikle kıdem tazminatı hakkı doğmaz; ayrıca kanuni ihbar süresine uymadan aniden işi bırakırsanız işverene karşı siz ihbar tazminatı ödemekle yükümlü olabilirsiniz.' },
+      { q: 'Kıdem tazminatı ile ihbar tazminatı ayrı ayrı mı vergilendirilir?', a: 'Kıdem tazminatı belirli bir tavana kadar gelir vergisinden istisnadır; ihbar tazminatı ise ücret sayıldığından normal gelir vergisi ve damga vergisi kesintisine tabidir.' },
+      { q: 'Deneme süresindeyken işten çıkarılırsam tazminat alır mıyım?', a: 'Hayır, deneme süresi içinde taraflardan biri sözleşmeyi bildirimsiz ve tazminatsız feshedebilir; kıdem tazminatı hakkı en az 1 yıllık kesintisiz çalışmayı gerektirir.' },
     ],
   },
   'bilesik-faiz-hesaplama': {
@@ -161,10 +311,38 @@ export const calculatorContent = {
   'vucut-kitle-indeksi-hesaplama': {
     about: 'Vücut Kitle İndeksi (VKİ/BMI), boy ve kilonuza göre kabaca bir sağlıklı kilo aralığında olup olmadığınızı gösteren, dünya genelinde yaygın kullanılan bir tarama ölçütüdür.',
     method: 'VKİ, kilonun (kg) boyun metre cinsinden karesine bölünmesiyle hesaplanır: VKİ = kilo ÷ boy². Sonuç, Dünya Sağlık Örgütü\'nün belirlediği zayıf, normal, fazla kilolu ve obez kategorilerinden birine yerleştirilir.',
+    examples: [
+      {
+        title: '70 kg, 1,75 m',
+        rows: [
+          { label: 'VKİ', value: '22,86' },
+          { label: 'Kategori', value: 'Normal' },
+        ],
+      },
+      {
+        title: '90 kg, 1,70 m',
+        rows: [
+          { label: 'VKİ', value: '31,14' },
+          { label: 'Kategori', value: 'Obez' },
+        ],
+      },
+      {
+        title: '45 kg, 1,65 m',
+        rows: [
+          { label: 'VKİ', value: '16,53' },
+          { label: 'Kategori', value: 'Zayıf' },
+        ],
+      },
+    ],
     faq: [
       { q: 'VKİ neden bazı sporcularda yanıltıcı olabilir?', a: 'VKİ kas ve yağ kütlesini ayırt etmez; kas kütlesi yüksek biri, yağ oranı düşük olsa bile VKİ\'ye göre "fazla kilolu" görünebilir.' },
       { q: 'İdeal kilo aralığı nasıl hesaplanıyor?', a: 'Normal VKİ aralığının alt sınırı (18,5) ve üst sınırı (24,9) boyunuzun karesiyle çarpılarak size özel kilogram aralığı bulunur.' },
       { q: 'Çocuklar için de geçerli mi?', a: 'Hayır, bu hesaplama yetişkinler içindir; çocuk ve ergenlerde yaşa göre değişen persentil eğrileri kullanılır.' },
+      { q: 'VKİ 25 ile 30 arası ne anlama gelir?', a: 'Bu aralık "fazla kilolu" olarak sınıflandırılır; obezite eşiği olan 30\'un altında olsa da sağlıklı aralığın (18,5-24,9) üzerindedir ve kademeli bir kilo yönetimi düşünülmesi önerilir.' },
+      { q: 'Aynı VKİ değerine sahip iki kişi neden farklı görünebilir?', a: 'VKİ yalnızca toplam kütleyi ölçer; yağ dağılımı (bel/kalça oranı), kas kütlesi ve vücut yapısı kişiden kişiye farklılık gösterdiğinden aynı VKİ görünüm ve sağlık riski açısından farklı anlam taşıyabilir.' },
+      { q: 'VKİ\'m normal ama karın bölgemde yağlanma var, bu normal mi?', a: 'Evet mümkündür; VKİ genel bir tarama ölçütüdür ve bölgesel yağ dağılımını yansıtmaz. Bel çevresi veya vücut yağ oranı gibi tamamlayıcı ölçümlere bakmak daha isabetli olabilir.' },
+      { q: 'Hamilelikte VKİ hesaplaması geçerli mi?', a: 'Hayır, gebelikte kilo artışı normal ve beklenen bir süreçtir; VKİ kategorileri gebe olmayan yetişkinler için tasarlanmıştır, gebelikte kilo takibini doktorunuzla yapmanız gerekir.' },
+      { q: 'VKİ sonucuma göre ne yapmalıyım?', a: 'Bu araç yalnızca bir tarama göstergesidir; kategori sonucu ne olursa olsun kesin bir sağlık değerlendirmesi ve kişisel hedef için doktor veya diyetisyene danışmanız önerilir.' },
     ],
   },
   'kalori-ihtiyaci-hesaplama': {
@@ -273,10 +451,40 @@ export const calculatorContent = {
   'yas-hesaplama': {
     about: 'Yaş hesaplama aracı, doğum tarihinize göre bugün (veya seçtiğiniz herhangi bir tarihte) tam olarak kaç yıl, ay ve gün yaşında olduğunuzu; ayrıca bir sonraki doğum gününüze kaç gün kaldığını hesaplar.',
     method: 'Doğum tarihi ile referans tarihi arasındaki fark, takvim ay/gün uzunluklarını dikkate alarak yıl, ay ve gün birimlerine ayrıştırılır (ödünç alma dahil). Toplam gün ve hafta sayısı da ayrıca hesaplanır.',
+    examples: [
+      {
+        title: 'Doğum tarihi 15.03.1995, bugün 07.07.2026',
+        rows: [
+          { label: 'Yaş', value: '31 yıl 3 ay 22 gün' },
+          { label: 'Toplam gün', value: '11.437 gün' },
+          { label: 'Sonraki doğum gününe kalan', value: '251 gün' },
+        ],
+      },
+      {
+        title: 'Doğum tarihi 01.01.2000, bugün 07.07.2026',
+        rows: [
+          { label: 'Yaş', value: '26 yıl 6 ay 6 gün' },
+          { label: 'Toplam gün', value: '9.684 gün' },
+          { label: 'Sonraki doğum gününe kalan', value: '178 gün' },
+        ],
+      },
+      {
+        title: 'Doğum tarihi 20.11.1988, referans tarih 01.01.2030 (gelecek bir tarih)',
+        rows: [
+          { label: 'O tarihteki yaş', value: '41 yıl 1 ay 12 gün' },
+          { label: 'Toplam gün', value: '15.017 gün' },
+        ],
+      },
+    ],
     faq: [
       { q: 'Artık yıllar (29 Şubat) hesaba dahil mi?', a: 'Evet, hesaplama gerçek takvim ay uzunluklarını kullandığından artık yıllar otomatik olarak doğru şekilde hesaba katılır.' },
       { q: 'Gelecekteki bir tarihe göre yaşımı hesaplayabilir miyim?', a: 'Evet, "hangi tarihe göre" alanına ileri bir tarih girerek o tarihte kaç yaşında olacağınızı görebilirsiniz.' },
       { q: 'Saat dilimi farkı sonucu etkiler mi?', a: 'Hayır, hesaplama yalnızca takvim günlerini (saat bilgisi olmadan) karşılaştırdığından saat dilimi farkı sonucu etkilemez.' },
+      { q: '29 Şubat\'ta doğdum, doğum günüm normal yıllarda ne zaman sayılır?', a: 'Bu araç bir sonraki 29 Şubat\'ı bulamadığı yıllarda otomatik olarak 28 Şubat\'ı referans alır; resmi belgelerde de genellikle bu yaklaşım kullanılır.' },
+      { q: 'Doğduğum gün "0 yaşında" mı sayılır yoksa "1 yaşında" mı?', a: 'Bu araç Batı/uluslararası yaş sistemini kullanır: doğduğunuz gün 0 yaşındasınızdır ve bir sonraki doğum gününüzde tam 1 yaşına girersiniz; Kore yaşı gibi alternatif sistemler farklı sayabilir.' },
+      { q: 'Yaşımı yıl-ay-gün yerine sadece toplam gün olarak görebilir miyim?', a: 'Evet, sonuç kartında yıl/ay/gün kırılımının yanında toplam gün ve toplam hafta sayısı da ayrıca gösterilir.' },
+      { q: 'İki farklı doğum tarihini (ör. ikizlerin) karşılaştırabilir miyim?', a: 'Bu araç tek bir doğum tarihini referans tarihe göre hesaplar; iki tarihi karşılaştırmak için her ikisini ayrı ayrı hesaplayıp sonuçları kıyaslayabilir ya da İki Tarih Arası Fark aracını kullanabilirsiniz.' },
+      { q: 'Yaş hesaplaması resmi işlemlerde (ör. emeklilik) kullanılabilir mi?', a: 'Bu araç genel bilgi amaçlıdır; emeklilik yaşı, askerlik gibi resmi süreçlerde kurumların kendi mevzuatına göre yaptığı hesaplama esas alınmalıdır.' },
     ],
   },
   'tarih-farki-hesaplama': {
@@ -311,10 +519,36 @@ export const calculatorContent = {
   'kredi-karti-asgari-odeme-hesaplama': {
     about: 'Bu araç, kredi kartı ekstrenizde sadece asgari tutarı ödemeyi düşündüğünüzde kalan bakiyeye ne kadar faiz işleyeceğini ve gecikme durumunda ek maliyetin ne olacağını önceden görmenizi sağlar.',
     method: 'Asgari ödeme tutarı, 2026 BDDK düzenlemesine göre kart limitinize bağlı bir oranla (50.000 TL ve altı için %20, üzeri için %40) dönem borcunuzdan hesaplanır. Ödenmeyen kalan bakiyeye aylık akdi faiz, gecikme durumunda ise ayrıca dönem borcunun tamamı üzerinden günlük kırılımla gecikme faizi eklenir.',
+    examples: [
+      {
+        title: 'Kart limiti 40.000 TL (eşik altı), ekstre borcu 20.000 TL, akdi faiz %3,25',
+        rows: [
+          { label: 'Asgari ödeme oranı', value: '%20' },
+          { label: 'Asgari ödeme tutarı', value: '4.000 TL' },
+          { label: 'Ödenmezse kalan bakiye', value: '16.000 TL' },
+          { label: 'Gelecek döneme işleyecek faiz', value: '520 TL' },
+        ],
+      },
+      {
+        title: 'Kart limiti 100.000 TL (eşik üstü), ekstre borcu 60.000 TL, akdi faiz %3,75, 10 gün gecikme',
+        rows: [
+          { label: 'Asgari ödeme oranı', value: '%40' },
+          { label: 'Asgari ödeme tutarı', value: '24.000 TL' },
+          { label: 'Ödenmezse kalan bakiye', value: '36.000 TL' },
+          { label: 'Gecikme faizi (10 gün)', value: '810 TL' },
+          { label: 'Sonraki dönem toplam borç', value: '38.160 TL' },
+        ],
+      },
+    ],
     faq: [
       { q: 'Sadece asgari ödeme yapmak neden risklidir?', a: 'Kalan bakiyeye yüksek oranlı akdi faiz işlemeye devam eder; uzun vadede borcunuz hızla büyüyebilir ve kredi notunuzu olumsuz etkileyebilir.' },
       { q: 'Asgari ödeme oranı her kartta aynı mı?', a: 'Hayır, oran kartınızın limitine göre değişir: 50.000 TL ve altı limitli kartlarda %20, üzerinde %40 olarak uygulanır.' },
       { q: 'Gecikme faizi ile akdi faiz arasındaki fark nedir?', a: 'Akdi faiz, ödenmeyen bakiyeye normal şartlarda işleyen faizdir; gecikme (temerrüt) faizi ise ödemeyi zamanında yapmadığınızda dönem borcunun tamamına ek olarak işleyen, genellikle biraz daha yüksek bir orandır.' },
+      { q: 'Asgari ödemeyi bile yapmazsam ne olur?', a: 'Asgari tutarı da ödemezseniz kartınız kanunen "temerrüde düşmüş" sayılır, tüm ekstre borcunuza gecikme faizi işler ve durum kredi kayıt bürosuna (Findeks) bildirilerek kredi notunuzu olumsuz etkiler.' },
+      { q: 'Asgari ödeme yaparsam kartımı kullanmaya devam edebilir miyim?', a: 'Bankalar, asgari ödemenin art arda yapılıp yapılmadığına göre kartın harcamaya kapatılması gibi önlemler alabilir; 3 dönem üst üste sadece asgari ödeme yapılması durumunda genellikle kart harcamaya kapatılır.' },
+      { q: 'Kalan bakiyeyi taksitlendirebilir miyim?', a: 'Bazı bankalar "yapılandırma" veya "taksitli borç ödeme" gibi seçenekler sunabilir; bu, bankanızla görüşerek değerlendirebileceğiniz ayrı bir üründür ve bu araca dahil değildir.' },
+      { q: 'Asgari ödeme tutarını değil, tamamını öderim daha iyi olmaz mı?', a: 'Evet, mümkünse ekstrenin tamamını ödemek en avantajlı seçenektir; bu şekilde hiç akdi faiz işlemez ve borç bir sonraki döneme taşınmaz.' },
+      { q: 'Farklı bankaların akdi/gecikme faiz oranları neden farklı?', a: 'TCMB her çeyrekte kredi kartlarında uygulanabilecek azami akdi ve gecikme faiz oranlarını ilan eder; bankalar bu tavanın altında serbestçe farklı oranlar belirleyebilir, bu yüzden kartınızın ekstresindeki oranı kontrol etmelisiniz.' },
     ],
   },
   'enflasyon-etkisi-hesaplama': {
@@ -338,10 +572,32 @@ export const calculatorContent = {
   'zam-orani-hesaplama': {
     about: 'Zam oranı hesaplama aracı, bir ürün veya hizmetin eski fiyatıyla yeni fiyatı arasındaki değişimin yüzde kaç olduğunu hızlıca göstermenizi sağlar; market alışverişinden abonelik zamlarına kadar birçok durumda kullanışlıdır.',
     method: 'Değişim tutarı, yeni fiyattan eski fiyatın çıkarılmasıyla bulunur. Değişim oranı ise bu farkın eski fiyata bölünüp 100 ile çarpılmasıyla hesaplanır: ((yeni − eski) ÷ eski) × 100.',
+    examples: [
+      {
+        title: 'Eski fiyat 30.000 TL, yeni fiyat 40.500 TL',
+        rows: [
+          { label: 'Fark', value: '10.500 TL' },
+          { label: 'Zam oranı', value: '%35' },
+        ],
+      },
+      {
+        title: 'Eski fiyat 1.500 TL, yeni fiyat 1.350 TL',
+        intro: 'Yeni fiyat eski fiyattan düşük olduğunda sonuç negatif çıkar; bu bir indirime karşılık gelir.',
+        rows: [
+          { label: 'Fark', value: '-150 TL' },
+          { label: 'Zam oranı', value: '%-10' },
+        ],
+      },
+    ],
     faq: [
       { q: 'Sonuç negatif çıkarsa ne anlama gelir?', a: 'Negatif sonuç, yeni fiyatın eski fiyattan düşük olduğunu, yani aslında bir indirim yapıldığını gösterir.' },
       { q: 'Zam oranı ile enflasyon oranı aynı şey mi?', a: 'Hayır, zam oranı tek bir ürüne özgü fiyat değişimidir; enflasyon ise bir sepet ürün ve hizmetin genel ortalama fiyat değişimini ifade eder.' },
       { q: 'Yüzde kaç zam yapıldığını biliyorsam yeni fiyatı bulabilir miyim?', a: 'Bu araç eski/yeni fiyattan oranı hesaplar; tam tersi için Yüzde Hesaplama aracındaki "X sayının %Y\'si" modunu kullanabilirsiniz.' },
+      { q: '30.000 TL\'den 40.500 TL\'ye çıkan bir ürüne kaç zam yapılmış?', a: 'Bu örnekte %35 zam yapılmıştır: (40.500 − 30.000) ÷ 30.000 × 100 = %35.' },
+      { q: 'Abonelik ücretim aynı oranda birkaç yıl zamlanırsa toplam artış nasıl hesaplanır?', a: 'Zamlar art arda uygulandığında oranlar toplanmaz, her yılki zam bir önceki yılın zamlı fiyatı üzerinden hesaplanır; toplam etkiyi görmek için her yılın sonucunu sırayla bu araca girebilirsiniz.' },
+      { q: 'Zam oranı ile "kaç kat arttı" ifadesi aynı şey mi?', a: 'Hayır, "%100 zam" fiyatın 2 katına çıktığı anlamına gelir; "3 kat arttı" ifadesi ise %200 zam yapıldığı anlamına gelir. Bu iki ifadeyi karıştırmamak önemlidir.' },
+      { q: 'Maaşıma yapılan zammın oranını bu araçla hesaplayabilir miyim?', a: 'Evet, eski ve yeni brüt maaşınızı girerek zam oranını bulabilirsiniz; net maaşınıza gerçek yansımayı görmek isterseniz Brüt-Net Maaş Hesaplama aracını da kullanmanız önerilir.' },
+      { q: 'Ondalıklı fiyatlarla (ör. 19,90 TL) çalışır mı?', a: 'Evet, hem eski hem yeni fiyat alanına kuruş dahil ondalıklı değerler girebilirsiniz; sonuç yine yüzdesel oran olarak hesaplanır.' },
     ],
   },
   'bahsis-hesap-bolusme-hesaplama': {
@@ -425,10 +681,38 @@ export const calculatorContent = {
   'ders-notu-ortalamasi-hesaplama': {
     about: 'Ders notu ortalaması hesaplama aracı, vize ve final notlarınızı ağırlıklarına göre birleştirerek genel ortalamanızı, ya da henüz final girmediyseniz dersten geçmek için finalden en az kaç almanız gerektiğini gösterir.',
     method: 'Ağırlıklı ortalama, vize notunun vize ağırlığıyla, final notunun final ağırlığıyla çarpılıp toplanması ve toplam ağırlığa bölünmesiyle hesaplanır. Final notu henüz belli değilse, geçme notuna ulaşmak için gereken minimum final notu aynı formül tersine çözülerek bulunur.',
+    examples: [
+      {
+        title: 'Vize 45 (ağırlık %40), final ağırlığı %60, geçme notu 50',
+        intro: 'Final notu henüz belli değil; aşağıda gereken minimum final notu gösterilmiştir.',
+        rows: [
+          { label: 'Geçmek için gereken final notu', value: '53,33' },
+        ],
+      },
+      {
+        title: 'Vize 80 (ağırlık %70), final ağırlığı %30, geçme notu 50',
+        rows: [
+          { label: 'Durum', value: 'Geçme garantilendi' },
+          { label: 'Gereken final notu', value: '0 (finalden 0 alsanız bile geçersiniz)' },
+        ],
+      },
+      {
+        title: 'Vize 10 (ağırlık %50), final ağırlığı %50, geçme notu 70',
+        rows: [
+          { label: 'Durum', value: 'Bu vizeyle geçmek mümkün değil' },
+          { label: 'Gereken final notu', value: '100\'ün üzerinde (imkansız)' },
+        ],
+      },
+    ],
     faq: [
       { q: 'Vize ve final ağırlıkları toplamı 100 olmak zorunda mı?', a: 'Genellikle öyle olması beklenir (ör. %40 + %60), ancak araç girdiğiniz ağırlıkları kendi toplamlarına göre orantılı olarak değerlendirir.' },
       { q: '"Geçme garantilendi" mesajını ne zaman görürüm?', a: 'Vize notunuz tek başına, finalden 0 alsanız bile ağırlıklı ortalamanızı geçme notunun üzerinde tutuyorsa bu mesaj gösterilir.' },
       { q: '"Bu vizeyle geçmek mümkün değil" ne anlama gelir?', a: 'Finalden 100 alsanız bile ağırlıklı ortalamanızın geçme notuna ulaşamayacağı durumlarda bu uyarı gösterilir; bu durumda bütünleme veya dersi tekrar alma seçeneklerini değerlendirmeniz gerekebilir.' },
+      { q: 'Vizeden 45 aldım, finalden kaç almalıyım?', a: 'Vize ağırlığı %40, final ağırlığı %60 ve geçme notu 50 ise finalden en az 53,33 (pratikte 54) almanız gerekir; ağırlıklar farklıysa bu araca kendi rakamlarınızı girerek kesin sonucu görebilirsiniz.' },
+      { q: 'Bütünleme sınavı için de bu araç kullanılabilir mi?', a: 'Evet, bütünleme notunu "final notu" alanına, bütünlemenin ders ortalamasındaki ağırlığını da "final ağırlığı" alanına girerek aynı mantıkla hesaplayabilirsiniz.' },
+      { q: 'Vize notum yoksa (sadece final ile geçilen bir ders) nasıl kullanmalıyım?', a: 'Vize ağırlığını 0, final ağırlığını 100 olarak girerek yalnızca final notunuza göre bir hesaplama yapabilirsiniz.' },
+      { q: 'Üç sınavlı (vize1 + vize2 + final) bir sistemde kullanılabilir mi?', a: 'Bu araç iki bileşenli (vize + final) sistemler için tasarlanmıştır; üç veya daha fazla bileşenli sistemlerde Ortalama Hesaplama aracındaki ağırlıklı ortalama modunu kullanabilirsiniz.' },
+      { q: 'Gereken final notu küsuratlı çıkıyor, yukarı mı aşağı mı yuvarlamalıyım?', a: 'Güvenli tarafta kalmak için sonucu her zaman yukarı yuvarlamanız önerilir; örneğin gereken notu 53,33 ise hedefinizi en az 54 olarak belirlemeniz daha güvenlidir.' },
     ],
   },
   'sinav-puani-hesaplama': {

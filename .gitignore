@@ -3,7 +3,11 @@ node_modules/
 
 # Build çıktıları
 dist/
+dist-ssr/
 dev-dist/
+
+# content/rehber/*.md dosyalarından otomatik üretilir (bkz. scripts/generate-rehber.mjs)
+src/data/rehberYazilari.generated.js
 
 # Ortam değişkenleri (gerçek .env dosyaları; .env.example hariç)
 .env

@@ -200,7 +200,7 @@ export const calculators = [
   {
     id: 'brut-net-maas-hesaplama',
     title: 'Brüt-Net Maaş Hesaplama',
-    description: '2026 gelir vergisi dilimleri, SGK ve damga vergisi kesintileriyle brüt maaştan net maaşa (veya tersine) ulaşın.',
+    description: 'Güncel gelir vergisi dilimleri, SGK ve damga vergisi kesintileriyle brüt maaştan net maaşa (veya tersine) ulaşın.',
     category: 'finans',
     icon: 'wallet',
     keywords: ['brüt', 'net', 'maaş', 'bordro', 'sgk', 'vergi'],

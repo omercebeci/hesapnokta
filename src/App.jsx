@@ -6,6 +6,9 @@ import Footer from './components/Footer.jsx';
 import HomePage from './pages/HomePage.jsx';
 import NotFoundPage from './pages/NotFoundPage.jsx';
 
+const RehberIndexPage = lazy(() => import('./pages/RehberIndexPage.jsx'));
+const RehberPostPage = lazy(() => import('./pages/RehberPostPage.jsx'));
+
 // Finans
 const KrediHesaplama = lazy(() => import('./pages/calculators/finans/KrediHesaplama.jsx'));
 const KdvHesaplama = lazy(() => import('./pages/calculators/finans/KdvHesaplama.jsx'));
@@ -129,6 +132,9 @@ export default function App() {
             <Route path="/tarih-farki-hesaplama" element={<TarihFarkiHesaplama />} />
             <Route path="/saat-farki-hesaplama" element={<SaatFarkiHesaplama />} />
             <Route path="/gun-sayaci-hesaplama" element={<GunSayaciHesaplama />} />
+
+            <Route path="/rehber" element={<RehberIndexPage />} />
+            <Route path="/rehber/:slug" element={<RehberPostPage />} />
 
             <Route path="*" element={<NotFoundPage />} />
           </Routes>

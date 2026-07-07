@@ -56,3 +56,11 @@ export function isPositiveNumber(value) {
 export function isNonNegativeNumber(value) {
   return Number.isFinite(value) && value >= 0;
 }
+
+// "2026-07-03" gibi bir tarihi "3 Temmuz 2026" biçiminde gösterir. Geçersiz/"N/A" değerlerde olduğu gibi döner.
+export function formatDateTr(dateStr) {
+  if (!dateStr) return '';
+  const date = new Date(dateStr);
+  if (Number.isNaN(date.getTime())) return dateStr;
+  return date.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
+}

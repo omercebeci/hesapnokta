@@ -3,20 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="HesapNokta; kredi, KDV, indirim, kâr marjı, maaş zammı, kira artışı, mevduat faizi, BMI, kalori ihtiyacı, yüzde, oran-orantı, alan/hacim, yaş ve tarih farkı gibi finans, sağlık, matematik ve zaman hesaplamalarını anında ve ücretsiz yapmanızı sağlar." />
     <meta name="keywords" content="hesaplama araçları, kredi hesaplama, KDV hesaplama, yüzde hesaplama, BMI hesaplama, kalori hesaplama, yaş hesaplama, tarih farkı hesaplama" />
-    <meta property="og:title" content="HesapNokta | Finans, Sağlık, Matematik ve Zaman Hesaplayıcıları" />
-    <meta property="og:description" content="20 ücretsiz hesaplayıcı: kredi, KDV, BMI, kalori, yüzde, yaş ve daha fazlası — anında sonuç." />
-    <meta property="og:url" content="https://hesapnokta.com/" />
     <meta property="og:type" content="website" />
-    <link rel="canonical" href="https://hesapnokta.com/" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
     <meta name="theme-color" content="#4F46E5" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-    <title>HesapNokta | Finans, Sağlık, Matematik ve Zaman Hesaplayıcıları</title>
+    <!-- display=optional: Yazı tipi geç yüklenirse sayfa sonradan "swap" yapıp metni kaydırmaz
+         (Cumulative Layout Shift'i önler); ilk ziyarette font hazır değilse o görüntülemede
+         sistem yazı tipiyle kalınır, sonraki ziyaretlerde önbellekten anında yüklenir. -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=optional" rel="stylesheet" />
     <script>
       // Tema flaşını önlemek için sayfa boyanmadan önce koyu/açık temayı uygula.
       (function () {
@@ -26,11 +23,10 @@
       })();
     </script>
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"HesapNokta","url":"https://hesapnokta.com","inLanguage":"tr-TR","potentialAction":{"@type":"SearchAction","target":"https://hesapnokta.com/?q={search_term_string}","query-input":"required name=search_term_string"}}</script>
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"HesapNokta","applicationCategory":"FinanceApplication","operatingSystem":"Web","inLanguage":"tr-TR","url":"https://hesapnokta.com","description":"Finans, sağlık, matematik ve zaman odaklı Türkçe hesaplama araçları."}</script>
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"HesapNokta hangi hesaplama araçlarını sunar?","acceptedAnswer":{"@type":"Answer","text":"HesapNokta; kredi, KDV, indirim, kâr marjı, maaş zammı, kira artışı, mevduat faizi, BMI, kalori ihtiyacı, yüzde, oran-orantı, alan/hacim, yaş ve tarih farkı gibi araçları tek yerde toplar."}},{"@type":"Question","name":"HesapNokta ücretsiz mi?","acceptedAnswer":{"@type":"Answer","text":"Evet, HesapNokta üzerindeki tüm hesaplama araçları web tarayıcısından ücretsiz kullanılabilir."}}]}</script>
+    <!--app-head-->
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root"><!--app-html--></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

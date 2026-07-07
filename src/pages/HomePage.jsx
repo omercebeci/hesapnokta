@@ -4,8 +4,10 @@ import CategorySection from '../components/CategorySection.jsx';
 import Icon from '../components/Icon.jsx';
 import { categories, calculators } from '../data/calculatorRegistry.js';
 import { setSeoTags, removeJsonLd } from '../utils/seo.js';
+import { useHeadContext } from '../context/HeadContext.jsx';
 
 const SITE_DESCRIPTION = 'HesapNokta; kredi, KDV, yüzde, BMI, kalori, yaş ve tarih farkı gibi finans, sağlık, matematik ve zaman hesaplamalarını anında ve ücretsiz yapmanızı sağlar.';
+const SITE_TITLE = 'HesapNokta | Finans, Sağlık, Matematik ve Zaman Hesaplayıcıları';
 
 const TRUST_ITEMS = [
   { icon: 'activity', label: 'Anlık sonuç' },
@@ -14,12 +16,15 @@ const TRUST_ITEMS = [
 ];
 
 export default function HomePage() {
+  const headContext = useHeadContext();
+
+  // Prerender (SSR) sırasında: render anında head verisini doğrudan bağlama yazar.
+  if (headContext) {
+    headContext.push({ title: SITE_TITLE, description: SITE_DESCRIPTION, path: '/', jsonLd: [] });
+  }
+
   useEffect(() => {
-    setSeoTags({
-      title: 'HesapNokta | Finans, Sağlık, Matematik ve Zaman Hesaplayıcıları',
-      description: SITE_DESCRIPTION,
-      path: '/',
-    });
+    setSeoTags({ title: SITE_TITLE, description: SITE_DESCRIPTION, path: '/' });
     // Bir hesaplayıcı sayfasından geri dönüldüğünde kalmış olabilecek şema script'lerini temizle.
     removeJsonLd('jsonld-calculator-app');
     removeJsonLd('jsonld-calculator-faq');

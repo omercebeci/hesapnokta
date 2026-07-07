@@ -16,6 +16,9 @@ export default function Header() {
           <span>HesapNokta</span>
         </Link>
         <div className="header-actions">
+          <Link className="header-home-link" to="/rehber">
+            <span className="label">Rehber</span>
+          </Link>
           <button type="button" className="header-home-link" onClick={() => setIsContactOpen(true)}>
             <span className="label">Bize Ulaşın</span>
           </button>

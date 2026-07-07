@@ -4,8 +4,12 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite --host 0.0.0.0",
-    "build": "vite build",
+    "generate:rehber": "node scripts/generate-rehber.mjs",
+    "generate:sitemap": "node scripts/generate-sitemap.mjs",
+    "dev": "npm run generate:rehber && vite --host 0.0.0.0",
+    "build": "npm run generate:rehber && npm run generate:sitemap && vite build && npm run build:ssr && node scripts/prerender.mjs && npm run clean:ssr",
+    "build:ssr": "vite build --ssr src/entry-server.jsx --outDir dist-ssr",
+    "clean:ssr": "node -e \"require('fs').rmSync('dist-ssr', { recursive: true, force: true })\"",
     "preview": "vite preview --host 0.0.0.0",
     "test": "vitest run"
   },
@@ -19,7 +23,9 @@
     "vite": "latest"
   },
   "devDependencies": {
+    "gray-matter": "^4.0.3",
     "jsdom": "latest",
+    "marked": "^18.0.5",
     "vercel": "^54.4.0",
     "vite-plugin-pwa": "^1.3.0",
     "vitest": "latest"

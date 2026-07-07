@@ -1,10 +1,14 @@
 import React, { useMemo, useState } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
+import DataPeriodNote from '../../../components/DataPeriodNote.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculateSeveranceAndNotice } from '../../../lib/finansCalculators.js';
 import { formatCurrency, formatNumber, parseLocaleNumber } from '../../../utils/format.js';
+import { GUNCEL_VERILER } from '../../../data/guncelVeriler.js';
 
+const KIDEM_TAVANI = GUNCEL_VERILER.kidemTazminatiTavani;
+const IHBAR_SURELERI = GUNCEL_VERILER.ihbarSureleri;
 const today = new Date().toISOString().slice(0, 10);
 
 export default function KidemIhbarTazminatiHesaplama() {
@@ -51,7 +55,7 @@ export default function KidemIhbarTazminatiHesaplama() {
           <ResultCard
             label="Toplam tazminat"
             value={formatCurrency(result.totalPay)}
-            note={result.isCapped ? 'Kıdem tazminatı 2026 2. dönem tavanına takıldı' : `${formatNumber(result.totalYears)} yıllık kıdeme göre hesaplandı`}
+            note={result.isCapped ? `Kıdem tazminatı ${KIDEM_TAVANI.period} tavanına takıldı` : `${formatNumber(result.totalYears)} yıllık kıdeme göre hesaplandı`}
           />
           <ResultMetrics
             items={[
@@ -61,14 +65,25 @@ export default function KidemIhbarTazminatiHesaplama() {
               { label: 'Toplam kıdem', value: `${formatNumber(result.totalYears)} yıl` },
             ]}
           />
+          <DataPeriodNote period={KIDEM_TAVANI.period} lastUpdated={KIDEM_TAVANI.lastUpdated} />
         </div>
       )}
 
       <div className="info-card" style={{ gridColumn: '1 / -1' }}>
         <h2>Varsayımlar ve kaynaklar</h2>
         <ul>
-          <li>Kıdem tazminatı, her tam yıl için 30 günlük brüt ücret üzerinden hesaplanır ve 2026 2. dönem (Temmuz-Aralık) tavanı olan 73.729,87 TL ile sınırlıdır.</li>
-          <li>İhbar süreleri İş Kanunu m.17'deki sabit tabloya göre belirlenir: 6 aya kadar 2 hafta, 1,5 yıla kadar 4 hafta, 3 yıla kadar 6 hafta, 3 yıldan fazla 8 hafta. İhbar tazminatına tavan uygulanmaz.</li>
+          <li>Kıdem tazminatı, her tam yıl için 30 günlük brüt ücret üzerinden hesaplanır ve {KIDEM_TAVANI.period} tavanı olan {formatCurrency(KIDEM_TAVANI.value)} ile sınırlıdır.</li>
+          <li>
+            İhbar süreleri İş Kanunu m.17'deki sabit tabloya göre belirlenir:{' '}
+            {IHBAR_SURELERI.value.map((row, index) => {
+              const isLast = index === IHBAR_SURELERI.value.length - 1;
+              const label = isLast
+                ? `${formatNumber(IHBAR_SURELERI.value[index - 1].kidemUstSiniriYil)} yıldan fazla ${row.hafta} hafta`
+                : `${formatNumber(row.kidemUstSiniriYil)} yıla kadar ${row.hafta} hafta`;
+              return `${label}${isLast ? '.' : ', '}`;
+            })}{' '}
+            İhbar tazminatına tavan uygulanmaz.
+          </li>
           <li>Bu hesaplama yalnızca temel ücret üzerinden yapılır; ikramiye, yol/yemek ücreti gibi "giydirilmiş ücret" unsurları dahil değildir. Kesin tutar için İK/mali müşavir kontrolü önerilir.</li>
         </ul>
       </div>

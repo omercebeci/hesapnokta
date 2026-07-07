@@ -1,4 +1,5 @@
 // Finans kategorisi için saf hesaplama fonksiyonları (UI'dan bağımsız).
+import { GUNCEL_VERILER } from '../data/guncelVeriler.js';
 
 export const round2 = (value) => Math.round((Number(value) + Number.EPSILON) * 100) / 100;
 
@@ -294,24 +295,17 @@ export function calculateCurrencyConversion({ amount, rate, direction = 'toForei
   };
 }
 
-// ── 2026 bordro parametreleri (Gelir İdaresi Başkanlığı gelir vergisi tarifesi, SGK/işsizlik oranları, Damga Vergisi Kanunu Genel Tebliği Seri No: 71) ──
-const INCOME_TAX_BRACKETS_2026 = [
-  { upTo: 190000, rate: 0.15 },
-  { upTo: 400000, rate: 0.20 },
-  { upTo: 1500000, rate: 0.27 },
-  { upTo: 5300000, rate: 0.35 },
-  { upTo: Infinity, rate: 0.40 },
-];
-const SGK_EMPLOYEE_RATE = 0.14;
-const UNEMPLOYMENT_EMPLOYEE_RATE = 0.01;
-const STAMP_TAX_RATE = 0.00759;
-const MIN_WAGE_GROSS_2026 = 33030;
+// ── 2026 bordro parametreleri — src/data/guncelVeriler.js dosyasından okunur, burada gömülü değer yoktur. ──
+const SGK_EMPLOYEE_RATE = GUNCEL_VERILER.sgkIsciPayiOrani.value;
+const UNEMPLOYMENT_EMPLOYEE_RATE = GUNCEL_VERILER.issizlikSigortasiIsciPayiOrani.value;
+const STAMP_TAX_RATE = GUNCEL_VERILER.damgaVergisiOrani.value;
+const MIN_WAGE_GROSS = GUNCEL_VERILER.asgariUcret.brutAylik.value;
 
 function calculateProgressiveIncomeTax(base) {
   let remaining = Math.max(0, base);
   let tax = 0;
   let lowerBound = 0;
-  for (const bracket of INCOME_TAX_BRACKETS_2026) {
+  for (const bracket of GUNCEL_VERILER.gelirVergisiDilimleri.value) {
     if (remaining <= 0) break;
     const bracketSize = bracket.upTo - lowerBound;
     const taxableInBracket = Math.min(remaining, bracketSize);
@@ -330,9 +324,9 @@ function grossToNetBreakdown(gross) {
   const stampTax = gross * STAMP_TAX_RATE;
 
   // Asgari ücret istisnası: asgari ücrete isabet eden gelir/damga vergisi çalışandan kesilmez.
-  const minWageBase = MIN_WAGE_GROSS_2026 * (1 - SGK_EMPLOYEE_RATE - UNEMPLOYMENT_EMPLOYEE_RATE);
+  const minWageBase = MIN_WAGE_GROSS * (1 - SGK_EMPLOYEE_RATE - UNEMPLOYMENT_EMPLOYEE_RATE);
   const minWageIncomeTaxExemption = calculateProgressiveIncomeTax(minWageBase);
-  const minWageStampTaxExemption = MIN_WAGE_GROSS_2026 * STAMP_TAX_RATE;
+  const minWageStampTaxExemption = MIN_WAGE_GROSS * STAMP_TAX_RATE;
 
   const netIncomeTax = Math.max(0, incomeTax - minWageIncomeTaxExemption);
   const netStampTax = Math.max(0, stampTax - minWageStampTaxExemption);
@@ -368,15 +362,13 @@ export function calculateSalaryConversion({ amount, mode = 'grossToNet' }) {
   return grossToNetBreakdown(value);
 }
 
-// 2026 2. dönem (Temmuz-Aralık) kıdem tazminatı tavanı — Hazine ve Maliye Bakanlığı duyurusu.
-const SEVERANCE_CEILING_2026_H2 = 73729.87;
+// Kıdem tazminatı tavanı ve ihbar süreleri tablosu — src/data/guncelVeriler.js dosyasından okunur.
+const SEVERANCE_CEILING = GUNCEL_VERILER.kidemTazminatiTavani.value;
 const MS_PER_DAY_FINANS = 1000 * 60 * 60 * 24;
 
 function getNoticeWeeks(totalYears) {
-  if (totalYears < 0.5) return 2;
-  if (totalYears < 1.5) return 4;
-  if (totalYears < 3) return 6;
-  return 8;
+  const match = GUNCEL_VERILER.ihbarSureleri.value.find((row) => totalYears < row.kidemUstSiniriYil);
+  return match ? match.hafta : GUNCEL_VERILER.ihbarSureleri.value.at(-1).hafta;
 }
 
 // Kıdem tazminatına yasal tavan uygulanır; ihbar tazminatına tavan uygulanmaz. İhbar süreleri İş Kanunu m.17'deki sabit tablodan alınır.
@@ -393,7 +385,7 @@ export function calculateSeveranceAndNotice({ grossSalary, startDate, endDate })
   const totalYears = totalDays / 365.25;
 
   const dailyGross = gross / 30;
-  const cappedDailyGross = Math.min(dailyGross, SEVERANCE_CEILING_2026_H2 / 30);
+  const cappedDailyGross = Math.min(dailyGross, SEVERANCE_CEILING / 30);
   const severancePay = cappedDailyGross * 30 * totalYears;
 
   const noticeWeeks = getNoticeWeeks(totalYears);
@@ -402,7 +394,7 @@ export function calculateSeveranceAndNotice({ grossSalary, startDate, endDate })
   return {
     valid: true,
     totalYears: round2(totalYears),
-    isCapped: dailyGross > SEVERANCE_CEILING_2026_H2 / 30,
+    isCapped: dailyGross > SEVERANCE_CEILING / 30,
     severancePay: round2(severancePay),
     noticeWeeks,
     noticePay: round2(noticePay),
@@ -461,8 +453,8 @@ export function calculateMortgageAffordability({ monthlyIncome, existingDebtPaym
   };
 }
 
-// 2026 BDDK düzenlemesi: kart limiti 50.000 TL ve altında asgari ödeme dönem borcunun %20'si, üzerinde %40'ıdır.
-const CREDIT_CARD_MIN_PAYMENT_THRESHOLD = 50000;
+// Asgari ödeme eşiği ve oranları — src/data/guncelVeriler.js dosyasından okunur (2026 BDDK düzenlemesi).
+const { esikTutar: CREDIT_CARD_MIN_PAYMENT_THRESHOLD, esikAltiOran: CREDIT_CARD_RATE_BELOW, esikUstuOran: CREDIT_CARD_RATE_ABOVE } = GUNCEL_VERILER.krediKartiAsgariOdeme;
 
 export function calculateCreditCardPayment({ cardLimit, statementBalance, monthlyInterestRate, lateInterestRate, daysLate = 0 }) {
   const limit = Math.max(0, safeNumber(cardLimit));
@@ -471,7 +463,7 @@ export function calculateCreditCardPayment({ cardLimit, statementBalance, monthl
   const lateRate = Math.max(0, safeNumber(lateInterestRate)) / 100;
   const overdueDays = Math.max(0, safeNumber(daysLate));
 
-  const minimumPaymentRate = limit > CREDIT_CARD_MIN_PAYMENT_THRESHOLD ? 0.40 : 0.20;
+  const minimumPaymentRate = limit > CREDIT_CARD_MIN_PAYMENT_THRESHOLD ? CREDIT_CARD_RATE_ABOVE : CREDIT_CARD_RATE_BELOW;
   const minimumPayment = balance * minimumPaymentRate;
   const remainingIfMinimumPaid = balance - minimumPayment;
   const nextCycleInterest = remainingIfMinimumPaid * monthlyRate;

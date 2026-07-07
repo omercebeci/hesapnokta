@@ -1,4 +1,5 @@
 {
+  "trailingSlash": false,
   "redirects": [
     { "source": "/kredi-hesaplama/", "destination": "/kredi-hesaplama", "permanent": true },
     { "source": "/kdv-hesaplama/", "destination": "/kdv-hesaplama", "permanent": true },
@@ -40,10 +41,6 @@
     { "source": "/banyo-tuvalet-tadilat-maliyeti/", "destination": "/", "permanent": true },
     { "source": "/dwg-pdf-dxf-insaat-maliyet-analizi", "destination": "/", "permanent": true },
     { "source": "/dwg-pdf-dxf-insaat-maliyet-analizi/", "destination": "/", "permanent": true },
-
-    { "source": "/rehber", "destination": "/", "permanent": true },
-    { "source": "/rehber/", "destination": "/", "permanent": true },
-    { "source": "/rehber/:slug*", "destination": "/", "permanent": true },
 
     { "source": "/admin/:path*", "destination": "/", "permanent": true }
   ],
