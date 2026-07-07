@@ -13,8 +13,9 @@ export default function PrintableBudgetPlan({ items, total }) {
   return (
     <>
       <button type="button" className="btn-primary print-plan-button no-print" onClick={() => window.print()}>
-        🖨️ Planı yazdır/PDF
+        🖨️ Planı yazdır / PDF kaydet
       </button>
+      <p className="hint no-print" style={{ marginTop: -8 }}>Açılan pencerede Hedef olarak "PDF olarak kaydet" seçerseniz dosya olarak indirilir.</p>
 
       <div className="print-summary" aria-hidden="true">
         <h1>HesapNokta</h1>
