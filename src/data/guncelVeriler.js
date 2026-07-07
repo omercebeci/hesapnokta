@@ -44,13 +44,13 @@ export const GUNCEL_VERILER = {
       value: 33030,
       period: '2026',
       source: 'Aile, Çalışma ve Sosyal Hizmetler Bakanlığı - Asgari Ücret Tespit Komisyonu Kararı',
-      lastUpdated: '2026-01-01',
+      lastUpdated: '2026-07-07',
     },
     netAylik: {
       value: 28075.50,
       period: '2026',
       source: 'Aile, Çalışma ve Sosyal Hizmetler Bakanlığı - Asgari Ücret Tespit Komisyonu Kararı',
-      lastUpdated: '2026-01-01',
+      lastUpdated: '2026-07-07',
     },
   },
 
@@ -67,7 +67,7 @@ export const GUNCEL_VERILER = {
     ],
     period: '2026',
     source: 'Gelir İdaresi Başkanlığı - 2026 Yılı Gelir Vergisi Tarifesi',
-    lastUpdated: '2026-01-01',
+    lastUpdated: '2026-07-07',
   },
 
   // ── SGK ve işsizlik sigortası çalışan payı oranları ──
@@ -75,13 +75,13 @@ export const GUNCEL_VERILER = {
     value: 0.14,
     period: '2026',
     source: '5510 sayılı Sosyal Sigortalar ve Genel Sağlık Sigortası Kanunu',
-    lastUpdated: '2026-01-01',
+    lastUpdated: '2026-07-07',
   },
   issizlikSigortasiIsciPayiOrani: {
     value: 0.01,
     period: '2026',
     source: '4447 sayılı İşsizlik Sigortası Kanunu',
-    lastUpdated: '2026-01-01',
+    lastUpdated: '2026-07-07',
   },
 
   // ── Damga vergisi oranı (ücret bordrosu) ──
@@ -89,7 +89,7 @@ export const GUNCEL_VERILER = {
     value: 0.00759,
     period: '2026',
     source: 'Damga Vergisi Kanunu Genel Tebliği (Seri No: 71)',
-    lastUpdated: '2026-01-01',
+    lastUpdated: '2026-07-07',
   },
 
   // ── Kira artışı yasal üst sınırı (TÜFE 12 aylık ortalama) ──
@@ -98,7 +98,7 @@ export const GUNCEL_VERILER = {
     value: 32.03,
     period: 'Temmuz 2026',
     source: 'TÜİK - TÜFE 12 Aylık Ortalamalara Göre Değişim Oranı',
-    lastUpdated: '2026-07-03',
+    lastUpdated: '2026-07-07',
   },
 
   // ── Kıdem tazminatı tavanı ──
@@ -107,7 +107,7 @@ export const GUNCEL_VERILER = {
     value: 73729.87,
     period: '2026 2. Dönem (Temmuz-Aralık)',
     source: 'Hazine ve Maliye Bakanlığı Genelgesi',
-    lastUpdated: '2026-07-01',
+    lastUpdated: '2026-07-07',
   },
 
   // ── İhbar süreleri (İş Kanunu m.17) ──
@@ -133,7 +133,7 @@ export const GUNCEL_VERILER = {
     esikUstuOran: 0.40,
     period: '2026',
     source: 'BDDK Kararı (26.09.2024 tarih, 10970 sayılı)',
-    lastUpdated: '2026-01-01',
+    lastUpdated: '2026-07-07',
   },
 
   // ── Kredi kartı azami (yasal üst sınır) faiz oranları ──
@@ -147,7 +147,7 @@ export const GUNCEL_VERILER = {
     ],
     period: '2026',
     source: 'TCMB - Kredi Kartı İşlemlerinde Uygulanacak Azami Faiz Oranları',
-    lastUpdated: '2026-01-01',
+    lastUpdated: '2026-07-07',
   },
 };
 
