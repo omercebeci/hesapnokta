@@ -1,14 +1,15 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculateVat } from '../../../lib/finansCalculators.js';
 import { formatCurrency, parseLocaleNumber } from '../../../utils/format.js';
+import { useQueryParamState } from '../../../hooks/useQueryParamState.js';
 
 export default function KdvHesaplama() {
-  const [amount, setAmount] = useState('1000');
-  const [vatRate, setVatRate] = useState('20');
-  const [mode, setMode] = useState('add');
+  const [amount, setAmount] = useQueryParamState('tutar', '1000');
+  const [vatRate, setVatRate] = useQueryParamState('oran', '20');
+  const [mode, setMode] = useQueryParamState('mod', 'add');
 
   const { result, error } = useMemo(() => {
     const parsedAmount = parseLocaleNumber(amount);

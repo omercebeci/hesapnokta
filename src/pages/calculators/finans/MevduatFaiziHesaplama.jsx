@@ -1,15 +1,16 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculateDeposit } from '../../../lib/finansCalculators.js';
 import { formatCurrency, parseLocaleNumber } from '../../../utils/format.js';
+import { useQueryParamState } from '../../../hooks/useQueryParamState.js';
 
 export default function MevduatFaiziHesaplama() {
-  const [principal, setPrincipal] = useState('100000');
-  const [annualRate, setAnnualRate] = useState('45');
-  const [days, setDays] = useState('32');
-  const [taxRate, setTaxRate] = useState('5');
+  const [principal, setPrincipal] = useQueryParamState('anapara', '100000');
+  const [annualRate, setAnnualRate] = useQueryParamState('faiz', '45');
+  const [days, setDays] = useQueryParamState('gun', '32');
+  const [taxRate, setTaxRate] = useQueryParamState('stopaj', '5');
 
   const { result, error } = useMemo(() => {
     const parsedPrincipal = parseLocaleNumber(principal);

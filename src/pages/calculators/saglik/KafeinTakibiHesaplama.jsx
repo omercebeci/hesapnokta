@@ -1,16 +1,23 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import { ResultCard, ResultMetrics } from '../../../components/Result.jsx';
 import { calculateCaffeineIntake, CAFFEINE_SOURCES } from '../../../lib/saglikCalculators.js';
 import { formatNumber } from '../../../utils/format.js';
+import { useQueryParamState, serializeRows, deserializeRows } from '../../../hooks/useQueryParamState.js';
 
 let rowIdCounter = 0;
 const createRow = (drinkType = 'filtreKahve', count = '1') => ({ id: rowIdCounter++, drinkType, count });
+const ROW_FIELDS = ['drinkType', 'count'];
+const DEFAULT_ROWS = [createRow('filtreKahve', '2'), createRow('kola', '1')];
+const BOOL_PARAM = { serialize: (v) => (v ? '1' : '0'), deserialize: (v) => v === '1' };
 
 export default function KafeinTakibiHesaplama() {
-  const [rows, setRows] = useState(() => [createRow('filtreKahve', '2'), createRow('kola', '1')]);
-  const [isPregnant, setIsPregnant] = useState(false);
+  const [rows, setRows] = useQueryParamState('icecekler', DEFAULT_ROWS, {
+    serialize: (value) => serializeRows(value, ROW_FIELDS),
+    deserialize: (text) => deserializeRows(text, ROW_FIELDS, (v) => createRow(v.drinkType, v.count)) ?? DEFAULT_ROWS,
+  });
+  const [isPregnant, setIsPregnant] = useQueryParamState('gebelik', false, BOOL_PARAM);
 
   const updateRow = (id, field, value) => {
     setRows((current) => current.map((row) => (row.id === id ? { ...row, [field]: value } : row)));

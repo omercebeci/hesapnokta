@@ -1,14 +1,15 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculateStepsToCalories } from '../../../lib/saglikCalculators.js';
 import { formatNumber, parseLocaleNumber } from '../../../utils/format.js';
+import { useQueryParamState } from '../../../hooks/useQueryParamState.js';
 
 export default function AdimKaloriDonusumuHesaplama() {
-  const [steps, setSteps] = useState('10000');
-  const [weightKg, setWeightKg] = useState('70');
-  const [strideMeters, setStrideMeters] = useState('0,75');
+  const [steps, setSteps] = useQueryParamState('adim', '10000');
+  const [weightKg, setWeightKg] = useQueryParamState('kilo', '70');
+  const [strideMeters, setStrideMeters] = useQueryParamState('adimBoyu', '0,75');
 
   const { result, error } = useMemo(() => {
     const parsedSteps = parseLocaleNumber(steps);

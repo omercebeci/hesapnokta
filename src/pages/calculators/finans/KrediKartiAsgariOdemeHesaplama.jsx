@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import DataPeriodNote from '../../../components/DataPeriodNote.jsx';
@@ -6,17 +6,18 @@ import { ResultCard, ResultMetrics, ResultError } from '../../../components/Resu
 import { calculateCreditCardPayment } from '../../../lib/finansCalculators.js';
 import { formatCurrency, formatInteger, formatNumber, parseLocaleNumber } from '../../../utils/format.js';
 import { GUNCEL_VERILER } from '../../../data/guncelVeriler.js';
+import { useQueryParamState } from '../../../hooks/useQueryParamState.js';
 
 const FAIZ_ORANLARI = GUNCEL_VERILER.krediKartiFaizOranlari;
 const ASGARI_ODEME = GUNCEL_VERILER.krediKartiAsgariOdeme;
 const EN_DUSUK_DILIM = FAIZ_ORANLARI.value[0];
 
 export default function KrediKartiAsgariOdemeHesaplama() {
-  const [cardLimit, setCardLimit] = useState('30000');
-  const [statementBalance, setStatementBalance] = useState('10000');
-  const [monthlyInterestRate, setMonthlyInterestRate] = useState(String(EN_DUSUK_DILIM.akdiFaiz * 100));
-  const [lateInterestRate, setLateInterestRate] = useState(String(EN_DUSUK_DILIM.gecikmeFaizi * 100));
-  const [daysLate, setDaysLate] = useState('0');
+  const [cardLimit, setCardLimit] = useQueryParamState('limit', '30000');
+  const [statementBalance, setStatementBalance] = useQueryParamState('borc', '10000');
+  const [monthlyInterestRate, setMonthlyInterestRate] = useQueryParamState('faiz', String(EN_DUSUK_DILIM.akdiFaiz * 100));
+  const [lateInterestRate, setLateInterestRate] = useQueryParamState('gecikmeFaiz', String(EN_DUSUK_DILIM.gecikmeFaizi * 100));
+  const [daysLate, setDaysLate] = useQueryParamState('gecikmeGun', '0');
 
   const { result, error } = useMemo(() => {
     const parsedLimit = parseLocaleNumber(cardLimit);

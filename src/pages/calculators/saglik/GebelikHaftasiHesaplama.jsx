@@ -1,15 +1,16 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculatePregnancy } from '../../../lib/saglikCalculators.js';
 import { formatInteger } from '../../../utils/format.js';
+import { useQueryParamState } from '../../../hooks/useQueryParamState.js';
 
 const today = new Date().toISOString().slice(0, 10);
 
 export default function GebelikHaftasiHesaplama() {
-  const [lastPeriodDate, setLastPeriodDate] = useState('');
-  const [referenceDate, setReferenceDate] = useState(today);
+  const [lastPeriodDate, setLastPeriodDate] = useQueryParamState('sonAdet', '');
+  const [referenceDate, setReferenceDate] = useQueryParamState('referans', today);
 
   const { result, error } = useMemo(() => {
     if (!lastPeriodDate) {

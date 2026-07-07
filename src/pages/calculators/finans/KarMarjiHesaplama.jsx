@@ -1,14 +1,15 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculateProfitMargin } from '../../../lib/finansCalculators.js';
 import { formatCurrency, formatPercent, parseLocaleNumber } from '../../../utils/format.js';
+import { useQueryParamState } from '../../../hooks/useQueryParamState.js';
 
 export default function KarMarjiHesaplama() {
-  const [cost, setCost] = useState('100');
-  const [salePrice, setSalePrice] = useState('150');
-  const [quantity, setQuantity] = useState('1');
+  const [cost, setCost] = useQueryParamState('maliyet', '100');
+  const [salePrice, setSalePrice] = useQueryParamState('fiyat', '150');
+  const [quantity, setQuantity] = useQueryParamState('adet', '1');
 
   const { result, error } = useMemo(() => {
     const parsedCost = parseLocaleNumber(cost);

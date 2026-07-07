@@ -1,15 +1,16 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import { ResultCard, ResultError } from '../../../components/Result.jsx';
 import { calculateRatio } from '../../../lib/matematikCalculators.js';
 import { formatNumber, parseLocaleNumber } from '../../../utils/format.js';
+import { useQueryParamState } from '../../../hooks/useQueryParamState.js';
 
 export default function OranOrantiHesaplama() {
-  const [type, setType] = useState('direct');
-  const [a, setA] = useState('4');
-  const [b, setB] = useState('12');
-  const [c, setC] = useState('6');
+  const [type, setType] = useQueryParamState('tur', 'direct');
+  const [a, setA] = useQueryParamState('a', '4');
+  const [b, setB] = useQueryParamState('b', '12');
+  const [c, setC] = useQueryParamState('c', '6');
 
   const { result, error } = useMemo(() => {
     const parsedA = parseLocaleNumber(a);

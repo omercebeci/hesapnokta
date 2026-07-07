@@ -1,16 +1,17 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import { ResultCard, ResultError } from '../../../components/Result.jsx';
 import { calculateBodyFatPercentage } from '../../../lib/saglikCalculators.js';
 import { formatNumber, parseLocaleNumber } from '../../../utils/format.js';
+import { useQueryParamState } from '../../../hooks/useQueryParamState.js';
 
 export default function VucutYagOraniHesaplama() {
-  const [gender, setGender] = useState('female');
-  const [heightCm, setHeightCm] = useState('165');
-  const [neckCm, setNeckCm] = useState('32');
-  const [waistCm, setWaistCm] = useState('70');
-  const [hipCm, setHipCm] = useState('95');
+  const [gender, setGender] = useQueryParamState('cinsiyet', 'female');
+  const [heightCm, setHeightCm] = useQueryParamState('boy', '165');
+  const [neckCm, setNeckCm] = useQueryParamState('boyun', '32');
+  const [waistCm, setWaistCm] = useQueryParamState('bel', '70');
+  const [hipCm, setHipCm] = useQueryParamState('kalca', '95');
 
   const { result, error } = useMemo(() => {
     const parsedHeight = parseLocaleNumber(heightCm);

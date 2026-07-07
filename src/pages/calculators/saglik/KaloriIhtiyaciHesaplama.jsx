@@ -1,9 +1,10 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculateCalorieNeeds } from '../../../lib/saglikCalculators.js';
 import { formatInteger, parseLocaleNumber } from '../../../utils/format.js';
+import { useQueryParamState } from '../../../hooks/useQueryParamState.js';
 
 const ACTIVITY_OPTIONS = [
   { value: 'sedentary', label: 'Hareketsiz (masa başı, egzersiz yok)' },
@@ -14,11 +15,11 @@ const ACTIVITY_OPTIONS = [
 ];
 
 export default function KaloriIhtiyaciHesaplama() {
-  const [gender, setGender] = useState('female');
-  const [weightKg, setWeightKg] = useState('65');
-  const [heightCm, setHeightCm] = useState('165');
-  const [age, setAge] = useState('30');
-  const [activityLevel, setActivityLevel] = useState('moderate');
+  const [gender, setGender] = useQueryParamState('cinsiyet', 'female');
+  const [weightKg, setWeightKg] = useQueryParamState('kilo', '65');
+  const [heightCm, setHeightCm] = useQueryParamState('boy', '165');
+  const [age, setAge] = useQueryParamState('yas', '30');
+  const [activityLevel, setActivityLevel] = useQueryParamState('aktivite', 'moderate');
 
   const { result, error } = useMemo(() => {
     const parsedWeight = parseLocaleNumber(weightKg);

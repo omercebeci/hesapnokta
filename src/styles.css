@@ -601,6 +601,19 @@ h1, h2, h3, h4 {
 }
 .result-card .result-note { font-size: .87rem; opacity: .9; }
 
+.result-share-button {
+  justify-self: start;
+  padding: 7px 14px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+  font-size: .78rem;
+  font-weight: 600;
+  transition: background .15s var(--ease), transform .1s var(--ease);
+}
+.result-share-button:hover { background: rgba(255, 255, 255, 0.28); }
+.result-share-button:active { transform: translateY(1px); }
+
 .result-metrics {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

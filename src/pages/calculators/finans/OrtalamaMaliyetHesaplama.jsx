@@ -1,15 +1,21 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculateAverageCost } from '../../../lib/finansCalculators.js';
 import { formatCurrency, formatNumber, parseLocaleNumber } from '../../../utils/format.js';
+import { useQueryParamState, serializeRows, deserializeRows } from '../../../hooks/useQueryParamState.js';
 
 let rowIdCounter = 0;
 const createRow = (quantity = '', price = '') => ({ id: rowIdCounter++, quantity, price });
+const ROW_FIELDS = ['quantity', 'price'];
+const DEFAULT_ROWS = [createRow('10', '100'), createRow('5', '130')];
 
 export default function OrtalamaMaliyetHesaplama() {
-  const [rows, setRows] = useState(() => [createRow('10', '100'), createRow('5', '130')]);
+  const [rows, setRows] = useQueryParamState('kalemler', DEFAULT_ROWS, {
+    serialize: (value) => serializeRows(value, ROW_FIELDS),
+    deserialize: (text) => deserializeRows(text, ROW_FIELDS, (v) => createRow(v.quantity, v.price)) ?? DEFAULT_ROWS,
+  });
 
   const updateRow = (id, field, value) => {
     setRows((current) => current.map((row) => (row.id === id ? { ...row, [field]: value } : row)));

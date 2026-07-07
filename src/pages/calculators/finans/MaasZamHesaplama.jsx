@@ -1,13 +1,14 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculateSalaryIncrease } from '../../../lib/finansCalculators.js';
 import { formatCurrency, parseLocaleNumber } from '../../../utils/format.js';
+import { useQueryParamState } from '../../../hooks/useQueryParamState.js';
 
 export default function MaasZamHesaplama() {
-  const [currentSalary, setCurrentSalary] = useState('30000');
-  const [increaseRate, setIncreaseRate] = useState('25');
+  const [currentSalary, setCurrentSalary] = useQueryParamState('maas', '30000');
+  const [increaseRate, setIncreaseRate] = useQueryParamState('oran', '25');
 
   const { result, error } = useMemo(() => {
     const parsedSalary = parseLocaleNumber(currentSalary);

@@ -1,14 +1,15 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import { ResultCard, ResultError } from '../../../components/Result.jsx';
 import { calculateCombinationPermutation } from '../../../lib/matematikCalculators.js';
 import { formatNumber, parseLocaleNumber } from '../../../utils/format.js';
+import { useQueryParamState } from '../../../hooks/useQueryParamState.js';
 
 export default function KombinasyonPermutasyonHesaplama() {
-  const [mode, setMode] = useState('combination');
-  const [n, setN] = useState('10');
-  const [r, setR] = useState('3');
+  const [mode, setMode] = useQueryParamState('mod', 'combination');
+  const [n, setN] = useQueryParamState('n', '10');
+  const [r, setR] = useQueryParamState('r', '3');
 
   const { result, error } = useMemo(() => {
     const parsedN = parseLocaleNumber(n);

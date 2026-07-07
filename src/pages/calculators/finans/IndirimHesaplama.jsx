@@ -1,13 +1,14 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculateDiscount } from '../../../lib/finansCalculators.js';
 import { formatCurrency, parseLocaleNumber } from '../../../utils/format.js';
+import { useQueryParamState } from '../../../hooks/useQueryParamState.js';
 
 export default function IndirimHesaplama() {
-  const [listPrice, setListPrice] = useState('1000');
-  const [discountRate, setDiscountRate] = useState('20');
+  const [listPrice, setListPrice] = useQueryParamState('fiyat', '1000');
+  const [discountRate, setDiscountRate] = useQueryParamState('oran', '20');
 
   const { result, error } = useMemo(() => {
     const parsedPrice = parseLocaleNumber(listPrice);

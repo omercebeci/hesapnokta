@@ -1,16 +1,17 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculateGradeAverage } from '../../../lib/egitimCalculators.js';
 import { formatNumber, parseLocaleNumber } from '../../../utils/format.js';
+import { useQueryParamState } from '../../../hooks/useQueryParamState.js';
 
 export default function DersNotuOrtalamasiHesaplama() {
-  const [midtermScore, setMidtermScore] = useState('60');
-  const [midtermWeight, setMidtermWeight] = useState('40');
-  const [finalWeight, setFinalWeight] = useState('60');
-  const [finalScore, setFinalScore] = useState('');
-  const [passingGrade, setPassingGrade] = useState('50');
+  const [midtermScore, setMidtermScore] = useQueryParamState('vize', '60');
+  const [midtermWeight, setMidtermWeight] = useQueryParamState('vizeAgirlik', '40');
+  const [finalWeight, setFinalWeight] = useQueryParamState('finalAgirlik', '60');
+  const [finalScore, setFinalScore] = useQueryParamState('final', '');
+  const [passingGrade, setPassingGrade] = useQueryParamState('gecmeNotu', '50');
 
   const { result, error } = useMemo(() => {
     const parsedMidterm = parseLocaleNumber(midtermScore);

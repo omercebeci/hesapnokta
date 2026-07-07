@@ -1,14 +1,15 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculateTimeDuration } from '../../../lib/zamanCalculators.js';
 import { formatNumber, parseLocaleNumber } from '../../../utils/format.js';
+import { useQueryParamState } from '../../../hooks/useQueryParamState.js';
 
 export default function SaatFarkiHesaplama() {
-  const [startTime, setStartTime] = useState('09:00');
-  const [endTime, setEndTime] = useState('18:00');
-  const [breakMinutes, setBreakMinutes] = useState('60');
+  const [startTime, setStartTime] = useQueryParamState('baslangic', '09:00');
+  const [endTime, setEndTime] = useQueryParamState('bitis', '18:00');
+  const [breakMinutes, setBreakMinutes] = useQueryParamState('mola', '60');
 
   const { result, error } = useMemo(() => {
     const parsedBreak = parseLocaleNumber(breakMinutes);

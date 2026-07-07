@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import DataPeriodNote from '../../../components/DataPeriodNote.jsx';
@@ -6,15 +6,16 @@ import { ResultCard, ResultMetrics, ResultError } from '../../../components/Resu
 import { calculateSeveranceAndNotice } from '../../../lib/finansCalculators.js';
 import { formatCurrency, formatNumber, parseLocaleNumber } from '../../../utils/format.js';
 import { GUNCEL_VERILER } from '../../../data/guncelVeriler.js';
+import { useQueryParamState } from '../../../hooks/useQueryParamState.js';
 
 const KIDEM_TAVANI = GUNCEL_VERILER.kidemTazminatiTavani;
 const IHBAR_SURELERI = GUNCEL_VERILER.ihbarSureleri;
 const today = new Date().toISOString().slice(0, 10);
 
 export default function KidemIhbarTazminatiHesaplama() {
-  const [grossSalary, setGrossSalary] = useState('50000');
-  const [startDate, setStartDate] = useState('2021-01-01');
-  const [endDate, setEndDate] = useState(today);
+  const [grossSalary, setGrossSalary] = useQueryParamState('maas', '50000');
+  const [startDate, setStartDate] = useQueryParamState('baslangic', '2021-01-01');
+  const [endDate, setEndDate] = useQueryParamState('bitis', today);
 
   const { result, error } = useMemo(() => {
     const parsedSalary = parseLocaleNumber(grossSalary);

@@ -1,9 +1,10 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import { ResultCard, ResultError } from '../../../components/Result.jsx';
 import { calculatePercentage } from '../../../lib/matematikCalculators.js';
 import { formatNumber, parseLocaleNumber } from '../../../utils/format.js';
+import { useQueryParamState } from '../../../hooks/useQueryParamState.js';
 
 const MODES = [
   { value: 'percentOf', label: 'X sayının %Y\'si' },
@@ -12,9 +13,9 @@ const MODES = [
 ];
 
 export default function YuzdeHesaplama() {
-  const [mode, setMode] = useState('percentOf');
-  const [valueA, setValueA] = useState('250');
-  const [valueB, setValueB] = useState('20');
+  const [mode, setMode] = useQueryParamState('mod', 'percentOf');
+  const [valueA, setValueA] = useQueryParamState('a', '250');
+  const [valueB, setValueB] = useQueryParamState('b', '20');
 
   const { result, error } = useMemo(() => {
     const a = parseLocaleNumber(valueA);

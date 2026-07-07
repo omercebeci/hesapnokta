@@ -1,16 +1,17 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculateCompoundInterest } from '../../../lib/finansCalculators.js';
 import { formatCurrency, parseLocaleNumber } from '../../../utils/format.js';
+import { useQueryParamState } from '../../../hooks/useQueryParamState.js';
 
 export default function BilesikFaizHesaplama() {
-  const [principal, setPrincipal] = useState('100000');
-  const [annualRate, setAnnualRate] = useState('12');
-  const [years, setYears] = useState('5');
-  const [monthlyContribution, setMonthlyContribution] = useState('0');
-  const [frequency, setFrequency] = useState('monthly');
+  const [principal, setPrincipal] = useQueryParamState('anapara', '100000');
+  const [annualRate, setAnnualRate] = useQueryParamState('faiz', '12');
+  const [years, setYears] = useQueryParamState('yil', '5');
+  const [monthlyContribution, setMonthlyContribution] = useQueryParamState('katki', '0');
+  const [frequency, setFrequency] = useQueryParamState('siklik', 'monthly');
 
   const { result, error } = useMemo(() => {
     const parsedPrincipal = parseLocaleNumber(principal);

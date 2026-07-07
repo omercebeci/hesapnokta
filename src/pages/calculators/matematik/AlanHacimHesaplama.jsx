@@ -1,9 +1,13 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import { ResultCard, ResultError } from '../../../components/Result.jsx';
 import { calculateAreaVolume } from '../../../lib/matematikCalculators.js';
 import { formatNumber, parseLocaleNumber } from '../../../utils/format.js';
+import { useQueryParamState, useQueryParamObjectState } from '../../../hooks/useQueryParamState.js';
+
+const DIMS_PARAM_MAP = { width: 'genislik', height: 'yukseklik', side: 'kenar', radius: 'yaricap', base: 'taban', depth: 'derinlik' };
+const DEFAULT_DIMS = { width: '5', height: '3', side: '4', radius: '3', base: '6', depth: '2' };
 
 const SHAPES = {
   area: {
@@ -22,9 +26,9 @@ const SHAPES = {
 };
 
 export default function AlanHacimHesaplama() {
-  const [mode, setMode] = useState('area');
-  const [shape, setShape] = useState('rectangle');
-  const [dims, setDims] = useState({ width: '5', height: '3', side: '4', radius: '3', base: '6', depth: '2' });
+  const [mode, setMode] = useQueryParamState('mod', 'area');
+  const [shape, setShape] = useQueryParamState('sekil', 'rectangle');
+  const [dims, setDims] = useQueryParamObjectState(DIMS_PARAM_MAP, DEFAULT_DIMS);
 
   const shapeConfig = SHAPES[mode][shape] || Object.values(SHAPES[mode])[0];
 

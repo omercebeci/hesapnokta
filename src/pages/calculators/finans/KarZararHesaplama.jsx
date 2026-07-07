@@ -1,14 +1,15 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculateInvestmentReturn } from '../../../lib/finansCalculators.js';
 import { formatCurrency, formatPercent, parseLocaleNumber } from '../../../utils/format.js';
+import { useQueryParamState } from '../../../hooks/useQueryParamState.js';
 
 export default function KarZararHesaplama() {
-  const [buyPrice, setBuyPrice] = useState('100');
-  const [currentPrice, setCurrentPrice] = useState('120');
-  const [quantity, setQuantity] = useState('1');
+  const [buyPrice, setBuyPrice] = useQueryParamState('alis', '100');
+  const [currentPrice, setCurrentPrice] = useQueryParamState('guncel', '120');
+  const [quantity, setQuantity] = useQueryParamState('adet', '1');
 
   const { result, error } = useMemo(() => {
     const parsedBuy = parseLocaleNumber(buyPrice);

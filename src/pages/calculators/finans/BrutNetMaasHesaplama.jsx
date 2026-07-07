@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import DataPeriodNote from '../../../components/DataPeriodNote.jsx';
@@ -6,6 +6,7 @@ import { ResultCard, ResultMetrics, ResultError } from '../../../components/Resu
 import { calculateSalaryConversion } from '../../../lib/finansCalculators.js';
 import { formatCurrency, formatNumber, parseLocaleNumber } from '../../../utils/format.js';
 import { GUNCEL_VERILER } from '../../../data/guncelVeriler.js';
+import { useQueryParamState } from '../../../hooks/useQueryParamState.js';
 
 const VERGI_DILIMLERI = GUNCEL_VERILER.gelirVergisiDilimleri;
 const SGK_ORANI = GUNCEL_VERILER.sgkIsciPayiOrani;
@@ -14,8 +15,8 @@ const DAMGA_ORANI = GUNCEL_VERILER.damgaVergisiOrani;
 const ASGARI_UCRET = GUNCEL_VERILER.asgariUcret;
 
 export default function BrutNetMaasHesaplama() {
-  const [mode, setMode] = useState('grossToNet');
-  const [amount, setAmount] = useState('50000');
+  const [mode, setMode] = useQueryParamState('mod', 'grossToNet');
+  const [amount, setAmount] = useQueryParamState('tutar', '50000');
 
   const { result, error } = useMemo(() => {
     const parsedAmount = parseLocaleNumber(amount);

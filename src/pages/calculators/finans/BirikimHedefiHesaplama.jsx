@@ -1,17 +1,18 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculateSavingsGoal } from '../../../lib/finansCalculators.js';
 import { formatCurrency, formatNumber, parseLocaleNumber } from '../../../utils/format.js';
+import { useQueryParamState } from '../../../hooks/useQueryParamState.js';
 
 export default function BirikimHedefiHesaplama() {
-  const [mode, setMode] = useState('monthlyNeeded'); // 'monthlyNeeded' | 'timeToGoal'
-  const [targetAmount, setTargetAmount] = useState('200000');
-  const [currentSavings, setCurrentSavings] = useState('20000');
-  const [months, setMonths] = useState('24');
-  const [monthlyContribution, setMonthlyContribution] = useState('5000');
-  const [annualReturnRate, setAnnualReturnRate] = useState('0');
+  const [mode, setMode] = useQueryParamState('mod', 'monthlyNeeded'); // 'monthlyNeeded' | 'timeToGoal'
+  const [targetAmount, setTargetAmount] = useQueryParamState('hedef', '200000');
+  const [currentSavings, setCurrentSavings] = useQueryParamState('birikim', '20000');
+  const [months, setMonths] = useQueryParamState('ay', '24');
+  const [monthlyContribution, setMonthlyContribution] = useQueryParamState('katki', '5000');
+  const [annualReturnRate, setAnnualReturnRate] = useQueryParamState('getiri', '0');
 
   const { result, error } = useMemo(() => {
     const parsedTarget = parseLocaleNumber(targetAmount);

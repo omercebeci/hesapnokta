@@ -1,15 +1,16 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import { ResultCard, ResultError } from '../../../components/Result.jsx';
 import { calculateCurrencyConversion } from '../../../lib/finansCalculators.js';
 import { formatNumber, parseLocaleNumber } from '../../../utils/format.js';
+import { useQueryParamState } from '../../../hooks/useQueryParamState.js';
 
 export default function DovizCevirici() {
-  const [amount, setAmount] = useState('100');
-  const [rate, setRate] = useState('34,50');
-  const [direction, setDirection] = useState('toForeign'); // toForeign: TL -> döviz, toTl: döviz -> TL
-  const [currencyLabel, setCurrencyLabel] = useState('USD');
+  const [amount, setAmount] = useQueryParamState('tutar', '100');
+  const [rate, setRate] = useQueryParamState('kur', '34,50');
+  const [direction, setDirection] = useQueryParamState('yon', 'toForeign'); // toForeign: TL -> döviz, toTl: döviz -> TL
+  const [currencyLabel, setCurrencyLabel] = useQueryParamState('birim', 'USD');
 
   const { result, error } = useMemo(() => {
     const parsedAmount = parseLocaleNumber(amount);

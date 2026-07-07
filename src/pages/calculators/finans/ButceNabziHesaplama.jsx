@@ -1,18 +1,19 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import { ResultCard, ResultError } from '../../../components/Result.jsx';
 import RatioBar from '../../../components/RatioBar.jsx';
 import { calculateBudgetPulse } from '../../../lib/finansCalculators.js';
 import { formatCurrency, parseLocaleNumber } from '../../../utils/format.js';
+import { useQueryParamState } from '../../../hooks/useQueryParamState.js';
 
 const RISK_LABEL = { düşük: 'Düşük risk', orta: 'Orta risk', yüksek: 'Yüksek risk' };
 
 export default function ButceNabziHesaplama() {
-  const [monthlyIncome, setMonthlyIncome] = useState('40000');
-  const [fixedExpenses, setFixedExpenses] = useState('18000');
-  const [debtPayments, setDebtPayments] = useState('6000');
-  const [savings, setSavings] = useState('4000');
+  const [monthlyIncome, setMonthlyIncome] = useQueryParamState('gelir', '40000');
+  const [fixedExpenses, setFixedExpenses] = useQueryParamState('gider', '18000');
+  const [debtPayments, setDebtPayments] = useQueryParamState('borc', '6000');
+  const [savings, setSavings] = useQueryParamState('birikim', '4000');
 
   const { result, error } = useMemo(() => {
     const parsedIncome = parseLocaleNumber(monthlyIncome);

@@ -1,9 +1,10 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import { ResultCard, ResultError } from '../../../components/Result.jsx';
 import { convertUnit, UNIT_CATEGORIES } from '../../../lib/matematikCalculators.js';
 import { formatNumber, parseLocaleNumber } from '../../../utils/format.js';
+import { useQueryParamState } from '../../../hooks/useQueryParamState.js';
 
 const CATEGORY_DEFAULT_UNITS = {
   length: ['km', 'mile'],
@@ -13,10 +14,10 @@ const CATEGORY_DEFAULT_UNITS = {
 };
 
 export default function BirimCevirici() {
-  const [category, setCategory] = useState('length');
-  const [fromUnit, setFromUnit] = useState(CATEGORY_DEFAULT_UNITS.length[0]);
-  const [toUnit, setToUnit] = useState(CATEGORY_DEFAULT_UNITS.length[1]);
-  const [value, setValue] = useState('10');
+  const [category, setCategory] = useQueryParamState('kategori', 'length');
+  const [fromUnit, setFromUnit] = useQueryParamState('kaynak', CATEGORY_DEFAULT_UNITS.length[0]);
+  const [toUnit, setToUnit] = useQueryParamState('hedef', CATEGORY_DEFAULT_UNITS.length[1]);
+  const [value, setValue] = useQueryParamState('deger', '10');
 
   const unitOptions = Object.entries(UNIT_CATEGORIES[category].units);
 

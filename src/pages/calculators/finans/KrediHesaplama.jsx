@@ -1,16 +1,17 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculateLoan, generateLoanSchedule } from '../../../lib/finansCalculators.js';
 import { formatCurrency, formatNumber, parseLocaleNumber } from '../../../utils/format.js';
+import { useQueryParamState } from '../../../hooks/useQueryParamState.js';
 
 export default function KrediHesaplama() {
-  const [amount, setAmount] = useState('100000');
-  const [monthlyRate, setMonthlyRate] = useState('3,5');
-  const [months, setMonths] = useState('12');
-  const [bsmvRate, setBsmvRate] = useState('15');
-  const [kkdfRate, setKkdfRate] = useState('15');
+  const [amount, setAmount] = useQueryParamState('tutar', '100000');
+  const [monthlyRate, setMonthlyRate] = useQueryParamState('faiz', '3,5');
+  const [months, setMonths] = useQueryParamState('vade', '12');
+  const [bsmvRate, setBsmvRate] = useQueryParamState('bsmv', '15');
+  const [kkdfRate, setKkdfRate] = useQueryParamState('kkdf', '15');
 
   const { result, schedule, error } = useMemo(() => {
     const parsedAmount = parseLocaleNumber(amount);

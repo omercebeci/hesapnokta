@@ -1,15 +1,16 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculateAge } from '../../../lib/zamanCalculators.js';
 import { formatInteger } from '../../../utils/format.js';
+import { useQueryParamState } from '../../../hooks/useQueryParamState.js';
 
 const today = new Date().toISOString().slice(0, 10);
 
 export default function YasHesaplama() {
-  const [birthDate, setBirthDate] = useState('2000-01-01');
-  const [referenceDate, setReferenceDate] = useState(today);
+  const [birthDate, setBirthDate] = useQueryParamState('dogum', '2000-01-01');
+  const [referenceDate, setReferenceDate] = useQueryParamState('referans', today);
 
   const { result, error } = useMemo(() => {
     if (!birthDate) {

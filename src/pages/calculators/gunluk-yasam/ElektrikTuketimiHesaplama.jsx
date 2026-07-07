@@ -1,15 +1,16 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculateElectricityCost } from '../../../lib/gunlukYasamCalculators.js';
 import { formatCurrency, formatNumber, parseLocaleNumber } from '../../../utils/format.js';
+import { useQueryParamState } from '../../../hooks/useQueryParamState.js';
 
 export default function ElektrikTuketimiHesaplama() {
-  const [watt, setWatt] = useState('1500');
-  const [hoursPerDay, setHoursPerDay] = useState('3');
-  const [daysPerMonth, setDaysPerMonth] = useState('30');
-  const [pricePerKwh, setPricePerKwh] = useState('2,5');
+  const [watt, setWatt] = useQueryParamState('watt', '1500');
+  const [hoursPerDay, setHoursPerDay] = useQueryParamState('saat', '3');
+  const [daysPerMonth, setDaysPerMonth] = useQueryParamState('gun', '30');
+  const [pricePerKwh, setPricePerKwh] = useQueryParamState('fiyat', '2,5');
 
   const { result, error } = useMemo(() => {
     const parsedWatt = parseLocaleNumber(watt);

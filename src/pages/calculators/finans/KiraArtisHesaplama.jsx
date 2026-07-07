@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import DataPeriodNote from '../../../components/DataPeriodNote.jsx';
@@ -6,13 +6,14 @@ import { ResultCard, ResultMetrics, ResultError } from '../../../components/Resu
 import { calculateRentIncrease } from '../../../lib/finansCalculators.js';
 import { formatCurrency, formatPercent, parseLocaleNumber } from '../../../utils/format.js';
 import { GUNCEL_VERILER } from '../../../data/guncelVeriler.js';
+import { useQueryParamState } from '../../../hooks/useQueryParamState.js';
 
 const KIRA_TAVANI = GUNCEL_VERILER.kiraArtisTavanOrani;
 
 export default function KiraArtisHesaplama() {
-  const [currentRent, setCurrentRent] = useState('10000');
-  const [increaseRate, setIncreaseRate] = useState('40');
-  const [legalCapRate, setLegalCapRate] = useState(String(KIRA_TAVANI.value));
+  const [currentRent, setCurrentRent] = useQueryParamState('kira', '10000');
+  const [increaseRate, setIncreaseRate] = useQueryParamState('oran', '40');
+  const [legalCapRate, setLegalCapRate] = useQueryParamState('tavan', String(KIRA_TAVANI.value));
 
   const { result, error } = useMemo(() => {
     const parsedRent = parseLocaleNumber(currentRent);

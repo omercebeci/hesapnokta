@@ -1,15 +1,21 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculateAverage } from '../../../lib/matematikCalculators.js';
 import { formatNumber, parseLocaleNumber } from '../../../utils/format.js';
+import { useQueryParamState, serializeRows, deserializeRows } from '../../../hooks/useQueryParamState.js';
 
 let rowIdCounter = 0;
 const createRow = (value = '', weight = '1') => ({ id: rowIdCounter++, value, weight });
+const ROW_FIELDS = ['value', 'weight'];
+const DEFAULT_ROWS = [createRow('70', '40'), createRow('85', '60')];
 
 export default function OrtalamaHesaplama() {
-  const [rows, setRows] = useState(() => [createRow('70', '40'), createRow('85', '60')]);
+  const [rows, setRows] = useQueryParamState('degerler', DEFAULT_ROWS, {
+    serialize: (value) => serializeRows(value, ROW_FIELDS),
+    deserialize: (text) => deserializeRows(text, ROW_FIELDS, (v) => createRow(v.value, v.weight)) ?? DEFAULT_ROWS,
+  });
 
   const updateRow = (id, field, value) => {
     setRows((current) => current.map((row) => (row.id === id ? { ...row, [field]: value } : row)));

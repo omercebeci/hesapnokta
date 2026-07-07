@@ -5,6 +5,7 @@ import { getCalculatorContent } from '../data/calculatorContent.js';
 import { getRehberYazilariByCalculatorId } from '../data/rehberYazilari.generated.js';
 import { setSeoTags, setJsonLd, removeJsonLd } from '../utils/seo.js';
 import { useHeadContext } from '../context/HeadContext.jsx';
+import { CalculatorContextProvider } from '../context/CalculatorContext.jsx';
 import Icon from './Icon.jsx';
 import FeedbackWidget from './FeedbackWidget.jsx';
 
@@ -97,7 +98,9 @@ export default function CalculatorLayout({ calculatorId, children }) {
           <p>{calculator.description}</p>
         </div>
 
-        <div className="calculator-layout">{children}</div>
+        <CalculatorContextProvider value={{ title: calculator.title }}>
+          <div className="calculator-layout">{children}</div>
+        </CalculatorContextProvider>
 
         <FeedbackWidget calculatorId={calculatorId} pageTitle={calculator.title} />
 

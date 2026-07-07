@@ -1,14 +1,15 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculateTipSplit } from '../../../lib/alisverisCalculators.js';
 import { formatCurrency, parseLocaleNumber } from '../../../utils/format.js';
+import { useQueryParamState } from '../../../hooks/useQueryParamState.js';
 
 export default function BahsisHesapBolusmeHesaplama() {
-  const [billAmount, setBillAmount] = useState('1000');
-  const [tipPercentage, setTipPercentage] = useState('10');
-  const [peopleCount, setPeopleCount] = useState('4');
+  const [billAmount, setBillAmount] = useQueryParamState('hesap', '1000');
+  const [tipPercentage, setTipPercentage] = useQueryParamState('bahsis', '10');
+  const [peopleCount, setPeopleCount] = useQueryParamState('kisi', '4');
 
   const { result, error } = useMemo(() => {
     const parsedBill = parseLocaleNumber(billAmount);

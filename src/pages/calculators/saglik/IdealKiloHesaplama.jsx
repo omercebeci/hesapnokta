@@ -1,13 +1,14 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import { ResultCard, ResultError } from '../../../components/Result.jsx';
 import { calculateIdealWeight } from '../../../lib/saglikCalculators.js';
 import { formatNumber, parseLocaleNumber } from '../../../utils/format.js';
+import { useQueryParamState } from '../../../hooks/useQueryParamState.js';
 
 export default function IdealKiloHesaplama() {
-  const [heightCm, setHeightCm] = useState('170');
-  const [gender, setGender] = useState('female');
+  const [heightCm, setHeightCm] = useQueryParamState('boy', '170');
+  const [gender, setGender] = useQueryParamState('cinsiyet', 'female');
 
   const { result, error } = useMemo(() => {
     const parsedHeight = parseLocaleNumber(heightCm);

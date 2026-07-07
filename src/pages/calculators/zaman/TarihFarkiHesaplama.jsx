@@ -1,15 +1,16 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculateDateDiff } from '../../../lib/zamanCalculators.js';
 import { formatInteger } from '../../../utils/format.js';
+import { useQueryParamState } from '../../../hooks/useQueryParamState.js';
 
 const today = new Date().toISOString().slice(0, 10);
 
 export default function TarihFarkiHesaplama() {
-  const [startDate, setStartDate] = useState(today);
-  const [endDate, setEndDate] = useState(today);
+  const [startDate, setStartDate] = useQueryParamState('baslangic', today);
+  const [endDate, setEndDate] = useQueryParamState('bitis', today);
 
   const { result, error } = useMemo(() => {
     if (!startDate || !endDate) {

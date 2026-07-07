@@ -1,14 +1,15 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculateInstallmentComparison } from '../../../lib/finansCalculators.js';
 import { formatCurrency, formatNumber, parseLocaleNumber } from '../../../utils/format.js';
+import { useQueryParamState } from '../../../hooks/useQueryParamState.js';
 
 export default function TaksitKarsilastirmaHesaplama() {
-  const [cashPrice, setCashPrice] = useState('10000');
-  const [installmentCount, setInstallmentCount] = useState('12');
-  const [monthlyInstallment, setMonthlyInstallment] = useState('950');
+  const [cashPrice, setCashPrice] = useQueryParamState('pesin', '10000');
+  const [installmentCount, setInstallmentCount] = useQueryParamState('taksitSayisi', '12');
+  const [monthlyInstallment, setMonthlyInstallment] = useQueryParamState('taksit', '950');
 
   const { result, error } = useMemo(() => {
     const parsedCash = parseLocaleNumber(cashPrice);

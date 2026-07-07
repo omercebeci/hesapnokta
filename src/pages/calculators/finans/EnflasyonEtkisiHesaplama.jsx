@@ -1,14 +1,15 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculateInflationImpact } from '../../../lib/finansCalculators.js';
 import { formatCurrency, formatPercent, parseLocaleNumber } from '../../../utils/format.js';
+import { useQueryParamState } from '../../../hooks/useQueryParamState.js';
 
 export default function EnflasyonEtkisiHesaplama() {
-  const [amount, setAmount] = useState('100000');
-  const [annualInflationRate, setAnnualInflationRate] = useState('30');
-  const [years, setYears] = useState('5');
+  const [amount, setAmount] = useQueryParamState('tutar', '100000');
+  const [annualInflationRate, setAnnualInflationRate] = useQueryParamState('enflasyon', '30');
+  const [years, setYears] = useQueryParamState('yil', '5');
 
   const { result, error } = useMemo(() => {
     const parsedAmount = parseLocaleNumber(amount);

@@ -1,13 +1,14 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculatePriceChangeRate } from '../../../lib/alisverisCalculators.js';
 import { formatCurrency, formatPercent, parseLocaleNumber } from '../../../utils/format.js';
+import { useQueryParamState } from '../../../hooks/useQueryParamState.js';
 
 export default function ZamOraniHesaplama() {
-  const [oldPrice, setOldPrice] = useState('100');
-  const [newPrice, setNewPrice] = useState('130');
+  const [oldPrice, setOldPrice] = useQueryParamState('eski', '100');
+  const [newPrice, setNewPrice] = useQueryParamState('yeni', '130');
 
   const { result, error } = useMemo(() => {
     const parsedOld = parseLocaleNumber(oldPrice);

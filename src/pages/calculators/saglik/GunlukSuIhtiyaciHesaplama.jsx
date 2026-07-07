@@ -1,14 +1,17 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculateWaterIntake } from '../../../lib/saglikCalculators.js';
 import { formatNumber, parseLocaleNumber } from '../../../utils/format.js';
+import { useQueryParamState } from '../../../hooks/useQueryParamState.js';
+
+const BOOL_PARAM = { serialize: (v) => (v ? '1' : '0'), deserialize: (v) => v === '1' };
 
 export default function GunlukSuIhtiyaciHesaplama() {
-  const [weightKg, setWeightKg] = useState('70');
-  const [activityMinutes, setActivityMinutes] = useState('30');
-  const [hotClimate, setHotClimate] = useState(false);
+  const [weightKg, setWeightKg] = useQueryParamState('kilo', '70');
+  const [activityMinutes, setActivityMinutes] = useQueryParamState('aktivite', '30');
+  const [hotClimate, setHotClimate] = useQueryParamState('sicak', false, BOOL_PARAM);
 
   const { result, error } = useMemo(() => {
     const parsedWeight = parseLocaleNumber(weightKg);

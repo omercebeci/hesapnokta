@@ -1,14 +1,15 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculateStackedDiscount } from '../../../lib/alisverisCalculators.js';
 import { formatCurrency, formatPercent, parseLocaleNumber } from '../../../utils/format.js';
+import { useQueryParamState } from '../../../hooks/useQueryParamState.js';
 
 export default function IndirimUstuneIndirimHesaplama() {
-  const [price, setPrice] = useState('1000');
-  const [firstDiscount, setFirstDiscount] = useState('20');
-  const [secondDiscount, setSecondDiscount] = useState('10');
+  const [price, setPrice] = useQueryParamState('fiyat', '1000');
+  const [firstDiscount, setFirstDiscount] = useQueryParamState('indirim1', '20');
+  const [secondDiscount, setSecondDiscount] = useQueryParamState('indirim2', '10');
 
   const { result, error } = useMemo(() => {
     const parsedPrice = parseLocaleNumber(price);

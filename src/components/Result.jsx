@@ -1,4 +1,5 @@
 import React from 'react';
+import ShareResultButton from './ShareResultButton.jsx';
 
 export function ResultCard({ label, value, note }) {
   return (
@@ -6,6 +7,7 @@ export function ResultCard({ label, value, note }) {
       <span className="result-label">{label}</span>
       <span className="result-value">{value}</span>
       {note && <span className="result-note">{note}</span>}
+      <ShareResultButton />
     </div>
   );
 }

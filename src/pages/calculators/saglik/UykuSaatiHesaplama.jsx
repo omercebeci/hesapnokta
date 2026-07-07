@@ -1,12 +1,13 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculateSleepSchedule } from '../../../lib/saglikCalculators.js';
+import { useQueryParamState } from '../../../hooks/useQueryParamState.js';
 
 export default function UykuSaatiHesaplama() {
-  const [mode, setMode] = useState('wakeup');
-  const [time, setTime] = useState('07:00');
+  const [mode, setMode] = useQueryParamState('mod', 'wakeup');
+  const [time, setTime] = useQueryParamState('saat', '07:00');
 
   const { result, error } = useMemo(() => {
     if (!time) {

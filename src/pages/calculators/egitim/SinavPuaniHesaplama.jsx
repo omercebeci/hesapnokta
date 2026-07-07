@@ -1,15 +1,16 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculateExamScore } from '../../../lib/egitimCalculators.js';
 import { formatNumber, parseLocaleNumber } from '../../../utils/format.js';
+import { useQueryParamState } from '../../../hooks/useQueryParamState.js';
 
 export default function SinavPuaniHesaplama() {
-  const [correctCount, setCorrectCount] = useState('30');
-  const [wrongCount, setWrongCount] = useState('8');
-  const [totalQuestions, setTotalQuestions] = useState('40');
-  const [wrongPenaltyDivisor, setWrongPenaltyDivisor] = useState('4');
+  const [correctCount, setCorrectCount] = useQueryParamState('dogru', '30');
+  const [wrongCount, setWrongCount] = useQueryParamState('yanlis', '8');
+  const [totalQuestions, setTotalQuestions] = useQueryParamState('soru', '40');
+  const [wrongPenaltyDivisor, setWrongPenaltyDivisor] = useQueryParamState('katsayi', '4');
 
   const { result, error } = useMemo(() => {
     const parsedCorrect = parseLocaleNumber(correctCount);

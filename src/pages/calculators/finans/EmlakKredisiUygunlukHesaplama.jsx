@@ -1,16 +1,17 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculateMortgageAffordability } from '../../../lib/finansCalculators.js';
 import { formatCurrency, parseLocaleNumber } from '../../../utils/format.js';
+import { useQueryParamState } from '../../../hooks/useQueryParamState.js';
 
 export default function EmlakKredisiUygunlukHesaplama() {
-  const [monthlyIncome, setMonthlyIncome] = useState('50000');
-  const [existingDebtPayments, setExistingDebtPayments] = useState('0');
-  const [maxDebtToIncomeRatio, setMaxDebtToIncomeRatio] = useState('40');
-  const [monthlyRate, setMonthlyRate] = useState('3');
-  const [months, setMonths] = useState('120');
+  const [monthlyIncome, setMonthlyIncome] = useQueryParamState('gelir', '50000');
+  const [existingDebtPayments, setExistingDebtPayments] = useQueryParamState('borc', '0');
+  const [maxDebtToIncomeRatio, setMaxDebtToIncomeRatio] = useQueryParamState('oran', '40');
+  const [monthlyRate, setMonthlyRate] = useQueryParamState('faiz', '3');
+  const [months, setMonths] = useQueryParamState('vade', '120');
 
   const { result, error } = useMemo(() => {
     const parsedIncome = parseLocaleNumber(monthlyIncome);

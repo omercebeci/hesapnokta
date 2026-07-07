@@ -1,16 +1,17 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculateRoomMaterials } from '../../../lib/gunlukYasamCalculators.js';
 import { formatNumber, parseLocaleNumber } from '../../../utils/format.js';
+import { useQueryParamState } from '../../../hooks/useQueryParamState.js';
 
 export default function OdaAlaniMalzemeHesaplama() {
-  const [length, setLength] = useState('4');
-  const [width, setWidth] = useState('5');
-  const [height, setHeight] = useState('2,5');
-  const [coatCount, setCoatCount] = useState('2');
-  const [wasteRate, setWasteRate] = useState('10');
+  const [length, setLength] = useQueryParamState('uzunluk', '4');
+  const [width, setWidth] = useQueryParamState('genislik', '5');
+  const [height, setHeight] = useQueryParamState('yukseklik', '2,5');
+  const [coatCount, setCoatCount] = useQueryParamState('kat', '2');
+  const [wasteRate, setWasteRate] = useQueryParamState('fire', '10');
 
   const { result, error } = useMemo(() => {
     const parsedLength = parseLocaleNumber(length);

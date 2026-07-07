@@ -1,14 +1,15 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculateFuelCost } from '../../../lib/finansCalculators.js';
 import { formatCurrency, formatNumber, parseLocaleNumber } from '../../../utils/format.js';
+import { useQueryParamState } from '../../../hooks/useQueryParamState.js';
 
 export default function YakitMaliyetiHesaplama() {
-  const [distanceKm, setDistanceKm] = useState('450');
-  const [consumptionPer100Km, setConsumptionPer100Km] = useState('7,2');
-  const [fuelPrice, setFuelPrice] = useState('43,15');
+  const [distanceKm, setDistanceKm] = useQueryParamState('mesafe', '450');
+  const [consumptionPer100Km, setConsumptionPer100Km] = useQueryParamState('tuketim', '7,2');
+  const [fuelPrice, setFuelPrice] = useQueryParamState('fiyat', '43,15');
 
   const { result, error } = useMemo(() => {
     const parsedDistance = parseLocaleNumber(distanceKm);

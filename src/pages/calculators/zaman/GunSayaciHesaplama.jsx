@@ -1,17 +1,18 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculateCountdown } from '../../../lib/zamanCalculators.js';
 import { formatInteger } from '../../../utils/format.js';
+import { useQueryParamState } from '../../../hooks/useQueryParamState.js';
 
 const today = new Date().toISOString().slice(0, 10);
 const defaultTarget = new Date();
 defaultTarget.setMonth(defaultTarget.getMonth() + 1);
 
 export default function GunSayaciHesaplama() {
-  const [targetDate, setTargetDate] = useState(defaultTarget.toISOString().slice(0, 10));
-  const [referenceDate, setReferenceDate] = useState(today);
+  const [targetDate, setTargetDate] = useQueryParamState('hedef', defaultTarget.toISOString().slice(0, 10));
+  const [referenceDate, setReferenceDate] = useQueryParamState('referans', today);
 
   const { result, error } = useMemo(() => {
     if (!targetDate) {

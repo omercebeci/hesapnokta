@@ -1,13 +1,14 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculateBMI } from '../../../lib/saglikCalculators.js';
 import { formatNumber, parseLocaleNumber } from '../../../utils/format.js';
+import { useQueryParamState } from '../../../hooks/useQueryParamState.js';
 
 export default function VucutKitleIndeksiHesaplama() {
-  const [weightKg, setWeightKg] = useState('70');
-  const [heightCm, setHeightCm] = useState('170');
+  const [weightKg, setWeightKg] = useQueryParamState('kilo', '70');
+  const [heightCm, setHeightCm] = useQueryParamState('boy', '170');
 
   const { result, error } = useMemo(() => {
     const parsedWeight = parseLocaleNumber(weightKg);
