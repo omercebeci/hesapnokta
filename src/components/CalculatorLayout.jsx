@@ -6,6 +6,7 @@ import { getRehberYazilariByCalculatorId } from '../data/rehberYazilari.generate
 import { setSeoTags, setJsonLd, removeJsonLd } from '../utils/seo.js';
 import { useHeadContext } from '../context/HeadContext.jsx';
 import Icon from './Icon.jsx';
+import FeedbackWidget from './FeedbackWidget.jsx';
 
 const APPLICATION_CATEGORY_BY_CATEGORY = {
   finans: 'FinanceApplication',
@@ -97,6 +98,8 @@ export default function CalculatorLayout({ calculatorId, children }) {
         </div>
 
         <div className="calculator-layout">{children}</div>
+
+        <FeedbackWidget calculatorId={calculatorId} pageTitle={calculator.title} />
 
         {content && (
           <section className="seo-content" aria-label={`${calculator.title} hakkında bilgi`}>

@@ -666,6 +666,66 @@ h1, h2, h3, h4 {
 .info-card ul { padding-left: 18px; list-style: disc; display: grid; gap: 6px; }
 .info-card + .info-card { margin-top: 14px; }
 
+/* ── Geri bildirim bileşeni ── */
+.feedback-widget {
+  margin: 30px 0 0;
+  padding: 16px 18px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+.feedback-prompt {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.feedback-prompt > span { font-size: .88rem; font-weight: 600; color: var(--text-secondary); }
+.feedback-vote-buttons { display: flex; gap: 6px; }
+.feedback-vote-buttons button {
+  font-size: 1.05rem;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  transition: background .15s var(--ease), border-color .15s var(--ease), transform .1s var(--ease);
+}
+.feedback-vote-buttons button:hover { background: var(--bg-soft); border-color: var(--border-strong); }
+.feedback-vote-buttons button:active { transform: translateY(1px); }
+.feedback-open-form-link {
+  font-size: .82rem;
+  font-weight: 600;
+  color: var(--text-dim);
+  margin-left: auto;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.feedback-open-form-link:hover { color: var(--accent-hover); }
+.feedback-form { display: grid; gap: 10px; }
+.feedback-form label { font-size: .85rem; font-weight: 600; color: var(--text-secondary); }
+.feedback-form textarea {
+  width: 100%;
+  padding: 11px 13px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text-primary);
+  font-size: .9rem;
+  font-family: inherit;
+  resize: vertical;
+  transition: border-color .15s var(--ease), box-shadow .15s var(--ease), background .15s var(--ease);
+}
+.feedback-form textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+  background: var(--surface);
+}
+.feedback-form-actions { display: flex; justify-content: flex-end; }
+.feedback-thanks { font-size: .88rem; font-weight: 600; color: var(--success); }
+.feedback-idle-error { flex-basis: 100%; }
+.hp-field { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+
 /* ── SEO / landing page içeriği (tanıtım, yöntem, SSS) ── */
 .seo-content {
   margin-top: 40px;
