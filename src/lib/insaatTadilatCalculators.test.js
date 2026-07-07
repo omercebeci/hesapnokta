@@ -40,6 +40,8 @@ describe('insaat & tadilat hesaplayıcıları', () => {
     expect(result.sevenHalf).toBe(1);
     expect(result.twoHalf).toBe(1);
     expect(result.totalLiters).toBe(10);
+    expect(result.literPerCoat).toBe(4);
+    expect(result.leftoverLiters).toBe(2);
   });
 
   it('fayans adedi ve kutu sayısını fire payıyla hesaplar', () => {
@@ -48,6 +50,8 @@ describe('insaat & tadilat hesaplayıcıları', () => {
     expect(result.areaWithWaste).toBe(22);
     expect(result.tileCount).toBe(Math.ceil(22 / 0.18));
     expect(result.boxCount).toBe(Math.ceil(result.tileCount / 6));
+    expect(result.leftoverTileCount).toBe(result.boxCount * 6 - result.tileCount);
+    expect(result.leftoverTileCount).toBe(3);
   });
 
   it('derz sarfiyatını fayans ölçüsüne göre hesaplar', () => {
@@ -62,6 +66,7 @@ describe('insaat & tadilat hesaplayıcıları', () => {
     expect(result.areaWithWaste).toBe(31.5);
     expect(result.blockCount).toBe(Math.ceil(31.5 / 0.12));
     expect(result.mortarKg).toBe(150);
+    expect(result.blocksPerM2).toBe(8.33);
   });
 
   it('beton hacmini ve mikser sayısını hesaplar', () => {
@@ -85,6 +90,17 @@ describe('insaat & tadilat hesaplayıcıları', () => {
     expect(result.areaWithWaste).toBe(22);
     expect(result.packageCount).toBe(Math.ceil(22 / 2.2));
     expect(result.skirtingMeters).toBe(18);
+    expect(result.totalPurchasedAreaM2).toBe(22);
+    expect(result.leftoverAreaM2).toBe(0);
+  });
+
+  it('paket sınırının hemen üzerinde kalan alanlarda artan miktarı hesaplar', () => {
+    const result = calculateFlooringNeed({ area: 20, coveragePerPackage: 2.2, wasteRate: 15, perimeter: 18 });
+    expect(result.areaWithWaste).toBe(23);
+    expect(result.packageCount).toBe(Math.ceil(23 / 2.2));
+    expect(result.totalPurchasedAreaM2).toBe(round2(result.packageCount * 2.2));
+    expect(result.leftoverAreaM2).toBe(round2(result.totalPurchasedAreaM2 - 23));
+    expect(result.leftoverAreaM2).toBeGreaterThan(0);
   });
 
   it('kapalı kalemleri hariç tutarak bütçe toplamını ve dağılımını hesaplar', () => {
@@ -98,6 +114,19 @@ describe('insaat & tadilat hesaplayıcıları', () => {
       { label: 'Seramik', amount: 6000, ratio: 60 },
       { label: 'Vitrifiye', amount: 4000, ratio: 40 },
     ]);
+    expect(result.enabledCount).toBe(2);
+    expect(result.totalCount).toBe(3);
+    expect(result.topItem).toEqual({ label: 'Seramik', amount: 6000, ratio: 60 });
+    expect(result.topItemWarning).toBe(true);
+  });
+
+  it('hiçbir kalemin payı %40ı aşmıyorsa dikkat uyarısı vermez', () => {
+    const result = calculateLineItemBudget([
+      { label: 'A', amount: 3000, enabled: true },
+      { label: 'B', amount: 3500, enabled: true },
+      { label: 'C', amount: 3500, enabled: true },
+    ]);
+    expect(result.topItemWarning).toBe(false);
   });
 
   it('çatı eğimine göre gerçek alanı ve malzeme adetlerini hesaplar', () => {
@@ -107,6 +136,7 @@ describe('insaat & tadilat hesaplayıcıları', () => {
     expect(result.areaWithWaste).toBeCloseTo(101.61, 1);
     expect(result.tileCount).toBe(Math.ceil(result.areaWithWaste * 10));
     expect(result.osbSheetsCount).toBe(Math.ceil(result.areaWithWaste / 2.9768));
+    expect(result.slopeIncreasePercent).toBeCloseTo(15.47, 1);
   });
 });
 

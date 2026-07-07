@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
+import ShoppingListCard from '../../../components/ShoppingListCard.jsx';
 import { calculateRoofNeed, calculateOptionalCost } from '../../../lib/insaatTadilatCalculators.js';
 import { formatCurrency, formatInteger, formatNumber, parseLocaleNumber } from '../../../utils/format.js';
 import { useQueryParamState } from '../../../hooks/useQueryParamState.js';
@@ -76,9 +77,16 @@ export default function CatiHesaplama() {
           <ResultMetrics
             items={[
               { label: 'Taban (plan) alanı', value: `${formatNumber(result.footprintArea)} m²` },
+              { label: 'Eğimin getirdiği fark', value: `+%${formatNumber(result.slopeIncreasePercent)}` },
               { label: 'Tahmini kiremit/panel adedi', value: `${formatInteger(result.tileCount)} adet` },
               { label: 'Tahmini membran/OSB levha sayısı', value: `${formatInteger(result.osbSheetsCount)} levha` },
               ...(result.cost !== null ? [{ label: 'Tahmini malzeme maliyeti', value: formatCurrency(result.cost) }] : []),
+            ]}
+          />
+          <ShoppingListCard
+            items={[
+              `${formatInteger(result.tileCount)} adet kiremit/panel`,
+              `${formatInteger(result.osbSheetsCount)} adet membran/OSB levhası`,
             ]}
           />
         </div>

@@ -1,10 +1,10 @@
 import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
-import { ResultCard } from '../../../components/Result.jsx';
+import { ResultCard, ResultMetrics } from '../../../components/Result.jsx';
 import RatioBar from '../../../components/RatioBar.jsx';
 import { calculateLineItemBudget } from '../../../lib/insaatTadilatCalculators.js';
-import { formatCurrency, parseLocaleNumber } from '../../../utils/format.js';
+import { formatCurrency, formatNumber, parseLocaleNumber } from '../../../utils/format.js';
 import { useQueryParamState, serializeRows, deserializeRows } from '../../../hooks/useQueryParamState.js';
 
 const ITEMS = [
@@ -77,6 +77,15 @@ export default function BanyoTadilatButcesiHesaplama() {
 
       <div key={JSON.stringify(result)} style={{ display: 'grid', gap: 14 }}>
         <ResultCard label="Toplam banyo tadilat bütçesi" value={formatCurrency(result.total)} />
+        <ResultMetrics
+          items={[
+            { label: 'Açık kalem', value: `${result.enabledCount} / ${result.totalCount}` },
+            ...(result.topItem ? [{ label: 'En büyük kalem', value: `${result.topItem.label} (%${formatNumber(result.topItem.ratio, { decimals: 0 })})` }] : []),
+          ]}
+        />
+        {result.topItemWarning && (
+          <p className="rate-disclaimer">⚠️ Bu kaleme dikkat: "{result.topItem.label}" tek başına bütçenin %{formatNumber(result.topItem.ratio, { decimals: 0 })}'ini oluşturuyor. Bu kalem için birden fazla teklif almanız özellikle önemli.</p>
+        )}
         {result.breakdown.length > 0 && (
           <div className="result-metric" style={{ display: 'grid', gap: 16 }}>
             {result.breakdown.map((item) => (

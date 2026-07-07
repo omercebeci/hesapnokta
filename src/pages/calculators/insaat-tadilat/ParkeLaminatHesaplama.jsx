@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
+import ShoppingListCard from '../../../components/ShoppingListCard.jsx';
 import { calculateFlooringNeed, calculateOptionalCost } from '../../../lib/insaatTadilatCalculators.js';
 import { formatCurrency, formatInteger, formatNumber, parseLocaleNumber } from '../../../utils/format.js';
 import { useQueryParamState } from '../../../hooks/useQueryParamState.js';
@@ -69,8 +70,16 @@ export default function ParkeLaminatHesaplama() {
           <ResultCard label="Gereken paket sayısı" value={`${formatInteger(result.packageCount)} paket`} note={`Fire payı dahil ${formatNumber(result.areaWithWaste)} m²`} />
           <ResultMetrics
             items={[
+              { label: 'Toplam satın alınan alan', value: `${formatNumber(result.totalPurchasedAreaM2)} m²` },
+              { label: 'Yedek kalan miktar', value: `${formatNumber(result.leftoverAreaM2)} m²` },
               { label: 'Süpürgelik metresi', value: `${formatNumber(result.skirtingMeters)} m` },
               ...(result.cost !== null ? [{ label: 'Tahmini parke/laminat maliyeti', value: formatCurrency(result.cost) }] : []),
+            ]}
+          />
+          <ShoppingListCard
+            items={[
+              `${formatInteger(result.packageCount)} paket parke/laminat (${formatNumber(result.totalPurchasedAreaM2)} m² karşılığı)`,
+              `${formatNumber(result.skirtingMeters)} m süpürgelik`,
             ]}
           />
         </div>

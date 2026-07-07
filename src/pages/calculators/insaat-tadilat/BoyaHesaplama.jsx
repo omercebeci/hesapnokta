@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
+import ShoppingListCard from '../../../components/ShoppingListCard.jsx';
 import { calculateRoomWallArea, calculatePaintNeed, calculateOptionalCost } from '../../../lib/insaatTadilatCalculators.js';
 import { formatCurrency, formatInteger, formatNumber, parseLocaleNumber } from '../../../utils/format.js';
 import { useQueryParamState } from '../../../hooks/useQueryParamState.js';
@@ -53,7 +54,13 @@ export default function BoyaHesaplama() {
     const parsedPrice = parseLocaleNumber(literPrice);
     const cost = Number.isFinite(parsedPrice) && parsedPrice > 0 ? calculateOptionalCost(paint.totalLiters, parsedPrice) : null;
 
-    return { result: { wallArea, ...paint, cost }, error: null };
+    const packageParts = [];
+    if (paint.fifteen > 0) packageParts.push(`${paint.fifteen} × 15L`);
+    if (paint.sevenHalf > 0) packageParts.push(`${paint.sevenHalf} × 7,5L`);
+    if (paint.twoHalf > 0) packageParts.push(`${paint.twoHalf} × 2,5L`);
+    const packageCombo = packageParts.length > 0 ? packageParts.join(' + ') : 'Boya gerekmiyor (net alan 0 m²)';
+
+    return { result: { wallArea, ...paint, cost, packageCombo }, error: null };
   }, [mode, length, width, height, directArea, deductionArea, coatCount, coverage, literPrice]);
 
   return (
@@ -108,12 +115,20 @@ export default function BoyaHesaplama() {
           <ResultCard
             label="Gereken boya miktarı"
             value={`${formatNumber(result.literNeeded)} L`}
-            note={`Ambalaj önerisi: ${result.fifteen > 0 ? `${result.fifteen} × 15L` : ''}${result.fifteen > 0 && (result.sevenHalf > 0 || result.twoHalf > 0) ? ' + ' : ''}${result.sevenHalf > 0 ? `${result.sevenHalf} × 7,5L` : ''}${result.sevenHalf > 0 && result.twoHalf > 0 ? ' + ' : ''}${result.twoHalf > 0 ? `${result.twoHalf} × 2,5L` : ''} (toplam ${formatNumber(result.totalLiters)} L)`}
+            note={`Ambalaj önerisi: ${result.packageCombo} (toplam ${formatNumber(result.totalLiters)} L)`}
           />
           <ResultMetrics
             items={[
               { label: 'Boyanacak net duvar alanı', value: `${formatNumber(result.netArea)} m²` },
+              { label: 'Toplam boya', value: `${formatNumber(result.literNeeded)} L` },
+              { label: 'Kat başına litre', value: `${formatNumber(result.literPerCoat)} L` },
               ...(result.cost !== null ? [{ label: 'Tahmini boya maliyeti', value: formatCurrency(result.cost) }] : []),
+            ]}
+          />
+          <ShoppingListCard
+            items={[
+              `${result.packageCombo} boya (toplam ${formatNumber(result.totalLiters)} L)`,
+              'Astar boyası bu listeye dahil değildir, ayrıca hesaplayın',
             ]}
           />
         </div>

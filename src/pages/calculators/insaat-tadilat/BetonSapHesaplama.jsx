@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
+import ShoppingListCard from '../../../components/ShoppingListCard.jsx';
 import { calculateConcreteNeed, calculateManualMixMaterials, calculateOptionalCost } from '../../../lib/insaatTadilatCalculators.js';
 import { formatCurrency, formatInteger, formatNumber, parseLocaleNumber } from '../../../utils/format.js';
 import { useQueryParamState } from '../../../hooks/useQueryParamState.js';
@@ -71,6 +72,8 @@ export default function BetonSapHesaplama() {
           <ResultCard label="Gereken beton/şap hacmi" value={`${formatNumber(result.volumeM3)} m³`} note={`${formatInteger(result.mixerTrucksToOrder)} mikser sipariş edin (yaklaşık ${formatNumber(result.mixerTrucksExact)} mikser karşılığı)`} />
           <ResultMetrics
             items={[
+              { label: 'Mikser karşılığı', value: `${formatInteger(result.mixerTrucksToOrder)} mikser (${formatNumber(result.mixerTrucksExact)} tam)` },
+              { label: 'Çimento (torba karşılığı)', value: `${formatInteger(result.manualMix.cementBags)} torba × 50 kg` },
               ...(result.cost !== null ? [{ label: 'Tahmini beton/şap maliyeti', value: formatCurrency(result.cost) }] : []),
             ]}
           />
@@ -86,6 +89,15 @@ export default function BetonSapHesaplama() {
               ]}
             />
           </div>
+          <ShoppingListCard
+            items={[
+              `Hazır beton kullanacaksanız: ${formatInteger(result.mixerTrucksToOrder)} mikser (${formatNumber(result.volumeM3)} m³)`,
+              `Elle karım yapacaksanız: ${formatInteger(result.manualMix.cementBags)} torba çimento (50 kg)`,
+              `Elle karım yapacaksanız: ${formatNumber(result.manualMix.sandM3)} m³ kum`,
+              `Elle karım yapacaksanız: ${formatNumber(result.manualMix.gravelM3)} m³ çakıl`,
+              `Elle karım yapacaksanız: ${formatNumber(result.manualMix.waterL)} L su`,
+            ]}
+          />
         </div>
       )}
 

@@ -679,6 +679,44 @@ h1, h2, h3, h4 {
 .info-card ul { padding-left: 18px; list-style: disc; display: grid; gap: 6px; }
 .info-card + .info-card { margin-top: 14px; }
 
+/* ── Alışveriş listesi (miktar hesaplayıcılarının sonuç kartı altında) ── */
+.shopping-list-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px 22px;
+  display: grid;
+  gap: 12px;
+  animation: resultFadeIn 260ms var(--ease);
+}
+.shopping-list-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.shopping-list-head h2 { font-size: 1rem; }
+.shopping-list-copy {
+  padding: 7px 14px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text-secondary);
+  font-size: .8rem;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: border-color .15s var(--ease), color .15s var(--ease), background .15s var(--ease), transform .1s var(--ease);
+}
+.shopping-list-copy:hover { border-color: var(--accent-border); color: var(--accent); background: var(--accent-soft); }
+.shopping-list-copy:active { transform: translateY(1px); }
+.shopping-list-items { display: grid; gap: 8px; }
+.shopping-list-items li {
+  font-size: .9rem;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
+}
+
 /* ── Geri bildirim bileşeni ── */
 .feedback-widget {
   margin: 30px 0 0;

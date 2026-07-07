@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
+import ShoppingListCard from '../../../components/ShoppingListCard.jsx';
 import { calculateWallBlockNeed, calculateOptionalCost } from '../../../lib/insaatTadilatCalculators.js';
 import { formatCurrency, formatInteger, formatNumber, parseLocaleNumber } from '../../../utils/format.js';
 import { useQueryParamState } from '../../../hooks/useQueryParamState.js';
@@ -76,8 +77,15 @@ export default function DuvarTuglaGazbetonHesaplama() {
           <ResultMetrics
             items={[
               { label: 'Bir bloğun yüz alanı', value: `${formatNumber(result.blockFaceArea, { decimals: 3 })} m²` },
+              { label: 'm² başına blok', value: `~${formatNumber(result.blocksPerM2)} adet` },
               { label: 'Tahmini harç/yapıştırıcı', value: `${formatNumber(result.mortarKg)} kg` },
               ...(result.cost !== null ? [{ label: 'Tahmini blok maliyeti', value: formatCurrency(result.cost) }] : []),
+            ]}
+          />
+          <ShoppingListCard
+            items={[
+              `${formatInteger(result.blockCount)} adet blok (tuğla/gazbeton)`,
+              `~${formatNumber(result.mortarKg)} kg harç/yapıştırıcı`,
             ]}
           />
         </div>

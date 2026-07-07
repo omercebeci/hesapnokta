@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
+import ShoppingListCard from '../../../components/ShoppingListCard.jsx';
 import { calculateTileNeed, calculateGroutNeed, calculateOptionalCost } from '../../../lib/insaatTadilatCalculators.js';
 import { formatCurrency, formatInteger, formatNumber, parseLocaleNumber } from '../../../utils/format.js';
 import { useQueryParamState } from '../../../hooks/useQueryParamState.js';
@@ -92,7 +93,15 @@ export default function FayansSeramikHesaplama() {
             items={[
               { label: 'Bir fayansın alanı', value: `${formatNumber(result.tileAreaM2, { decimals: 3 })} m²` },
               { label: 'Tahmini derz dolgusu', value: `${formatNumber(result.groutKg)} kg` },
+              ...(result.leftoverTileCount > 0 ? [{ label: 'Kutulardan artan fayans', value: `${formatInteger(result.leftoverTileCount)} adet` }] : []),
               ...(result.cost !== null ? [{ label: 'Tahmini fayans maliyeti', value: formatCurrency(result.cost) }] : []),
+            ]}
+          />
+          <ShoppingListCard
+            items={[
+              `${formatInteger(result.boxCount)} kutu fayans (${formatInteger(result.tileCount)} adet)`,
+              `~${formatNumber(result.groutKg)} kg derz dolgusu`,
+              'Yapıştırıcı (ambalaj sarfiyatına bakın)',
             ]}
           />
         </div>

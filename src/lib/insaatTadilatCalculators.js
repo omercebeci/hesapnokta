@@ -44,13 +44,16 @@ export function calculatePaintNeed({ wallArea, deductionArea = 0, coatCount = 2,
   const coverage = Math.max(0.1, safeNumber(coveragePerLiter, 10));
 
   const netArea = Math.max(0, area - deduction);
-  const literNeeded = (netArea * coats) / coverage;
+  const literPerCoat = netArea / coverage;
+  const literNeeded = literPerCoat * coats;
   const packages = suggestPaintPackages(literNeeded);
 
   return {
     netArea: round2(netArea),
+    literPerCoat: round2(literPerCoat),
     literNeeded: round2(literNeeded),
     ...packages,
+    leftoverLiters: round2(Math.max(0, packages.totalLiters - literNeeded)),
   };
 }
 
@@ -72,6 +75,7 @@ export function calculateTileNeed({ area, tileLengthCm, tileWidthCm, wasteRate =
     areaWithWaste: round2(areaWithWaste),
     tileCount,
     boxCount,
+    leftoverTileCount: Math.max(0, boxCount * pieces - tileCount),
   };
 }
 
@@ -106,6 +110,7 @@ export function calculateWallBlockNeed({ wallArea, blockWidthCm, blockHeightCm, 
     areaWithWaste: round2(areaWithWaste),
     blockCount,
     mortarKg: round2(mortarKg),
+    blocksPerM2: blockFaceArea > 0 ? round2(1 / blockFaceArea) : 0,
   };
 }
 
@@ -149,18 +154,25 @@ export function calculateFlooringNeed({ area, coveragePerPackage, wasteRate = 10
 
   const areaWithWaste = a * (1 + waste / 100);
   const packageCount = Math.ceil(areaWithWaste / coverage);
+  const totalPurchasedAreaM2 = packageCount * coverage;
 
   return {
     areaWithWaste: round2(areaWithWaste),
     packageCount,
     skirtingMeters: round2(perimeterValue),
+    totalPurchasedAreaM2: round2(totalPurchasedAreaM2),
+    leftoverAreaM2: round2(Math.max(0, totalPurchasedAreaM2 - areaWithWaste)),
   };
 }
 
 // ── 6, 7, 9) Kalem bazlı tadilat/yapım bütçesi (banyo, mutfak, ev yapımı ortak) ──
 // items: [{ label, amount, enabled }] — enabled=false olan kalemler toplama dahil edilmez.
+// TOP_ITEM_WARNING_RATIO: bir kalemin toplam bütçenin bu oranını aşması "bu kaleme dikkat" uyarısını tetikler.
+const TOP_ITEM_WARNING_RATIO = 40;
+
 export function calculateLineItemBudget(items) {
-  const activeItems = (items || []).filter((item) => item.enabled !== false);
+  const allItems = items || [];
+  const activeItems = allItems.filter((item) => item.enabled !== false);
   const total = activeItems.reduce((sum, item) => sum + Math.max(0, safeNumber(item.amount)), 0);
 
   const breakdown = activeItems.map((item) => {
@@ -172,7 +184,16 @@ export function calculateLineItemBudget(items) {
     };
   });
 
-  return { total: round2(total), breakdown };
+  const topItem = breakdown.reduce((max, item) => (!max || item.amount > max.amount ? item : max), null);
+
+  return {
+    total: round2(total),
+    breakdown,
+    enabledCount: activeItems.length,
+    totalCount: allItems.length,
+    topItem,
+    topItemWarning: !!topItem && topItem.ratio > TOP_ITEM_WARNING_RATIO,
+  };
 }
 
 // ── 8) Çatı hesaplama ──
@@ -195,6 +216,7 @@ export function calculateRoofNeed({ length, width, pitchDegrees = 30, tilesPerM2
     footprintArea: round2(footprintArea),
     actualRoofArea: round2(actualRoofArea),
     areaWithWaste: round2(areaWithWaste),
+    slopeIncreasePercent: footprintArea > 0 ? round2((slopeFactor - 1) * 100) : 0,
     tileCount: Math.ceil(areaWithWaste * tileDensity),
     osbSheetsCount: Math.ceil(areaWithWaste / OSB_SHEET_AREA_M2),
   };
