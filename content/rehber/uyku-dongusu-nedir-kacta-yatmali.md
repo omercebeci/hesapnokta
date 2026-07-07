@@ -48,6 +48,8 @@ Görüldüğü gibi, "7-8 saat uyuyayım" diye rastgele bir saatte yatmak yerine
 
 Kendi kalkış ya da yatış saatinize göre bu hesaplamayı otomatik yapmak için [Uyku Saati Hesaplama](/uyku-saati-hesaplama) aracımızı kullanabilirsiniz; hem kalkış saatine göre önerilen yatma saatlerini hem de yatış saatine göre önerilen kalkış saatlerini gösterir.
 
+Bu yazıda kalkış saatinizden geriye doğru gittik; eğer durumunuz tam tersiyse — yani sabit bir yatma saatiniz var ve buna göre en uygun kalkış saatini merak ediyorsanız — [Uyku Döngüsü Nedir? Kaçta Yatıp Kaçta Kalkmalısınız?](/rehber/uyku-dongusu-kacta-yatip-kacta-kalkmalisiniz) yazımızda bu yönü, REM uykusunun rolünü ve uyku borcu gibi ek konuları ele alıyoruz.
+
 ## Uyku kalitesini etkileyen diğer faktörler
 
 Döngü hesaplamak faydalı bir başlangıç noktasıdır, ama uyku kalitesi başka faktörlerden de etkilenir:
