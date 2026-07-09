@@ -149,6 +149,44 @@ export const GUNCEL_VERILER = {
     source: 'TCMB - Kredi Kartı İşlemlerinde Uygulanacak Azami Faiz Oranları',
     lastUpdated: '2026-07-07',
   },
+
+  // ── Trafik idari para cezası erken ödeme indirimi (KTK madde 115) ──
+  // "gunSayisi": tebliğ tarihinden itibaren indirimli ödeme için tanınan süre.
+  // ÖNEMLİ: Bu süre eskiden (2024 öncesi) 15 gündü; 31.01.2024 tarihli yönetmelik
+  // değişikliğiyle 1 aya (30 gün) uzatıldı. Kaynağı ikinci kez teyit etmeden "15 gün"e geri almayın.
+  trafikCezasiErkenOdeme: {
+    indirimOrani: 0.25,
+    gunSayisi: 30,
+    period: '2026',
+    source: '2918 sayılı Karayolları Trafik Kanunu madde 115 (%25 indirim ilkesi); "Trafik İdari Para Cezası Karar Tutanaklarının Düzenlenmesinde, Tahsilinde ve Takibinde Uygulanacak Usul ve Esaslar Hakkında Yönetmelik"te 31.01.2024 tarihli değişiklik (indirimli ödeme süresi 15 günden 1 aya uzatıldı) — İçişleri Bakanlığı duyurusu, icisleri.gov.tr',
+    lastUpdated: '2026-07-09',
+  },
+
+  // ── Askerlik hizmet süreleri ──
+  // Bedelli askerlik yapanlar yedek subay/astsubay olamaz; süre gün olarak sabittir.
+  askerlikHizmetSureleri: {
+    value: {
+      er: { ay: 6 },
+      yedekSubay: { ay: 12 },
+      bedelli: { gun: 32 },
+    },
+    period: '2026',
+    source: '7179 sayılı Askeralma Kanunu, madde 5/2 (er/erbaş 6 ay, yedek subay/yedek astsubay 12 ay) — mevzuat.gov.tr; kesin celp/terhis tarihiniz için ASAL (asal.msb.gov.tr) veya e-Devlet üzerinden "Askerlik Durum Belgesi" sorgulamasını esas alın',
+    lastUpdated: '2026-07-09',
+  },
+
+  // ── Doğalgaz m³ → kWh dönüşümü ──
+  // "ustIsilDegerKcalM3": faturalarda dönem ortalaması olarak yayınlanan değerdir, dağıtım
+  // şirketine ve mevsime göre küçük farklar gösterebilir; burada tipik bir varsayılan tutulur.
+  // "kcalToKwh": sabit fizik birimi çevrim katsayısıdır (1 kWh = 860,42 kcal).
+  dogalgazDonusum: {
+    ustIsilDegerKcalM3: 9155,
+    duzeltmeKatsayisi: 1,
+    kcalToKwh: 860.42,
+    period: '2026 (dönem ortalaması, tipik değer)',
+    source: 'EPDK / dağıtım şirketi fatura hesaplama kılavuzları (fiili üst ısıl değer dönem ve bölgeye göre değişir)',
+    lastUpdated: '2026-07-07',
+  },
 };
 
 // Aşağıdaki yardımcı fonksiyonlara dokunmanız gerekmez; sayfalar veriyi

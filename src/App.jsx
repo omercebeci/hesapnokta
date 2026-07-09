@@ -34,15 +34,28 @@ const KrediKartiAsgariOdemeHesaplama = lazy(() => import('./pages/calculators/fi
 const EnflasyonEtkisiHesaplama = lazy(() => import('./pages/calculators/finans/EnflasyonEtkisiHesaplama.jsx'));
 const TaksitKarsilastirmaHesaplama = lazy(() => import('./pages/calculators/finans/TaksitKarsilastirmaHesaplama.jsx'));
 
-// Alışveriş
+// Alışveriş & Kargo
 const ZamOraniHesaplama = lazy(() => import('./pages/calculators/alisveris/ZamOraniHesaplama.jsx'));
 const BahsisHesapBolusmeHesaplama = lazy(() => import('./pages/calculators/alisveris/BahsisHesapBolusmeHesaplama.jsx'));
 const IndirimUstuneIndirimHesaplama = lazy(() => import('./pages/calculators/alisveris/IndirimUstuneIndirimHesaplama.jsx'));
+const KargoDesiHesaplama = lazy(() => import('./pages/calculators/alisveris/KargoDesiHesaplama.jsx'));
+const BedenCevirici = lazy(() => import('./pages/calculators/alisveris/BedenCevirici.jsx'));
+const AltinCevirici = lazy(() => import('./pages/calculators/alisveris/AltinCevirici.jsx'));
 
 // Günlük Yaşam
 const ElektrikTuketimiHesaplama = lazy(() => import('./pages/calculators/gunluk-yasam/ElektrikTuketimiHesaplama.jsx'));
 const YolculukYakitPayiHesaplama = lazy(() => import('./pages/calculators/gunluk-yasam/YolculukYakitPayiHesaplama.jsx'));
 const OdaAlaniMalzemeHesaplama = lazy(() => import('./pages/calculators/gunluk-yasam/OdaAlaniMalzemeHesaplama.jsx'));
+const DogalgazTuketimiHesaplama = lazy(() => import('./pages/calculators/gunluk-yasam/DogalgazTuketimiHesaplama.jsx'));
+const EvArkadasiFaturaBolusmeHesaplama = lazy(() => import('./pages/calculators/gunluk-yasam/EvArkadasiFaturaBolusmeHesaplama.jsx'));
+const AbonelikMaliyetiHesaplama = lazy(() => import('./pages/calculators/gunluk-yasam/AbonelikMaliyetiHesaplama.jsx'));
+const AracSahipOlmaMaliyetiHesaplama = lazy(() => import('./pages/calculators/gunluk-yasam/AracSahipOlmaMaliyetiHesaplama.jsx'));
+const ElektrikliAracSarjMaliyetiHesaplama = lazy(() => import('./pages/calculators/gunluk-yasam/ElektrikliAracSarjMaliyetiHesaplama.jsx'));
+const TrafikCezasiErkenOdemeHesaplama = lazy(() => import('./pages/calculators/gunluk-yasam/TrafikCezasiErkenOdemeHesaplama.jsx'));
+const TarifPorsiyonOlceklemeHesaplama = lazy(() => import('./pages/calculators/gunluk-yasam/TarifPorsiyonOlceklemeHesaplama.jsx'));
+const MutfakOlcuCevirici = lazy(() => import('./pages/calculators/gunluk-yasam/MutfakOlcuCevirici.jsx'));
+const EvcilHayvanYasiHesaplama = lazy(() => import('./pages/calculators/gunluk-yasam/EvcilHayvanYasiHesaplama.jsx'));
+const AskerlikTerhisTarihiHesaplama = lazy(() => import('./pages/calculators/gunluk-yasam/AskerlikTerhisTarihiHesaplama.jsx'));
 
 // Sağlık
 const VucutKitleIndeksiHesaplama = lazy(() => import('./pages/calculators/saglik/VucutKitleIndeksiHesaplama.jsx'));
@@ -117,10 +130,23 @@ export default function App() {
             <Route path="/zam-orani-hesaplama" element={<ZamOraniHesaplama />} />
             <Route path="/bahsis-hesap-bolusme-hesaplama" element={<BahsisHesapBolusmeHesaplama />} />
             <Route path="/indirim-ustune-indirim-hesaplama" element={<IndirimUstuneIndirimHesaplama />} />
+            <Route path="/kargo-desi-hesaplama" element={<KargoDesiHesaplama />} />
+            <Route path="/beden-cevirici" element={<BedenCevirici />} />
+            <Route path="/altin-cevirici" element={<AltinCevirici />} />
 
             <Route path="/elektrik-tuketimi-hesaplama" element={<ElektrikTuketimiHesaplama />} />
             <Route path="/yolculuk-yakit-payi-hesaplama" element={<YolculukYakitPayiHesaplama />} />
             <Route path="/oda-alani-malzeme-hesaplama" element={<OdaAlaniMalzemeHesaplama />} />
+            <Route path="/dogalgaz-tuketimi-hesaplama" element={<DogalgazTuketimiHesaplama />} />
+            <Route path="/ev-arkadasi-fatura-bolusme-hesaplama" element={<EvArkadasiFaturaBolusmeHesaplama />} />
+            <Route path="/abonelik-maliyeti-hesaplama" element={<AbonelikMaliyetiHesaplama />} />
+            <Route path="/arac-sahip-olma-maliyeti-hesaplama" element={<AracSahipOlmaMaliyetiHesaplama />} />
+            <Route path="/elektrikli-arac-sarj-maliyeti-hesaplama" element={<ElektrikliAracSarjMaliyetiHesaplama />} />
+            <Route path="/trafik-cezasi-erken-odeme-hesaplama" element={<TrafikCezasiErkenOdemeHesaplama />} />
+            <Route path="/tarif-porsiyon-olcekleme-hesaplama" element={<TarifPorsiyonOlceklemeHesaplama />} />
+            <Route path="/mutfak-olcu-cevirici" element={<MutfakOlcuCevirici />} />
+            <Route path="/evcil-hayvan-yasi-hesaplama" element={<EvcilHayvanYasiHesaplama />} />
+            <Route path="/askerlik-terhis-tarihi-hesaplama" element={<AskerlikTerhisTarihiHesaplama />} />
 
             <Route path="/vucut-kitle-indeksi-hesaplama" element={<VucutKitleIndeksiHesaplama />} />
             <Route path="/kalori-ihtiyaci-hesaplama" element={<KaloriIhtiyaciHesaplama />} />

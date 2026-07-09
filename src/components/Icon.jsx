@@ -10,6 +10,7 @@ import {
   Tags, Paintbrush, BedDouble, Coffee, Footprints, GraduationCap, ClipboardCheck,
   BookOpen,
   Hammer, PaintRoller, Grid3x3, Blocks, Truck, Layers, Bath, CookingPot, Triangle, HardHat,
+  Package, Shirt, Coins, FlameKindling, Repeat, BatteryCharging, Siren, ChefHat, Utensils, PawPrint, Shield,
 } from 'lucide-react';
 
 const ICONS = {
@@ -81,6 +82,17 @@ const ICONS = {
   'cooking-pot': CookingPot,
   triangle: Triangle,
   'hard-hat': HardHat,
+  package: Package,
+  shirt: Shirt,
+  coins: Coins,
+  'flame-kindling': FlameKindling,
+  repeat: Repeat,
+  'battery-charging': BatteryCharging,
+  siren: Siren,
+  'chef-hat': ChefHat,
+  utensils: Utensils,
+  'paw-print': PawPrint,
+  shield: Shield,
 };
 
 export default function Icon({ name, size = 20, strokeWidth = 1.75, className, ...rest }) {

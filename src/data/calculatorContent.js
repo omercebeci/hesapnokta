@@ -938,6 +938,349 @@ export const calculatorContent = {
       { q: 'Birden fazla müteahhitten teklif almalı mıyım?', a: 'Evet, özellikle kaba yapı ve çatı gibi büyük kalemlerde birden fazla müteahhit/ustadan teklif almanız, gerçekçi bir toplam bütçe oluşturmanıza yardımcı olur.' },
     ],
   },
+
+  // ── Alışveriş & Kargo (yeni) ──
+  'kargo-desi-hesaplama': {
+    about: 'Kargo desi hesaplama aracı, gönderdiğiniz kolinin en, boy ve yükseklik ölçülerine göre desi değerini hesaplar ve kargo firmasının faturalamada desi mi yoksa gerçek ağırlığı mı esas alacağını gösterir; birden fazla koliniz varsa hepsini tek seferde toplu olarak hesaplayabilirsiniz.',
+    method: 'Desi = (en × boy × yükseklik [cm]) ÷ 3000 formülüyle hesaplanır. Her koli için bu desi değeri, girdiğiniz gerçek ağırlıkla (kg) karşılaştırılır; kargo firmaları ikisinden hangisi büyükse o değeri "kg" birimiyle faturalar. Birden fazla koli eklediğinizde her birinin faturalanacak ağırlığı ayrı ayrı hesaplanıp toplanır.',
+    examples: [
+      {
+        title: '40×30×25 cm, 8 kg, tek koli',
+        rows: [
+          { label: 'Desi', value: '10' },
+          { label: 'Gerçek ağırlık', value: '8 kg' },
+          { label: 'Faturalanan ağırlık', value: '10 kg (desi esas alındı)' },
+        ],
+      },
+      {
+        title: '20×20×20 cm, 5 kg, tek koli',
+        rows: [
+          { label: 'Desi', value: '2,67' },
+          { label: 'Gerçek ağırlık', value: '5 kg' },
+          { label: 'Faturalanan ağırlık', value: '5 kg (gerçek ağırlık esas alındı)' },
+        ],
+      },
+    ],
+    faq: [
+      { q: 'Desi ne demektir?', a: 'Desi, bir kolinin hacmini ağırlık birimine (kg) çeviren, kargo sektöründe yaygın kullanılan bir hacimsel ağırlık ölçüsüdür; hafif ama hacimli kargoların da adil bir şekilde ücretlendirilmesini sağlar.' },
+      { q: '3000 sayısı neyi ifade eder?', a: 'Kara kargosunda yaygın kullanılan standart hacim-ağırlık dönüşüm katsayısıdır. Bazı kurye/havayolu kargo firmaları farklı bir katsayı (ör. 5000 veya 6000) kullanabilir; kesin hesap için taşıyıcınızın tarifesini kontrol edin.' },
+      { q: 'Desi mi kg mi daha yüksekse ne olur?', a: 'Kargo firmaları her zaman ikisinden büyük olan değeri esas alarak faturalar; bu yüzden hafif ama hacimli kolilerde desi, ağır ama küçük kolilerde gerçek ağırlık geçerli olur.' },
+      { q: 'Aynı koliye birden fazla ürün koyarsam nasıl hesaplarım?', a: 'Koliyi tek bir birim olarak dışından ölçüp tek bir satır olarak girmeniz yeterlidir; içindeki ürün sayısı desi hesabını etkilemez.' },
+      { q: 'E-ticaret sitesindeki "X desiye kadar ücretsiz kargo" ne anlama gelir?', a: 'Kolinizin desisi bu sınırı aşarsa satıcı veya kargo firması ek ücret talep edebilir; bu aracı kullanarak gönderiminizin desisini önceden öğrenebilirsiniz.' },
+      { q: 'Yurt dışı kargo ve havayolu taşımacılığında da 3000 mü kullanılır?', a: 'Hayır, uluslararası kargo ve havayolu taşımacılığında genellikle 5000 veya 6000 gibi farklı katsayılar kullanılır; bu araç yurt içi kara kargosu standardını esas alır.' },
+      { q: 'Ölçüleri nasıl hassas alabilirim?', a: 'Koliyi dışından, en geniş noktalarından cm cinsinden ölçün ve yuvarlamadan (ör. 40,5 cm yerine 41 cm yazmadan) girin; küçük farklar toplam desiyi belirgin şekilde değiştirebilir.' },
+      { q: 'Küçük paketler/zarflar için de bu hesap geçerli mi?', a: 'Evet, ancak birçok kargo firması küçük gönderiler için de bir minimum desi/ağırlık ücreti uygular; kesin ücret için taşıyıcınızın güncel tarifesine bakmanız önerilir.' },
+    ],
+  },
+  'beden-cevirici': {
+    about: 'Beden çevirici aracı, kadın ve erkek giyim bedenleri ile ayakkabı numaralarını TR, EU, US ve UK standartları arasında hızlıca çevirmenizi sağlar; özellikle yurt dışı sitelerinden alışveriş yaparken doğru bedeni seçmenize yardımcı olur.',
+    method: 'Türkiye\'de kullanılan giyim ve ayakkabı bedenleri EU (Avrupa) numaralandırmasıyla birebir aynıdır. Seçtiğiniz kategori ve TR bedene karşılık gelen satır, yaygın kullanılan standart beden dönüşüm tablosundan okunarak US ve UK karşılıkları gösterilir.',
+    examples: [
+      {
+        title: 'Kadın ayakkabı, TR 38',
+        rows: [
+          { label: 'EU beden', value: '38' },
+          { label: 'US beden', value: '7,5' },
+          { label: 'UK beden', value: '5' },
+        ],
+      },
+      {
+        title: 'Erkek giyim, TR 50',
+        rows: [
+          { label: 'EU beden', value: '50' },
+          { label: 'US beden', value: '40' },
+          { label: 'UK beden', value: '40' },
+        ],
+      },
+    ],
+    faq: [
+      { q: 'TR beden ile EU beden aynı mı?', a: 'Evet, Türkiye\'de giyim ve ayakkabıda kullanılan beden numaraları Avrupa (EU) standardıyla birebir örtüşür; ayrı bir çevrim gerekmez.' },
+      { q: 'US ve UK bedenleri neden markaya göre değişebiliyor?', a: 'Bu araçtaki değerler yaygın kabul gören standart dönüşüm tablosuna dayanır; ancak markalar arasında kalıp (fit) farkları olabileceğinden aynı numara markadan markaya biraz farklı oturabilir.' },
+      { q: 'Çocuk bedenleri bu araca dahil mi?', a: 'Hayır, bu araç yalnızca yetişkin kadın ve erkek giyim/ayakkabı bedenlerini kapsar; çocuk bedenlerinde farklı bir numaralandırma sistemi kullanılır.' },
+      { q: 'Ayakkabıda yarım numaralar nasıl gösteriliyor?', a: 'US ve UK sütunlarında gerektiğinde ondalıklı değerler (ör. 7,5) gösterilir; bu, o TR/EU bedenin US/UK sisteminde tam bir tam sayıya denk gelmediği anlamına gelir.' },
+      { q: 'Bu tablo hangi kaynağa dayanıyor?', a: 'Yaygın kullanılan, uluslararası genel-geçer standart beden dönüşüm tablolarına dayanır; resmi tek bir uluslararası otorite olmadığından farklı kaynaklar arasında ±0,5 numara civarında küçük farklar görülebilir.' },
+      { q: 'Bir markanın kendi beden tablosuyla bu araç çelişirse hangisine güvenmeliyim?', a: 'Satın alacağınız markanın kendi beden tablosuna öncelik verin; bu araç genel bir başlangıç noktası sunar, kesin kalıp bilgisini yalnızca üretici verebilir.' },
+      { q: 'Kadın ve erkek ayakkabı numaralandırması neden farklı?', a: 'Kadın ve erkek ayakkabıları farklı kalıp standartlarına göre üretildiğinden, aynı EU numarası bile kadın ve erkek modelinde farklı US/UK karşılığına sahip olabilir.' },
+      { q: 'Listede olmayan bir TR beden için ne yapmalıyım?', a: 'Aracın listesi yaygın kullanılan standart aralığı kapsar; listede olmayan bir ara beden için kendinize en yakın iki bedenin ortalamasını referans alabilirsiniz.' },
+    ],
+  },
+  'altin-cevirici': {
+    about: 'Altın çevirici aracı, gram altını çeyrek, yarım, tam ve Cumhuriyet altınına (veya tersine) standart gram karşılıklarına göre çevirir; isterseniz güncel gram fiyatınızı girerek toplam tutarı da hesaplayabilirsiniz.',
+    method: 'Her altın türünün piyasada kabul gören sabit bir gram ağırlığı vardır (çeyrek altın 1,75 gr, yarım altın 3,5 gr, tam altın 7 gr, Cumhuriyet altını 7,216 gr). Girdiğiniz miktar önce bu karşılıkla grama çevrilir, ardından hedef birimin gram karşılığına bölünerek sonuç bulunur. Gram fiyatı girerseniz toplam gram bu fiyatla çarpılarak yaklaşık bir tutar hesaplanır.',
+    examples: [
+      {
+        title: '2 tam altın → çeyrek altın, gram fiyatı 4.500 TL',
+        rows: [
+          { label: 'Toplam gram', value: '14 gr' },
+          { label: 'Çeyrek altın karşılığı', value: '8 çeyrek' },
+          { label: 'Tahmini tutar', value: '63.000 TL' },
+        ],
+      },
+    ],
+    faq: [
+      { q: 'Bu araçta güncel altın fiyatı otomatik geliyor mu?', a: 'Hayır, bu araçta gömülü veya canlı bir kur bulunmaz; gram fiyatını kuyumcunuzdan veya güncel piyasa kaynaklarından öğrenip kendiniz girmeniz gerekir.' },
+      { q: 'Çeyrek altın neden tam olarak 1,75 gram kabul ediliyor?', a: 'Bu, piyasada ve kuyumculukta yaygın kabul gören standart bir ağırlıktır; basım yılına göre çok küçük farklar olabilir ama hesaplamalarda bu değer referans alınır.' },
+      { q: 'Cumhuriyet altını neden diğerlerinden farklı gram ağırlığında?', a: 'Cumhuriyet altını (Ata Lira olarak da bilinir) ayrı bir basım standardına sahiptir ve çeyrek/yarım/tam altın serisinden bağımsız olarak 7,216 gram olarak kabul edilir.' },
+      { q: '22 ayar ne anlama gelir?', a: 'Ayar, altının saflık derecesini gösterir; 22 ayar yaklaşık %91,6 saf altın, kalanı ise dayanıklılık için katılan diğer metaller anlamına gelir.' },
+      { q: 'Bu araç alış mı satış fiyatını mı esas alıyor?', a: 'Hiçbirini; araç yalnızca gram dönüşümü yapar. Tutar hesaplaması istiyorsanız girdiğiniz gram fiyatı alış ya da satış fiyatı olabilir, bu tamamen sizin tercihinize bağlıdır.' },
+      { q: 'Yarım altın gerçekten çeyreğin tam iki katı mı?', a: 'Evet, standart gram karşılıklarında yarım altın (3,5 gr) çeyrek altının (1,75 gr) tam iki katıdır, tam altın (7 gr) ise çeyreğin dört katıdır.' },
+      { q: 'İşçilik veya kâr payı bu hesaba dahil mi?', a: 'Hayır, bu araç yalnızca has gram karşılığını hesaplar; fiziksel altın alıp satarken kuyumcular işçilik farkı veya kâr payı ekleyebilir.' },
+      { q: 'Gram fiyatını boş bırakırsam ne olur?', a: 'Gram fiyatı girilmezse araç yalnızca gram ve hedef birim çevrimini gösterir, tutar alanı hesaplanmaz.' },
+    ],
+  },
+
+  // ── Günlük Yaşam (yeni) ──
+  'dogalgaz-tuketimi-hesaplama': {
+    about: 'Doğalgaz tüketimi hesaplama aracı, sayacınızdan okuduğunuz m³ cinsinden tüketimi kWh\'e çevirir ve girdiğiniz m³ birim fiyatıyla aylık maliyetinizi hesaplar; elektrik faturanızla kıyaslamak için kWh başına maliyeti de gösterir.',
+    method: 'Enerji (kWh) = Düzeltilmiş tüketim (m³) × Üst ısıl değer (kcal/m³) ÷ 860,42 (1 kWh\'in kcal karşılığı) formülüyle hesaplanır. "Üst ısıl değer" doğalgazın enerji içeriğidir ve dağıtım şirketinin dönem ortalamasına göre küçük farklar gösterebilir; "düzeltme katsayısı" ise sayacın ölçtüğü hacmi mevsimsel sıcaklık/basınç farklarına göre standart koşullara taşır. Aylık maliyet ise girdiğiniz m³ tüketimin, m³ birim fiyatıyla doğrudan çarpılmasıyla bulunur.',
+    examples: [
+      {
+        title: '120 m³ tüketim, 18 TL/m³ birim fiyat',
+        rows: [
+          { label: 'Aylık maliyet', value: '2.160 TL' },
+          { label: 'Enerji karşılığı', value: '1.276,82 kWh' },
+          { label: 'kWh başına maliyet', value: '1,69 TL' },
+        ],
+      },
+    ],
+    faq: [
+      { q: 'Üst ısıl değer nedir?', a: 'Doğalgazın içerdiği enerji miktarını gösteren bir değerdir (kcal/m³); gazın kaynağına ve faturalandırma dönemine göre küçük farklar gösterebilir, faturanızda da genellikle bu değer belirtilir.' },
+      { q: 'Düzeltme katsayısı neden gerekli?', a: 'Doğalgaz sayaçları hacmi ölçerken ortam sıcaklığı ve basıncından etkilenir; düzeltme katsayısı bu ölçümü standart koşullara taşıyarak daha tutarlı bir sonuç verir.' },
+      { q: 'Faturamdaki m³ ile bu araca girdiğim m³ aynı mı?', a: 'Evet, sayacınızdan okunan ve faturanızda "tüketim" olarak belirtilen m³ değerini doğrudan girebilirsiniz.' },
+      { q: 'kWh sonucu ne işime yarar?', a: 'kWh, elektrik faturanızla ortak bir birim olduğu için ısıtma sisteminizi (doğalgaz kombi mi elektrikli ısıtıcı mı) maliyet açısından karşılaştırmak istediğinizde işinize yarar.' },
+      { q: 'Bu araç dağıtım bedeli ve vergileri de hesaplıyor mu?', a: 'Hayır, yalnızca girdiğiniz m³ tüketim ile birim fiyatın çarpımı hesaplanır; faturanızdaki dağıtım bedeli, sayaç okuma bedeli ve KDV gibi kalemler bu tutara ayrıca eklenir.' },
+      { q: 'Isıl değer neden dönemden döneme farklı olabiliyor?', a: 'Doğalgazın kaynağı (yerli üretim, ithal boru hattı, LNG vb.) ve karışım oranı zamanla değiştiğinden, enerji içeriği de dönemden döneme küçük farklar gösterebilir.' },
+      { q: 'Kombi ile soba tüketimi aynı formülle mi hesaplanır?', a: 'Evet, m³\'ten kWh\'e dönüşüm formülü cihazdan bağımsızdır; hangi cihazı kullanırsanız kullanın, sayaçtan okunan m³ aynı şekilde kWh\'e çevrilir.' },
+      { q: '1 m³ doğalgaz yaklaşık kaç kWh eder?', a: 'Tipik bir üst ısıl değerle (varsayılan olarak bu araçta kullanılan) yaklaşık 10,64 kWh\'e karşılık gelir; ancak gerçek değer dönem ve bölgeye göre biraz farklılık gösterebilir.' },
+    ],
+  },
+  'ev-arkadasi-fatura-bolusme-hesaplama': {
+    about: 'Ev arkadaşı kira/fatura bölüşme aracı, kira ve fatura kalemlerinizi ev arkadaşlarınız arasında eşit olarak ya da oda büyüklüğü/gelir gibi bir ağırlığa göre orantılı olarak paylaştırmanızı sağlar.',
+    method: '"Eşit bölüşüm" modunda tüm kalemlerin toplamı kişi sayısına bölünür. "Ağırlığa göre bölüşüm" modunda ise her kişi için girdiğiniz bir ağırlık (oda metrekaresi, gelir düzeyi vb.) toplam ağırlığa oranlanır ve toplam tutar bu orana göre kişiler arasında paylaştırılır.',
+    examples: [
+      {
+        title: 'Eşit bölüşüm — toplam 20.000 TL, 3 kişi',
+        rows: [
+          { label: 'Kişi başı pay', value: '6.666,67 TL (%33,33)' },
+        ],
+      },
+      {
+        title: 'Ağırlıklı bölüşüm — toplam 20.000 TL, ağırlıklar 20/15/10',
+        intro: 'Örneğin oda metrekarelerine göre.',
+        rows: [
+          { label: '1. kişi payı', value: '8.888,89 TL (%44,44)' },
+          { label: '2. kişi payı', value: '6.666,67 TL (%33,33)' },
+          { label: '3. kişi payı', value: '4.444,44 TL (%22,22)' },
+        ],
+      },
+    ],
+    faq: [
+      { q: 'Eşit ve ağırlıklı bölüşüm arasındaki fark nedir?', a: '"Eşit bölüşüm" herkesin aynı miktarı ödemesini varsayar; "ağırlıklı bölüşüm" ise oda büyüklüğü veya gelir gibi girdiğiniz bir ölçüte göre payları orantılı şekilde dağıtır.' },
+      { q: 'Ağırlık olarak ne girmeliyim, oda m² mi yoksa gelir mi?', a: 'İkisi de kullanılabilir; grubunuzun hangi ölçütü adil bulduğuna göre karar verebilirsiniz. Örneğin daha büyük odada kalan kişi daha yüksek ağırlık, daha düşük gelirli kişi daha düşük ağırlık girebilir.' },
+      { q: 'Bir kişi bir kalemi hiç kullanmıyorsa (ör. sigara, özel bir hizmet) nasıl hariç tutarım?', a: 'Bu araç tüm kalemleri tüm kişilere dağıtır; kullanılmayan bir kalemi hariç tutmak isterseniz o kalemi ayrı bir hesaplamada, ilgili kişiler arasında manuel olarak paylaştırabilirsiniz.' },
+      { q: 'Depozito veya bir seferlik giderler bu hesaba dahil edilebilir mi?', a: 'Evet, kalem listesine "Depozito" gibi bir satır ekleyip tutarını girerek diğer kalemlerle birlikte paylaştırabilirsiniz.' },
+      { q: 'Kaç kişiye kadar ekleme yapabilirim?', a: 'Bir sınır yoktur; "+ Kişi ekle" butonuyla istediğiniz sayıda ev arkadaşı ekleyebilirsiniz.' },
+      { q: 'Kira kontratında isim tek kişideyse bölüşüm sonucu bunu değiştirir mi?', a: 'Hayır, bu araç yalnızca aranızdaki pay dağılımını hesaplar; kira kontratındaki hukuki sorumluluk ev sahibi ile yapılan sözleşmeye bağlıdır.' },
+      { q: 'Ağırlıklı bölüşümde ağırlıkların toplamı 100 olmak zorunda mı?', a: 'Hayır, ağırlıklar yalnızca birbirine oranlanır; toplamları 100, 45 veya başka bir sayı olsa da sonuç değişmez.' },
+      { q: 'Sonuçları ev arkadaşlarımla nasıl paylaşırım?', a: 'Sonuç kartındaki paylaş butonuyla, girdiğiniz tüm değerleri içeren bir bağlantı kopyalayıp ev arkadaşlarınıza gönderebilirsiniz.' },
+    ],
+  },
+  'abonelik-maliyeti-hesaplama': {
+    about: 'Abonelik maliyeti hesaplama aracı, Netflix, Spotify, bulut depolama gibi tüm dijital aboneliklerinizi tek listede toplayarak aylık ve yıllık toplam maliyetinizi, ayrıca bu maliyetin net asgari ücrete göre kaç günlük çalışmaya denk geldiğini hesaplar.',
+    method: 'Her abonelik için girdiğiniz aylık tutarlar toplanarak aylık toplam bulunur; bu toplam 12 ile çarpılarak yıllık toplam elde edilir. Yıllık toplam, güncel net asgari ücretin günlük karşılığına (net asgari ücret ÷ 30) bölünerek "yılda kaç günlük net asgari ücrete denk geldiği" hesaplanır.',
+    examples: [
+      {
+        title: 'Netflix 150 TL, Spotify 80 TL, bulut depolama 45 TL',
+        rows: [
+          { label: 'Aylık toplam', value: '275 TL' },
+          { label: 'Yıllık toplam', value: '3.300 TL' },
+          { label: 'Asgari ücrete göre karşılığı', value: 'Yılda ~4 günlük net asgari ücret' },
+        ],
+      },
+    ],
+    faq: [
+      { q: 'Yıllık ödediğim abonelikleri nasıl eklerim?', a: 'Yıllık tutarı 12\'ye bölüp aylık tutar alanına girmeniz yeterlidir; araç tüm hesaplamayı aylık tutarlar üzerinden yapar.' },
+      { q: 'Aile paketinde paylaştığım bir abonelik için ne girmeliyim?', a: 'Toplam aile paketi tutarını değil, sizin ödediğiniz veya kendinize ayırdığınız kişi başı payı aylık tutar olarak girmeniz daha doğru bir sonuç verir.' },
+      { q: 'Asgari ücret karşılaştırması neden net (brüt değil) üzerinden yapılıyor?', a: 'Net asgari ücret, bir çalışanın eline geçen gerçek harcanabilir geliri yansıttığı için abonelik maliyetinin günlük hayata etkisini daha anlaşılır şekilde gösterir.' },
+      { q: 'Otomatik yenilenen ücretsiz deneme süreleri dahil mi?', a: 'Deneme süresi bitip ücretli döneme geçecekse, bu aboneliği normal aylık tutarıyla listeye eklemeniz gerçek maliyetinizi daha doğru yansıtır.' },
+      { q: 'Kaç abonelik ekleyebilirim?', a: 'Bir sınır yoktur; "+ Abonelik ekle" ile istediğiniz kadar satır ekleyebilirsiniz.' },
+      { q: 'Bu araç bana hangi aboneliği iptal etmem gerektiğini mi söylüyor?', a: 'Hayır, araç yalnızca toplam maliyeti ve büyüklüğünü görünür kılar; hangi aboneliği tutup hangisini iptal edeceğiniz tamamen kendi tercihinize kalmıştır.' },
+      { q: 'Döviz cinsinden ödediğim abonelikleri (ör. dolar) nasıl girerim?', a: 'Güncel kurla TL karşılığını hesaplayıp aylık tutar alanına TL cinsinden girmeniz gerekir; bu araçta otomatik döviz çevirisi bulunmaz.' },
+      { q: 'Fiyatlar zamanla değiştiğinde sonucu nasıl güncellerim?', a: 'Sayfadaki tutarları güncelleyip yeniden hesaplayabilir, ardından paylaş butonuyla güncel durumu yansıtan yeni bir bağlantı kaydedebilirsiniz.' },
+    ],
+  },
+  'arac-sahip-olma-maliyeti-hesaplama': {
+    about: 'Araç sahip olma maliyeti hesaplama aracı, MTV, trafik sigortası, kasko, bakım, lastik ve yakıt gibi yıllık gider kalemlerinizi toplayarak aracınızın gerçek yıllık, aylık ortalama ve kilometre başına maliyetini hesaplar.',
+    method: 'Girdiğiniz altı gider kaleminin (MTV, sigorta, kasko, bakım, lastik, yakıt) toplamı yıllık toplam maliyeti verir. Bu toplam 12\'ye bölünerek aylık ortalama, yıllık kilometreye bölünerek de kilometre başına maliyet bulunur; her kalemin toplam içindeki payı da ayrıca gösterilir.',
+    examples: [
+      {
+        title: 'MTV 3.500, sigorta 8.000, kasko 12.000, bakım 4.000, lastik 3.000, yakıt 25.000 TL, 15.000 km/yıl',
+        rows: [
+          { label: 'Yıllık toplam maliyet', value: '55.500 TL' },
+          { label: 'Kilometre başı maliyet', value: '3,70 TL' },
+          { label: 'Aylık ortalama', value: '4.625 TL' },
+        ],
+      },
+    ],
+    faq: [
+      { q: 'Amortisman (değer kaybı) neden bu hesaba dahil değil?', a: 'Değer kaybı, aracın markasına, yaşına ve piyasa koşullarına göre tahmin edilmesi zor bir kalemdir; bu araç yalnızca doğrudan ve düzenli nakit çıkışı olan giderlere odaklanır.' },
+      { q: 'Yakıt maliyetimi bilmiyorum, nasıl bulurum?', a: 'Sitedeki Yakıt Maliyeti Hesaplama aracını kullanarak yıllık kilometrenize göre yaklaşık yıllık yakıt giderinizi hesaplayıp bu araca girebilirsiniz.' },
+      { q: 'Kredi/taşıt kredisi taksitleri bu hesaba dahil mi?', a: 'Hayır, bu araç yalnızca araca sahip olmanın işletme giderlerini hesaplar; kredi taksitiniz varsa bunu ayrı bir bütçe kalemi olarak değerlendirmeniz gerekir.' },
+      { q: 'Kilometre başı maliyet ne işime yarar?', a: 'Farklı araçları, ya da "kendi aracımla mı gitsem toplu taşıma/taksi mi kullansam" kararını karşılaştırmak için pratik bir ölçüttür.' },
+      { q: 'Trafik cezaları bu hesaba dahil mi?', a: 'Hayır, cezalar düzenli/öngörülebilir bir gider olmadığından bu hesaba dahil edilmemiştir; ayrı bir gider kalemi olarak değerlendirmeniz önerilir.' },
+      { q: 'Kasko zorunlu mu, girmezsem ne olur?', a: 'Kasko yasal bir zorunluluk değildir (trafik sigortası zorunludur); kaskonuz yoksa bu alana 0 girerek diğer kalemlerle hesaplamaya devam edebilirsiniz.' },
+      { q: 'Otopark ve otoyol/köprü geçiş ücretleri nereye eklenir?', a: 'Bu araçta ayrı bir kalem olarak yer almaz; isterseniz "bakım" kalemine dahil edebilir veya toplam sonucu kendi hesabınızda bu tutar kadar artırabilirsiniz.' },
+      { q: 'Bu hesap ticari araçlar için de geçerli mi?', a: 'Evet, mantık aynıdır; yalnızca gider kalemi tutarlarını ticari aracınızın gerçek MTV, sigorta, bakım ve yakıt giderlerine göre girmeniz yeterlidir.' },
+    ],
+  },
+  'elektrikli-arac-sarj-maliyeti-hesaplama': {
+    about: 'Elektrikli araç şarj maliyeti hesaplama aracı, batarya kapasitesi ve elektrik fiyatınıza (ev veya şarj istasyonu) göre tam şarj ve 100 km maliyetini hesaplar; isterseniz benzinli bir araçla karşılaştırma yaparak hangisinin daha ekonomik olduğunu görebilirsiniz.',
+    method: 'Tam şarj maliyeti, batarya kapasitesinin (kWh) ev elektrik birim fiyatıyla çarpılmasıyla bulunur. 100 km maliyeti, aracın 100 km başına tükettiği kWh miktarının ilgili birim fiyatla (ev veya istasyon) çarpılmasıyla hesaplanır. Karşılaştırma için girdiğiniz benzinli araç tüketimi ve yakıt fiyatı ile de 100 km\'lik benzin maliyeti hesaplanıp aradaki fark gösterilir.',
+    examples: [
+      {
+        title: '60 kWh batarya, 100 km\'de 16 kWh tüketim, ev fiyatı 2,8 TL/kWh, istasyon 6,5 TL/kWh',
+        intro: 'Karşılaştırma için benzinli araç: 100 km\'de 7 L, 43 TL/L.',
+        rows: [
+          { label: 'Evde tam şarj maliyeti', value: '168 TL' },
+          { label: '100 km maliyeti (ev)', value: '44,80 TL' },
+          { label: '100 km maliyeti (istasyon)', value: '104 TL' },
+          { label: '100 km maliyeti (benzinli araç)', value: '301 TL' },
+          { label: '100 km başına tasarruf', value: '256,20 TL' },
+        ],
+      },
+    ],
+    faq: [
+      { q: '100 km başına tüketimimi nereden öğrenirim?', a: 'Aracın teknik özelliklerinde belirtilen WLTP tüketim değerini veya kendi kullanımınızdan gözlemlediğiniz ortalama tüketimi kullanabilirsiniz; gerçek tüketim sürüş tarzı ve mevsime göre değişebilir.' },
+      { q: 'Ev ve istasyon fiyatı neden bu kadar farklı olabiliyor?', a: 'Hızlı (DC) şarj istasyonları, altyapı ve işletme maliyetleri nedeniyle ev elektriğine göre genellikle belirgin şekilde daha yüksek birim fiyat uygular.' },
+      { q: 'Pil ömrü veya değer kaybı bu hesaba dahil mi?', a: 'Hayır, bu araç yalnızca enerji (şarj) maliyetini hesaplar; pil sağlığı, değer kaybı ve bakım gibi uzun vadeli maliyetler bu hesaba dahil değildir.' },
+      { q: 'Benzinli araç karşılaştırması zorunlu mu?', a: 'Hayır, bu alanlar opsiyoneldir; boş bırakırsanız yalnızca elektrikli aracın şarj maliyeti hesaplanır.' },
+      { q: 'AC ve DC şarj arasındaki fark bu hesaba dahil mi?', a: 'Hayır, araç yalnızca girdiğiniz kWh fiyatı ve tüketim değerini kullanır; AC/DC şarj hızı farkı maliyeti değil süreyi etkiler.' },
+      { q: 'Kışın artan tüketim hesaba katılıyor mu?', a: 'Hayır, otomatik bir mevsim düzeltmesi yapılmaz; kış aylarında genellikle artan tüketiminizi "100 km başına tüketim" alanına elle girerek güncelleyebilirsiniz.' },
+      { q: 'Şarj kaybı (AC-DC dönüşüm verimsizliği) hesaba dahil mi?', a: 'Hayır, bu basitleştirilmiş bir hesaptır; gerçek şarj sırasında birkaç yüzde kayıp yaşanabileceğinden gerçek maliyet hesaplanandan biraz yüksek çıkabilir.' },
+      { q: 'Elektrikli araç gerçekten daha ucuz mu?', a: 'Enerji maliyeti açısından genellikle evet; ancak satın alma fiyatı, pil değişim maliyeti ve ikinci el değeri gibi faktörler toplam sahiplik maliyetini etkiler ve bu araca dahil değildir.' },
+    ],
+  },
+  'trafik-cezasi-erken-odeme-hesaplama': {
+    about: 'Trafik cezası erken ödeme hesaplama aracı, aldığınız trafik idari para cezasının kanunen tanınan erken ödeme indirimiyle ne kadara düşeceğini ve indirimden yararlanmak için son ödeme süresini hesaplar.',
+    method: '2918 sayılı Karayolları Trafik Kanunu\'nun 115. maddesi uyarınca, ceza tutarına sabit bir indirim oranı uygulanır: indirimli tutar = ceza tutarı × (1 − indirim oranı). İndirim, yalnızca cezanın tebliğ tarihinden itibaren kanunen tanınan süre içinde ödenmesi halinde geçerlidir.',
+    examples: [
+      {
+        title: '2.560 TL ceza',
+        rows: [
+          { label: 'İndirim tutarı', value: '640 TL' },
+          { label: 'İndirimli ödeme tutarı', value: '1.920 TL' },
+        ],
+      },
+    ],
+    faq: [
+      { q: 'İndirim oranı her zaman %25 mi?', a: 'Evet, Karayolları Trafik Kanunu madde 115 uyarınca trafik idari para cezalarında erken ödeme indirimi sabit %25 oranında uygulanır.' },
+      { q: 'Erken ödeme süresi neden 15 günden 1 aya çıktı?', a: '31.01.2024 tarihli bir yönetmelik değişikliğiyle (İçişleri Bakanlığı), tebliğ tarihinden itibaren indirimli ödeme için tanınan süre 15 günden 1 aya (30 gün) uzatılmıştır; bu değişiklik hâlâ yürürlüktedir.' },
+      { q: 'Süre tebliğ tarihinden mi yoksa cezanın kesildiği tarihten mi başlar?', a: 'Cezanın size resmi olarak tebliğ edildiği (bildirildiği) tarihten itibaren başlar; kesim tarihi ile tebliğ tarihi farklı günlere denk gelebilir.' },
+      { q: 'Cezaya itiraz edersem indirim hakkım devam eder mi?', a: 'İtiraz süreci ile erken ödeme indirimi süresi birbirinden bağımsız işler; itiraz düşünüyorsanız bile indirim süresini kaçırmamaya dikkat etmeniz, itirazınız reddedilirse dezavantajlı duruma düşmenizi önler.' },
+      { q: 'Taksitle ödersem indirim geçerli mi?', a: 'İndirim, tutarın süresi içinde tam ve tek seferde ödenmesi esasına dayanır; taksitlendirme genellikle bu indirimden yararlanmayı etkileyebileceğinden ödeme kanalınızdaki güncel koşulları kontrol etmeniz önerilir.' },
+      { q: 'Süre geçtikten sonra ne olur?', a: 'İndirim hakkı kaybedilir, ceza tam tutar üzerinden borç olarak kalır ve aylık yaklaşık %3,5 civarında gecikme zammı işlemeye başlar.' },
+      { q: 'Bu oran tüm trafik cezası türleri için mi geçerli?', a: 'Evet, genel %25 erken ödeme indirimi kural olarak tüm trafik idari para cezalarına uygulanır; ceza türüne göre indirim oranında bir farklılaşma yoktur.' },
+      { q: 'Ödemeyi nereden yapabilirim?', a: 'e-Devlet üzerinden "Trafik Cezası Sorgulama ve Ödeme", bankaların internet/mobil şubeleri, PTT şubeleri ve bazı vergi dairesi veznelerinden ödeme yapabilirsiniz.' },
+    ],
+  },
+  'tarif-porsiyon-olcekleme-hesaplama': {
+    about: 'Tarif porsiyon ölçekleme aracı, bir yemek tarifinin malzeme miktarlarını mevcut porsiyon sayısından istediğiniz hedef porsiyon sayısına göre otomatik olarak ölçekler; örneğin 4 kişilik bir tarifi kolayca 7 kişilik hale getirebilirsiniz.',
+    method: 'Ölçekleme oranı, hedef porsiyon sayısının mevcut (tarifteki) porsiyon sayısına bölünmesiyle bulunur (ör. 4 kişilik tarifi 7 kişiye çıkarmak için oran 7 ÷ 4 = 1,75\'tir). Listenizdeki her malzemenin miktarı bu oranla çarpılarak yeni miktarlar hesaplanır.',
+    examples: [
+      {
+        title: '4 kişilik tarifi 7 kişiye çıkarma (oran 1,75)',
+        rows: [
+          { label: '200 g un', value: '350 g' },
+          { label: '2 adet yumurta', value: '3,5 adet' },
+        ],
+      },
+    ],
+    faq: [
+      { q: 'Tuz ve baharat miktarını da aynı oranla mı ölçeklemeliyim?', a: 'Bu oran iyi bir başlangıç noktasıdır, ancak tada göre ayarlanan malzemelerde (tuz, baharat, acı biber vb.) sonucu bir başlangıç kabul edip damak tadınıza göre ince ayar yapmanız önerilir.' },
+      { q: 'Pişirme süresi de aynı oranda mı artmalı?', a: 'Hayır, pişirme süresi malzeme miktarıyla doğrusal artmaz; özellikle fırın tariflerinde hacim/kalınlık arttıkça pişirme süresi orantısız şekilde uzayabilir, tarifi gözlemleyerek pişirmeniz önerilir.' },
+      { q: 'Yumurta gibi bölünemeyen malzemelerde ne yapmalıyım?', a: 'Çıkan ondalıklı sonucu (ör. 3,5 adet) tarifin niteliğine göre yukarı veya aşağı yuvarlayabilir, ya da kalan yarımı çırpıp göz kararı ekleyebilirsiniz.' },
+      { q: 'Kalıp veya tepsi boyutunu da değiştirmeli miyim?', a: 'Evet, porsiyon arttıkça genellikle daha büyük bir pişirme kabına ihtiyaç duyarsınız; bu araç yalnızca malzeme miktarlarını hesaplar, kap boyutu önerisi sunmaz.' },
+      { q: 'Küçültme (ör. 6 kişilikten 2 kişiye) için de kullanılabilir mi?', a: 'Evet, hedef porsiyon sayısı mevcut porsiyondan küçük olduğunda araç aynı mantıkla malzemeleri orantılı olarak azaltır.' },
+      { q: 'Ölçekleme oranı tam olarak nasıl hesaplanıyor?', a: 'Hedef porsiyon sayısının mevcut porsiyon sayısına bölünmesiyle bulunur; bu tek bir çarpan tüm malzeme listesine uygulanır.' },
+      { q: 'Malzemeleri farklı birimlerde (bazısı gram, bazısı adet) girebilir miyim?', a: 'Evet, her satırın kendi birimi korunur; araç yalnızca miktarı ölçekler, birimi değiştirmez.' },
+      { q: 'Ölçeklenmiş tarifi nasıl kaydederim?', a: 'Sonuç alanındaki paylaş butonuyla, girdiğiniz tüm malzeme ve porsiyon bilgilerini içeren bir bağlantı kopyalayıp kendinize veya birine gönderebilirsiniz.' },
+    ],
+  },
+  'mutfak-olcu-cevirici': {
+    about: 'Mutfak ölçü çevirici aracı, Türk mutfağında yaygın kullanılan su bardağı, çay bardağı, yemek kaşığı ve tatlı kaşığı gibi ölçüleri, malzeme tipine (un, şeker, tuz, pirinç, sıvı) göre grama veya başka bir ölçüye çevirir.',
+    method: 'Her malzeme tipinin yoğunluğuna göre farklı bir gram karşılığı vardır; bu yüzden aynı "1 su bardağı" un, şeker veya pirinç için farklı gram değeri verir. Girdiğiniz miktar önce seçtiğiniz malzeme tipinin tablosundan grama çevrilir, ardından hedef ölçünün gram karşılığına bölünerek sonuç bulunur. Sıvılarda (su, süt, sıvı yağ) yoğunluk yaklaşık 1 kabul edildiğinden ml ve gram birbirine eşit sayılır.',
+    examples: [
+      {
+        title: '3 su bardağı un → yemek kaşığı',
+        rows: [
+          { label: 'Gram karşılığı', value: '390 gr' },
+          { label: 'Yemek kaşığı karşılığı', value: '43,33 yemek kaşığı' },
+        ],
+      },
+    ],
+    faq: [
+      { q: 'Su bardağı ile çay bardağı arasındaki fark ne kadar?', a: 'Standart bir su bardağı yaklaşık 200 ml/g, bir çay bardağı ise yaklaşık 100 ml/g olarak kabul edilir; yani çay bardağı su bardağının yarısı büyüklüğündedir.' },
+      { q: 'Un ve şeker neden aynı bardakta farklı gram veriyor?', a: 'Un daha hafif ve havadar, şeker ise daha yoğun bir malzeme olduğundan aynı hacimde (1 bardak) farklı ağırlıkta olurlar; bu yüzden her malzeme tipi için ayrı bir tablo kullanılır.' },
+      { q: 'Sıvı yağ da su gibi mi hesaplanıyor?', a: 'Evet, bu araçta pratik kullanım için sıvı yağın yoğunluğu suya yakın kabul edilir; hassas tariflerde küçük bir fark olabileceğini unutmayın.' },
+      { q: 'Kaşık ölçüleri "silme" mi yoksa "tepeleme" mi?', a: 'Bu tablodaki değerler silme (düz, kaşığın üstünü bir bıçakla düzleştirdiğiniz) ölçüye göre hesaplanmıştır; tepeleme ölçtüğünüzde gerçek miktar daha fazla olur.' },
+      { q: 'Un elenmiş mi elenmemiş mi ölçülmeli?', a: 'Tablodaki değerler standart, elenmemiş un için tipik bir ortalamayı yansıtır; elenmiş un daha hafif olduğundan aynı hacimde biraz daha az gram tartabilir.' },
+      { q: 'Bu tablo hangi kaynağa dayanıyor?', a: 'Türk mutfağında yemek kitapları ve tarif sitelerinde yaygın olarak kullanılan standart ölçü tablolarına dayanır.' },
+      { q: 'Pasta veya ekmek gibi hassas tarifler için yeterince kesin mi?', a: 'Bu araç pratik günlük kullanım için yaklaşık bir değer verir; un/şeker oranının kritik olduğu pasta ve ekmek gibi tariflerde bir mutfak tartısı kullanmanız daha tutarlı sonuç verir.' },
+      { q: 'Un dışında hangi malzemeler destekleniyor?', a: 'Un, şeker, tuz, pirinç ve sıvılar (su, süt, sıvı yağ gibi) için ayrı tablolar bulunur; listede olmayan bir malzeme için en yakın yoğunluktaki kategoriyi tahmini olarak kullanabilirsiniz.' },
+    ],
+  },
+  'evcil-hayvan-yasi-hesaplama': {
+    about: 'Evcil hayvan yaşı hesaplama aracı, köpeğinizin (boyutuna göre) veya kedinizin yaşını güncel veteriner kaynaklı bir formülle yaklaşık insan yaşına çevirir; eğlenceli ama bilimsel araştırmalara dayanan bir tahmin sunar.',
+    method: 'Kediler için Amerikan Hayvan Hastaneleri Birliği (AAHA) ve International Cat Care\'in kabul ettiği "15-9-4" kuralı kullanılır: ilk yıl 15, ikinci yıl toplamda 24 (+9), sonraki her yıl +4 insan yılı eklenir. Köpeklerde de aynı ilk-iki-yıl eğrisi (1. yıl 15, 2. yıl toplam 24) kullanılır, ancak 2 yıldan sonraki her yıl için eklenen insan yılı sayısı ırkın boyutuna göre değişir: küçük ırklarda +4, orta ırklarda +5, büyük ırklarda +6, dev ırklarda +7.',
+    examples: [
+      {
+        title: '3 yaşındaki kedi',
+        rows: [{ label: 'İnsan yaşı karşılığı', value: '28 yaş' }],
+      },
+      {
+        title: '5 yaşında büyük ırk köpek (25-45 kg)',
+        rows: [{ label: 'İnsan yaşı karşılığı', value: '42 yaş' }],
+      },
+      {
+        title: '10 yaşında küçük ırk köpek (≤10 kg)',
+        rows: [{ label: 'İnsan yaşı karşılığı', value: '56 yaş' }],
+      },
+    ],
+    faq: [
+      { q: '"1 köpek/kedi yılı = 7 insan yılı" kuralı neden artık kullanılmıyor?', a: 'Bu kural bilimsel bir temele dayanmıyordu; güncel araştırmalar evcil hayvanların ilk yıllarda çok hızlı, sonrasında ise çok daha yavaş yaşlandığını gösteriyor, bu yüzden doğrusal bir çarpan gerçekçi sonuç vermiyor.' },
+      { q: 'Neden köpeklerde boyut önemli ama kedilerde değil?', a: 'Köpek ırkları arasında yetişkin ağırlığı ve ömür beklentisi çok büyük farklılıklar gösterir (ör. Chihuahua ile Saint Bernard); kedilerde ırklar arası ömür farkı çok daha az belirgin olduğundan tek bir eğri yeterli kabul edilir.' },
+      { q: 'Melez/karışık ırk köpekler için hangi boyut kategorisini seçmeliyim?', a: 'Köpeğinizin yetişkinlikteki (ergin) ağırlığına en yakın kategoriyi (küçük, orta, büyük, dev) seçmeniz en gerçekçi tahmini verir.' },
+      { q: 'Bu hesaplama evcil hayvanımın sağlık durumunu mu gösteriyor?', a: 'Hayır, bu yalnızca yaklaşık bir insan yaşı karşılığıdır; tıbbi bir değerlendirme değildir. Hayvanınızın gerçek sağlık ve yaşlanma durumu için veterinerinize danışmanız gerekir.' },
+      { q: '1 yaşın altındaki yavrular için doğru çalışıyor mu?', a: 'Evet, ilk yıl içindeki kısmi yaşlar (ör. 0,5 yaş) da orantılı olarak hesaplanır; ancak yavruluk dönemindeki gelişim bireysel farklılıklar gösterebilir.' },
+      { q: 'Bu formülün kaynağı nedir?', a: 'Kediler için AAHA ve International Cat Care tarafından kabul edilen "15-9-4" kuralı, köpekler için ise aynı ilk-iki-yıl eğrisinin yaygın veteriner kaynaklarında yer alan boyuta göre uyarlanmış versiyonu kullanılmıştır.' },
+      { q: 'Egzotik evcil hayvanlar (tavşan, kuş vb.) için kullanılabilir mi?', a: 'Hayır, bu araç yalnızca kedi ve köpekler için tasarlanmıştır; diğer türlerin yaşlanma eğrisi tamamen farklıdır.' },
+      { q: 'Sonuç neden ondalıklı değil tam sayı olarak gösteriliyor?', a: 'Okunabilirliği artırmak için sonuç en yakın tam yaşa yuvarlanır; iç hesaplama ondalıklı değerlerle yapılır.' },
+    ],
+  },
+  'askerlik-terhis-tarihi-hesaplama': {
+    about: 'Askerlik terhis tarihi hesaplama aracı, sevk (birliğe katılış) tarihinize ve hizmet türünüze (er/erbaş, yedek subay/astsubay veya bedelli) göre terhis tarihinizi ve terhise kalan gün sayısını hesaplar.',
+    method: '7179 sayılı Askeralma Kanunu\'nun 5. maddesine göre belirlenen hizmet süresi sevk tarihine eklenerek terhis tarihi bulunur: er/erbaş için 6 ay, yedek subay/yedek astsubay için 12 ay, bedelli askerlik için 32 gün (28 gün temel askerlik eğitimi + 2 gün yol izni + 2 gün kanuni izin). Kalan gün sayısı, bu terhis tarihi ile bugünün tarihi arasındaki farktır.',
+    examples: [
+      {
+        title: 'Sevk tarihi 9 Temmuz 2026, er/erbaş (6 ay)',
+        rows: [{ label: 'Terhis tarihi', value: '9 Ocak 2027' }],
+      },
+      {
+        title: 'Sevk tarihi 9 Temmuz 2026, bedelli askerlik (32 gün)',
+        rows: [{ label: 'Terhis tarihi', value: '10 Ağustos 2026' }],
+      },
+    ],
+    faq: [
+      { q: 'Hizmet süreleri her zaman aynı mı kalıyor?', a: 'Hayır, askerlik mevzuatı zaman zaman değişebilir; bu araçtaki süreler 7179 sayılı Askeralma Kanunu\'nun 5. maddesine dayanır ve sayfanın altında belirtilen kaynak/güncelleme tarihine göre günceldir. Kesin ve güncel bilgi için ASAL (asal.msb.gov.tr) veya e-Devlet\'teki askerlik durum sorgulamasını esas almanız önerilir.' },
+      { q: 'Bedelli askerlik yapanlar yedek subay veya astsubay olabilir mi?', a: 'Hayır, kanuna göre bedelli askerlik yapan vatandaşlar yedek subay veya yedek astsubay statüsünden yararlanamaz.' },
+      { q: 'Sevk tarihi ile celp tarihi aynı şey mi?', a: 'Evet, bu araçta "sevk tarihi" olarak kastedilen, birliğinize fiilen katıldığınız tarihtir.' },
+      { q: 'Hesaplanan tarih benim kesin terhis tarihim mi?', a: 'Bu araç yasal hizmet süresini esas alan yaklaşık bir tarih verir; birlik içi idari işlemler veya özel durumlar gerçek terhis tarihinizi birkaç gün etkileyebilir.' },
+      { q: 'İzin günlerim terhis tarihimi uzatır mı?', a: 'Hayır, kullanılan yasal izinler hizmet süresi içinde sayılır ve genel kural olarak terhis tarihini uzatmaz.' },
+      { q: 'Yurt dışında yaşayanlar için süre farklı mı?', a: 'Dövizli/yurt dışı askerlik farklı koşullara ve sürelere tabi olabilir; bu araç yalnızca temel er, yedek subay ve bedelli sürelerini esas alır.' },
+      { q: 'Kalan gün sayısı neye göre hesaplanıyor?', a: 'Varsayılan olarak bugünün tarihine göre hesaplanır; hesaplama mantığı sevk tarihinden terhis tarihine kadar olan toplam süreyi esas alır.' },
+      { q: 'Sürem doluyor ama terhis işlemleri gecikirse ne olur?', a: 'Bu araç yalnızca yasal hizmet süresini hesaplar; birlik içi idari süreçler (evrak işlemleri, sevk organizasyonu vb.) fiili çıkışınızı birkaç gün geciktirebilir.' },
+    ],
+  },
 };
 
 export function getCalculatorContent(id) {
