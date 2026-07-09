@@ -256,6 +256,25 @@ export const GUNCEL_VERILER = {
     lastUpdated: '2026-07-09',
   },
 
+  // ── Ev tansiyon ölçümü (HBPM) tanı eşiği ──
+  // ÖNEMLİ: Ofis ölçümü ≥140/90 mmHg eşiğine KARŞILIK GELEN ev ölçümü değeridir; yukarıdaki
+  // tansiyonSiniflandirma tablosuyla karıştırılmamalı (o, ofis/poliklinik ölçümü esas alır).
+  evTansiyonOlcumEsigi: {
+    sistolik: 135,
+    diastolik: 85,
+    period: '2023 (ESH kılavuzu)',
+    source: '2023 ESH (European Society of Hypertension) Kan Basıncı Yüksekliğinin Yönetimi Kılavuzu (J Hypertens 2023;41:1874-2071) — ofis ölçümünde ≥140/90 mmHg tanısına karşılık gelen ev ölçümü (HBPM) eşiği',
+    lastUpdated: '2026-07-09',
+  },
+
+  // ── Glisemik hedef bandı (gebe olmayan çoğu yetişkin, ADA) ──
+  glisemikHedefBandi: {
+    value: { aclikMin: 80, aclikMax: 130, toklukMax: 180 },
+    period: '2026',
+    source: 'American Diabetes Association, "6. Glycemic Goals, Hypoglycemia, and Hyperglycemic Crises: Standards of Care in Diabetes—2026." Diabetes Care. 2026;49(Suppl.1) — çoğu gebe olmayan yetişkin için açlık/öğün öncesi 80-130 mg/dL, tokluk (öğün başlangıcından 1-2 saat sonra) <180 mg/dL hedefi',
+    lastUpdated: '2026-07-09',
+  },
+
   // ── Doğalgaz m³ → kWh dönüşümü ──
   // "ustIsilDegerKcalM3": faturalarda dönem ortalaması olarak yayınlanan değerdir, dağıtım
   // şirketine ve mevsime göre küçük farklar gösterebilir; burada tipik bir varsayılan tutulur.

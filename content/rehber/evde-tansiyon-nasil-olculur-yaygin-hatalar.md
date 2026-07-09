@@ -45,7 +45,7 @@ American Heart Association'ın hasta yönlendirme materyaline göre, ölçümün
 
 ## Ölçümlerinizi kaydedin, hekiminize götürün
 
-Tek seferlik bir ölçümden çok, düzenli kaydedilen bir seri, hekiminizin tedavi kararı almasına daha çok yardımcı olur. [Ev Tansiyon Ölçüm Ortalaması](/tansiyon-olcum-ortalamasi) aracıyla girdiğiniz ölçümler adres çubuğundaki bağlantıda saklanır (kaydedip daha sonra devam edebilirsiniz) ve tek tuşla tarih/sabah/akşam/ortalama sütunlarını içeren yazdırılabilir bir çizelgeye dönüştürülebilir.
+Tek seferlik bir ölçümden çok, düzenli kaydedilen bir seri, hekiminizin tedavi kararı almasına daha çok yardımcı olur. [Ev Tansiyon Ölçüm Ortalaması](/tansiyon-olcum-ortalamasi) aracı artık girdiğiniz ölçümleri bu cihazın tarayıcısında otomatik olarak saklıyor; sayfaya her döndüğünüzde günlüğünüz kaldığı yerden karşınıza çıkıyor — ayrıca bir şey yapmanıza gerek yok. Bu veriler yalnızca sizin cihazınızda kalır, bize gönderilmez; tarayıcı verilerinizi silerseniz kayıtlarınız da silinir, bu yüzden arada bir "yedeği indir" ile bir JSON dosyasına kopyalamanızı öneririz (telefon değiştirdiğinizde de bu dosyayı yeni cihazda içe aktarabilirsiniz). Beş günden fazla ölçüm girdiğinizde, sistolik/diastolik ortalamalarınızı ve 135/85 mmHg ev ölçüm eşiğini gösteren bir trend grafiği de otomatik olarak belirir. Kayıtlarınız her zaman tek tuşla tarih/sabah/akşam/ortalama sütunlarını içeren yazdırılabilir bir çizelgeye dönüştürülebilir.
 
 ## Özet
 

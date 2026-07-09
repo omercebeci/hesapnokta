@@ -1,19 +1,33 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import DataPeriodNote from '../../../components/DataPeriodNote.jsx';
 import HealthResultDisclaimer from '../../../components/HealthResultDisclaimer.jsx';
 import PrintableMeasurementLog from '../../../components/PrintableMeasurementLog.jsx';
-import { calculateGlucoseLog } from '../../../lib/saglikCalculators.js';
+import TakipPrivacyNotice from '../../../components/TakipPrivacyNotice.jsx';
+import MeasurementLogControls from '../../../components/MeasurementLogControls.jsx';
+import MeasurementConflictBanner from '../../../components/MeasurementConflictBanner.jsx';
+import MeasurementTrendChart from '../../../components/MeasurementTrendChart.jsx';
+import MeasurementRangeFilter from '../../../components/MeasurementRangeFilter.jsx';
+import MeasurementStatCard from '../../../components/MeasurementStatCard.jsx';
+import {
+  calculateGlucoseLog,
+  sortRowsByDate,
+  filterRowsByRecency,
+  buildGlucoseTrendPoints,
+  calculateGlucoseStats,
+} from '../../../lib/saglikCalculators.js';
 import { GUNCEL_VERILER } from '../../../data/guncelVeriler.js';
 import { formatNumber, formatDateTr } from '../../../utils/format.js';
-import { useQueryParamState, serializeRows, deserializeRows } from '../../../hooks/useQueryParamState.js';
+import { useMeasurementRows } from '../../../hooks/useMeasurementRows.js';
 
 const HYPO_DATA = GUNCEL_VERILER.hipoglisemiEsikleri;
 const HYPER_DATA = GUNCEL_VERILER.hiperglisemiAcilEsigi;
 const FORMULA_DATA = GUNCEL_VERILER.hba1cOrtalamaGlukozFormulu;
+const TARGET_DATA = GUNCEL_VERILER.glisemikHedefBandi;
 const ROW_FIELDS = ['date', 'fasting', 'postprandial'];
+const STORAGE_KEY = 'hn-takip-seker';
 
 let rowIdCounter = 0;
 function todayMinusDays(days) {
@@ -22,6 +36,7 @@ function todayMinusDays(days) {
   return d.toISOString().slice(0, 10);
 }
 const createRow = (date = '', fasting = '', postprandial = '') => ({ id: rowIdCounter++, date, fasting, postprandial });
+const createRowFromValues = (v) => createRow(v.date, v.fasting, v.postprandial);
 const DEFAULT_ROWS = [createRow(todayMinusDays(1), '95', '138'), createRow(todayMinusDays(0), '102', '145')];
 
 const PRINT_COLUMNS = [
@@ -42,21 +57,31 @@ function buildGlucoseAction({ hasSevereLow, hasVeryHigh }) {
 }
 
 export default function SekerOlcumOrtalamasiHesaplama() {
-  const [rows, setRows] = useQueryParamState('olcumler', DEFAULT_ROWS, {
-    serialize: (value) => serializeRows(value, ROW_FIELDS),
-    deserialize: (text) => {
-      const parsed = deserializeRows(text, ROW_FIELDS, (v) => createRow(v.date, v.fasting, v.postprandial));
-      return parsed && parsed.length > 0 ? parsed : DEFAULT_ROWS;
-    },
+  const { rows, setRows, conflict, resolveConflict, clearAll } = useMeasurementRows({
+    storageKey: STORAGE_KEY,
+    queryParam: 'olcumler',
+    fields: ROW_FIELDS,
+    createRowFromValues,
+    defaultRows: DEFAULT_ROWS,
   });
+  const [range, setRange] = useState('all');
 
   const updateRow = (id, field, value) => {
-    setRows((current) => current.map((row) => (row.id === id ? { ...row, [field]: value } : row)));
+    setRows((current) => {
+      const next = current.map((row) => (row.id === id ? { ...row, [field]: value } : row));
+      return field === 'date' ? sortRowsByDate(next) : next;
+    });
   };
-  const addRow = () => setRows((current) => [...current, createRow(todayMinusDays(0))]);
+  const addRow = () => setRows((current) => sortRowsByDate([...current, createRow(todayMinusDays(0))]));
   const removeRow = (id) => setRows((current) => (current.length > 1 ? current.filter((row) => row.id !== id) : current));
 
   const result = useMemo(() => calculateGlucoseLog(rows), [rows]);
+  const stats = useMemo(() => calculateGlucoseStats(rows), [rows]);
+  const trendPoints = useMemo(() => buildGlucoseTrendPoints(rows), [rows]);
+  const filteredTrendPoints = useMemo(
+    () => (range === 'all' ? trendPoints : filterRowsByRecency(trendPoints, range)),
+    [trendPoints, range],
+  );
 
   const rowFlags = useMemo(() => {
     const map = new Map();
@@ -87,8 +112,26 @@ export default function SekerOlcumOrtalamasiHesaplama() {
   if (result.valid && (result.hasSevereLow || result.hasVeryHigh)) tone = 'danger';
   else if (result.valid && result.hasLow) tone = 'warning';
 
+  const statItems = stats.valid ? [
+    { label: 'Son 7 gün ortalaması', value: stats.last7Avg ? `${formatNumber(stats.last7Avg, { decimals: 0 })} mg/dL` : '—' },
+    { label: 'Genel ortalama', value: `${formatNumber(stats.overallAvg, { decimals: 0 })} mg/dL` },
+    { label: 'Açlık ortalaması hedefe göre', value: stats.fastingCategory ? stats.fastingCategory.label : '—' },
+    { label: 'Tokluk ortalaması hedefe göre', value: stats.postprandialCategory ? stats.postprandialCategory.label : '—' },
+    { label: 'En yüksek ölçüm', value: stats.highest ? `${formatNumber(stats.highest.value, { decimals: 0 })} mg/dL (${stats.highest.field === 'fasting' ? 'açlık' : 'tokluk'})` : '—' },
+    { label: 'En düşük ölçüm', value: stats.lowest ? `${formatNumber(stats.lowest.value, { decimals: 0 })} mg/dL (${stats.lowest.field === 'fasting' ? 'açlık' : 'tokluk'})` : '—' },
+  ] : [];
+
   return (
     <CalculatorLayout calculatorId="seker-olcum-ortalamasi">
+      <TakipPrivacyNotice />
+
+      {conflict && (
+        <MeasurementConflictBanner
+          onMerge={() => resolveConflict('merge')}
+          onReplace={() => resolveConflict('replace')}
+        />
+      )}
+
       <div className="calc-card">
         <h2>Ev ölçümleriniz</h2>
         <p style={{ color: 'var(--text-secondary)', fontSize: '.9rem', marginTop: -6 }}>Her gün için açlık ve/veya tokluk (yemekten ~2 saat sonra) ölçümünüzü mg/dL cinsinden girin.</p>
@@ -119,6 +162,15 @@ export default function SekerOlcumOrtalamasiHesaplama() {
           })}
           <button type="button" className="btn-primary" style={{ justifySelf: 'start' }} onClick={addRow}>+ Gün ekle</button>
         </div>
+        <MeasurementLogControls
+          rows={rows}
+          setRows={setRows}
+          fields={ROW_FIELDS}
+          createRowFromValues={createRowFromValues}
+          clearAll={clearAll}
+          createEmptyRow={() => createRow(todayMinusDays(0))}
+          fileNamePrefix="seker-takip"
+        />
       </div>
 
       {!result.valid ? (
@@ -142,6 +194,30 @@ export default function SekerOlcumOrtalamasiHesaplama() {
             <p className="rate-disclaimer">⚠️ Kayıtlarınızda uyarı eşiği (70 mg/dL) altında en az bir ölçüm var. Tekrarlayan düşük ölçümleri hekiminize bildirin.</p>
           )}
           <p className="rate-disclaimer">ℹ️ Tahmini HbA1c karşılığı, girdiğiniz ölçümlerin ortalamasından ADAG formülüyle hesaplanır; laboratuvar HbA1c sonucunun yerini tutmaz.</p>
+
+          {stats.valid && <MeasurementStatCard title="Ölçüm günlüğü istatistikleri" items={statItems} />}
+
+          {result.validDayCount >= 5 && (
+            <div className="calc-card">
+              <h2>Trend görünümü</h2>
+              <MeasurementRangeFilter value={range} onChange={setRange} />
+              <MeasurementTrendChart
+                data={filteredTrendPoints}
+                series={[
+                  { key: 'aclik', label: 'Açlık', color: 'var(--chart-line-1)' },
+                  { key: 'tokluk', label: 'Tokluk', color: 'var(--chart-line-2)' },
+                ]}
+                guides={[
+                  { value: TARGET_DATA.value.toklukMax, label: `${TARGET_DATA.value.toklukMax} mg/dL (tokluk hedef üst sınırı)`, color: 'var(--danger)' },
+                ]}
+                band={{ min: TARGET_DATA.value.aclikMin, max: TARGET_DATA.value.aclikMax, label: 'Açlık hedef bandı' }}
+                unit="mg/dL"
+                ariaLabel={`Açlık ve tokluk şeker trend grafiği, ${filteredTrendPoints.length} gün`}
+              />
+              <DataPeriodNote period={TARGET_DATA.period} lastUpdated={TARGET_DATA.lastUpdated} source={TARGET_DATA.source} />
+            </div>
+          )}
+
           <DataPeriodNote period={FORMULA_DATA.period} lastUpdated={FORMULA_DATA.lastUpdated} source={FORMULA_DATA.source} />
           <DataPeriodNote period={HYPO_DATA.period} lastUpdated={HYPO_DATA.lastUpdated} source={HYPO_DATA.source} />
           <HealthResultDisclaimer />
@@ -157,7 +233,7 @@ export default function SekerOlcumOrtalamasiHesaplama() {
 
       <div className="info-card">
         <h2>HbA1c ile günlük ölçüm neden farklı olabilir?</h2>
-        <p>Buradaki "tahmini HbA1c" yalnızca girdiğiniz ölçümlerin ortalamasına dayanır; laboratuvarda ölçülen gerçek HbA1c, son 2-3 ayın tamamını ve ölçmediğiniz saatleri de kapsar. Az sayıda ölçüm girdiyseniz tahmin gerçek değerden sapabilir.</p>
+        <p>Buradaki "tahmini HbA1c" yalnızca girdiğiniz ölçümlerin ortalamasına dayanır; laboratuvarda ölçülen gerçek HbA1c, son 2-3 ayın tamamını ve ölçmediğiniz saatleri de kapsar. Az sayıda ölçüm girdiyseniz tahmin gerçek değerden sapabilir. Ölçümleriniz bu cihazda kayıtlı kaldıkça, 5 günden fazla veri girdiğinizde yukarıda bir trend grafiği de görürsünüz.</p>
       </div>
     </CalculatorLayout>
   );

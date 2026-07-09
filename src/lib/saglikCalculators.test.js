@@ -15,6 +15,12 @@ import {
   convertHbA1cGlucose,
   calculateGlucoseLog,
   calculateCarbCounting,
+  sortRowsByDate,
+  filterRowsByRecency,
+  buildBloodPressureTrendPoints,
+  calculateBloodPressureStats,
+  buildGlucoseTrendPoints,
+  calculateGlucoseStats,
 } from './saglikCalculators.js';
 
 describe('sağlık hesaplayıcıları', () => {
@@ -208,6 +214,62 @@ describe('sağlık hesaplayıcıları', () => {
     });
   });
 
+  describe('ölçüm günlüğü yardımcıları: sıralama ve son N gün filtresi', () => {
+    it('sortRowsByDate satırları tarihe göre artan sıraya koyar, tarihsizleri sona atar', () => {
+      const rows = [{ date: '2026-07-05' }, { date: '2026-07-01' }, { date: '' }, { date: '2026-07-03' }];
+      expect(sortRowsByDate(rows).map((r) => r.date)).toEqual(['2026-07-01', '2026-07-03', '2026-07-05', '']);
+    });
+
+    it('filterRowsByRecency en son tarihten geriye N günü alır', () => {
+      const rows = [
+        { date: '2026-06-20', v: 1 },
+        { date: '2026-06-30', v: 2 },
+        { date: '2026-07-01', v: 3 },
+      ];
+      const result = filterRowsByRecency(rows, 7);
+      expect(result.map((r) => r.v)).toEqual([2, 3]);
+    });
+
+    it('days verilmezse tüm satırları döndürür', () => {
+      const rows = [{ date: '2026-07-01' }];
+      expect(filterRowsByRecency(rows, null)).toBe(rows);
+    });
+  });
+
+  describe('tansiyon trend noktaları ve istatistik kartı', () => {
+    it('buildBloodPressureTrendPoints günlük sistolik/diastolik noktaları tarihe göre sıralı üretir', () => {
+      const rows = [
+        { date: '2026-07-02', morningSys: '130', morningDia: '85', eveningSys: '120', eveningDia: '78' },
+        { date: '2026-07-01', morningSys: '134', morningDia: '87' },
+        { date: '2026-07-03', eveningSys: '', eveningDia: '' },
+      ];
+      const points = buildBloodPressureTrendPoints(rows);
+      expect(points).toEqual([
+        { date: '2026-07-01', sistolik: 134, diastolik: 87 },
+        { date: '2026-07-02', sistolik: 125, diastolik: 81.5 },
+      ]);
+    });
+
+    it('calculateBloodPressureStats son 7 gün/genel ortalama, kategori ve en yüksek/en düşük döner', () => {
+      const rows = [
+        { date: '2026-06-01', morningSys: '150', morningDia: '95' },
+        { date: '2026-07-01', morningSys: '110', morningDia: '70' },
+        { date: '2026-07-02', morningSys: '120', morningDia: '80' },
+      ];
+      const stats = calculateBloodPressureStats(rows);
+      expect(stats.valid).toBe(true);
+      expect(stats.last7AvgSys).toBe(115);
+      expect(stats.overallAvgSys).toBeCloseTo(126.7, 1);
+      expect(stats.category.key).toBeDefined();
+      expect(stats.highest).toEqual({ sys: 150, dia: 95, date: '2026-06-01' });
+      expect(stats.lowest).toEqual({ sys: 110, dia: 70, date: '2026-07-01' });
+    });
+
+    it('calculateBloodPressureStats veri yoksa valid:false döner', () => {
+      expect(calculateBloodPressureStats([]).valid).toBe(false);
+    });
+  });
+
   describe('tuz/sodyum çevirici', () => {
     it('sodyumdan tuza dönüştürür ve günlük limite oranını hesaplar', () => {
       expect(convertSaltSodium({ mode: 'sodiumToSalt', value: 2000 })).toEqual({
@@ -285,6 +347,45 @@ describe('sağlık hesaplayıcıları', () => {
 
     it('geçerli ölçüm yoksa valid:false döner', () => {
       expect(calculateGlucoseLog([{ fasting: '', postprandial: '' }]).valid).toBe(false);
+    });
+
+    it('validDayCount geçerli ölçümü olan gün sayısını verir', () => {
+      const result = calculateGlucoseLog([{ fasting: 90, postprandial: '' }, { fasting: '', postprandial: 130 }, { fasting: '', postprandial: '' }]);
+      expect(result.validDayCount).toBe(2);
+    });
+  });
+
+  describe('şeker trend noktaları ve istatistik kartı', () => {
+    it('buildGlucoseTrendPoints tarihe göre sıralı, eksik alanı null bırakan noktalar üretir', () => {
+      const rows = [
+        { date: '2026-07-02', fasting: '102', postprandial: '' },
+        { date: '2026-07-01', fasting: '95', postprandial: '138' },
+      ];
+      expect(buildGlucoseTrendPoints(rows)).toEqual([
+        { date: '2026-07-01', aclik: 95, tokluk: 138 },
+        { date: '2026-07-02', aclik: 102, tokluk: null },
+      ]);
+    });
+
+    it('calculateGlucoseStats hedef bandına göre açlık/tokluk kategorisi ve en yüksek/en düşük döner', () => {
+      const rows = [
+        { date: '2026-07-01', fasting: '95', postprandial: '138' },
+        { date: '2026-07-02', fasting: '150', postprandial: '210' },
+      ];
+      const stats = calculateGlucoseStats(rows);
+      expect(stats.valid).toBe(true);
+      expect(stats.avgFasting).toBeCloseTo(122.5, 1);
+      expect(stats.fastingCategory).toEqual({ key: 'icinde', label: 'Hedef bandı içinde', tone: 'success' });
+      expect(stats.avgPostprandial).toBeCloseTo(174, 1);
+      expect(stats.postprandialCategory).toEqual({ key: 'icinde', label: 'Hedef bandı içinde', tone: 'success' });
+      expect(stats.highest).toEqual({ value: 210, field: 'postprandial', date: '2026-07-02' });
+      expect(stats.lowest).toEqual({ value: 95, field: 'fasting', date: '2026-07-01' });
+    });
+
+    it('calculateGlucoseStats hedef üstü/altı kategorileri doğru işaretler', () => {
+      const stats = calculateGlucoseStats([{ date: '2026-07-01', fasting: '60', postprandial: '220' }]);
+      expect(stats.fastingCategory).toEqual({ key: 'altinda', label: 'Hedefin altında', tone: 'warning' });
+      expect(stats.postprandialCategory).toEqual({ key: 'ustunde', label: 'Hedefin üzerinde', tone: 'warning' });
     });
   });
 

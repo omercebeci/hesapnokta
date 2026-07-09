@@ -1310,15 +1310,18 @@ export const calculatorContent = {
     ],
   },
   'tansiyon-olcum-ortalamasi': {
-    about: 'Ev tansiyon ölçüm ortalaması aracı, günlere yayılan sabah ve akşam ölçümlerinizden genel, sabah ve akşam ortalamalarını hesaplar ve bu ortalamayı kılavuz kategorisine yerleştirir; hekiminize götürmek üzere yazdırılabilir bir çizelge oluşturur.',
-    method: 'Girdiğiniz her geçerli sabah/akşam ölçümü tek bir listede toplanır ve aritmetik ortalaması alınır; ayrıca sabah ölçümleri kendi aralarında, akşam ölçümleri kendi aralarında ayrıca ortalanır. Genel ortalama, tansiyon değerlendirme aracındaki aynı ESH 2023 sınıflandırma mantığıyla kategorize edilir.',
+    about: 'Ev tansiyon ölçüm ortalaması aracı, günlere yayılan sabah ve akşam ölçümlerinizden genel, sabah ve akşam ortalamalarını hesaplar ve bu ortalamayı kılavuz kategorisine yerleştirir; hekiminize götürmek üzere yazdırılabilir bir çizelge oluşturur. Girdiğiniz ölçümler bu cihazın tarayıcısında otomatik olarak saklanır, sayfaya her döndüğünüzde günlüğünüz hazır bekler; 5 günden fazla kayıt biriktiğinde eşik çizgileriyle birlikte bir trend grafiği de görürsünüz.',
+    method: 'Girdiğiniz her geçerli sabah/akşam ölçümü tek bir listede toplanır ve aritmetik ortalaması alınır; ayrıca sabah ölçümleri kendi aralarında, akşam ölçümleri kendi aralarında ayrıca ortalanır. Genel ortalama, tansiyon değerlendirme aracındaki aynı ESH 2023 sınıflandırma mantığıyla kategorize edilir. Trend grafiğindeki 135/85 mmHg çizgisi, ofis ölçümünde ≥140/90 mmHg tanısına karşılık gelen ESH 2023 ev ölçümü (HBPM) eşiğidir.',
     faq: [
       { q: 'Neden tek ölçüm yerine birkaç günün ortalaması alınıyor?', a: 'Poliklinikte alınan tek ölçüm "beyaz önlük etkisi" gibi nedenlerle gerçek değerden yüksek çıkabilir; ev ortamında birkaç gün boyunca alınan ölçümlerin ortalaması kılavuzlarca daha güvenilir kabul edilir.' },
       { q: 'Kaç gün ölçüm girmeliyim?', a: 'Yaygın uygulama, art arda birkaç gün (genellikle bir hafta) sabah ve akşam ölçüm alıp ilk günü değerlendirme dışı bırakmaktır; kesin süre için hekiminizin önerisini esas alın.' },
       { q: 'Sabah ve akşam ölçümü ne zaman yapılmalı?', a: 'Sabah ölçümü genellikle uyandıktan kısa süre sonra (ilaç/kahvaltı öncesi), akşam ölçümü ise yatmadan önce, her seferinde dinlenmiş halde alınır.' },
       { q: 'Bir günün sadece sabah ölçümünü girdim, sorun olur mu?', a: 'Hayır, boş bıraktığınız hücreler hesaba katılmaz; genel ortalama yalnızca girdiğiniz ölçümler üzerinden hesaplanır.' },
+      { q: 'Ölçümlerim nerede saklanıyor, verilerim size gönderiliyor mu?', a: 'Ölçümleriniz yalnızca bu cihazın tarayıcısında (localStorage) saklanır; bize veya bir sunucuya gönderilmez. Tarayıcı verilerinizi silerseniz kayıtlarınız da silinir; bu yüzden "yedeği indir" ile arada bir bir JSON dosyasına kopyalamanızı öneririz.' },
+      { q: 'Telefon değiştirirsem ya da başka bir tarayıcıdan girersem ölçümlerim gelir mi?', a: 'Hayır, kayıtlar cihaza/tarayıcıya özeldir. Eski cihazda "Yedeği indir" ile bir JSON dosyası alıp yeni cihazda "Yedekten yükle" ile içe aktarabilir, ya da bu sayfanın adres çubuğundaki paylaşım bağlantısını kullanabilirsiniz.' },
+      { q: 'Trend grafiği ne zaman görünür?', a: 'En az 5 günlük geçerli ölçüm girdiğinizde, sistolik/diastolik ortalamalarınızı ve 135/85 mmHg ev ölçüm eşiğini gösteren bir çizgi grafik otomatik olarak belirir; son 7, son 30 gün veya tüm kayıtlar arasında filtre yapabilirsiniz.' },
       { q: 'Çizelgeyi hekimime nasıl götürebilirim?', a: '"Ölçüm çizelgesini yazdır" düğmesiyle açılan pencereden yazdırabilir veya PDF olarak kaydedebilirsiniz.' },
-      { q: 'Ölçümlerimi kaydetmek zorunda mıyım?', a: 'Hayır, bu sayfanın adres çubuğundaki bağlantı ölçümlerinizi barındırır; bağlantıyı kaydederek veya paylaşarak daha sonra tekrar açabilirsiniz.' },
+      { q: 'Tüm kayıtlarımı silmek istersem ne yapmalıyım?', a: '"Tümünü temizle" düğmesine basıp onaylamanız yeterlidir; bu işlem bu cihazdaki tüm ölçüm günlüğünü siler ve geri alınamaz.' },
     ],
   },
   'tuz-sodyum-cevirici': {
@@ -1351,14 +1354,18 @@ export const calculatorContent = {
     ],
   },
   'seker-olcum-ortalamasi': {
-    about: 'Ev şeker ölçüm günlüğü, günlere yayılan açlık ve tokluk kan şekeri ölçümlerinizin ortalamasını ve ADAG formülüyle hesaplanan tahmini HbA1c karşılığını hesaplar; hekiminize götürmek üzere yazdırılabilir bir çizelge oluşturur.',
-    method: 'Girdiğiniz tüm açlık ve tokluk ölçümleri tek bir listede toplanıp ortalaması alınır; bu genel ortalama, ADAG formülünün tersi kullanılarak (HbA1c = (ortalama + 46,7) ÷ 28,7) tahmini bir HbA1c yüzdesine çevrilir. 70 mg/dL altındaki ölçümler uyarı, 54 mg/dL altındakiler ciddi hipoglisemi olarak ayrıca işaretlenir.',
+    about: 'Ev şeker ölçüm günlüğü, günlere yayılan açlık ve tokluk kan şekeri ölçümlerinizin ortalamasını ve ADAG formülüyle hesaplanan tahmini HbA1c karşılığını hesaplar; hekiminize götürmek üzere yazdırılabilir bir çizelge oluşturur. Girdiğiniz ölçümler bu cihazın tarayıcısında otomatik olarak saklanır, sayfaya her döndüğünüzde günlüğünüz hazır bekler; 5 günden fazla kayıt biriktiğinde ADA hedef bandıyla birlikte bir trend grafiği de görürsünüz.',
+    method: 'Girdiğiniz tüm açlık ve tokluk ölçümleri tek bir listede toplanıp ortalaması alınır; bu genel ortalama, ADAG formülünün tersi kullanılarak (HbA1c = (ortalama + 46,7) ÷ 28,7) tahmini bir HbA1c yüzdesine çevrilir. 70 mg/dL altındaki ölçümler uyarı, 54 mg/dL altındakiler ciddi hipoglisemi olarak ayrıca işaretlenir. Trend grafiğindeki hedef bant (açlık 80-130 mg/dL) ve tokluk üst sınırı (180 mg/dL), ADA Standards of Care 2026\'nın çoğu gebe olmayan yetişkin için önerdiği genel glisemik hedeflerdir.',
     faq: [
       { q: 'Kaç gün ölçüm girmeliyim?', a: 'Ne kadar çok gün ve ölçüm girerseniz tahmini ortalama o kadar güvenilir olur; tek bir günün ölçümü genel eğilimi yansıtmayabilir.' },
       { q: 'Tahmini HbA1c, laboratuvar sonucumdan neden farklı çıkabilir?', a: 'Laboratuvar HbA1c\'si son 2-3 ayın tamamını kapsar; bu araçtaki tahmin ise yalnızca girdiğiniz ölçümlerin ortalamasına dayanır ve ölçmediğiniz saatleri/günleri yansıtmaz.' },
       { q: 'Neden bazı satırlar kırmızı/turuncu işaretleniyor?', a: '70 mg/dL altındaki ölçümler hipoglisemi uyarı eşiği, 54 mg/dL altındakiler ciddi hipoglisemi, 300 mg/dL ve üzerindeki düşmeyen ölçümler ise hiperglisemi acil eşiği olarak ayrıca vurgulanır.' },
       { q: 'Düşük bir ölçüm girdiğimde ne yapmalıyım?', a: 'Bilinç bulanıklığı veya bayılma gibi belirtileriniz varsa hemen 112\'yi arayın; belirtisiz tekrarlayan düşük ölçümleri de en kısa sürede hekiminize bildirin.' },
+      { q: 'Ölçümlerim nerede saklanıyor, verilerim size gönderiliyor mu?', a: 'Ölçümleriniz yalnızca bu cihazın tarayıcısında (localStorage) saklanır; bize veya bir sunucuya gönderilmez. Tarayıcı verilerinizi silerseniz kayıtlarınız da silinir; bu yüzden "yedeği indir" ile arada bir bir JSON dosyasına kopyalamanızı öneririz.' },
+      { q: 'Telefon değiştirirsem ya da başka bir tarayıcıdan girersem ölçümlerim gelir mi?', a: 'Hayır, kayıtlar cihaza/tarayıcıya özeldir. Eski cihazda "Yedeği indir" ile bir JSON dosyası alıp yeni cihazda "Yedekten yükle" ile içe aktarabilir, ya da bu sayfanın adres çubuğundaki paylaşım bağlantısını kullanabilirsiniz.' },
+      { q: 'Trend grafiği ne zaman görünür?', a: 'En az 5 günlük geçerli ölçüm girdiğinizde, açlık/tokluk ortalamalarınızı, ADA\'nın açlık için önerdiği 80-130 mg/dL hedef bandını ve 180 mg/dL tokluk üst sınırını gösteren bir çizgi grafik otomatik olarak belirir; son 7, son 30 gün veya tüm kayıtlar arasında filtre yapabilirsiniz.' },
       { q: 'Bu araç insülin ya da ilaç dozu hesaplar mı?', a: 'Hayır, bu araç yalnızca girdiğiniz ölçümleri toplayıp ortalamasını gösterir; doz ve tedavi kararları hekiminize aittir.' },
+      { q: 'Tüm kayıtlarımı silmek istersem ne yapmalıyım?', a: '"Tümünü temizle" düğmesine basıp onaylamanız yeterlidir; bu işlem bu cihazdaki tüm ölçüm günlüğünü siler ve geri alınamaz.' },
     ],
   },
   'karbonhidrat-sayimi': {

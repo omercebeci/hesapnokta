@@ -439,6 +439,7 @@ export function calculateGlucoseLog(rows) {
   const avg = (list) => round1(list.reduce((sum, v) => sum + v, 0) / list.length);
   const overallAvg = avg(allReadings);
   const estimatedA1c = round1((overallAvg + A1C_FORMULA.sabit) / A1C_FORMULA.katsayi);
+  const validDayCount = flaggedRows.filter((row) => row.validFasting || row.validPostprandial).length;
 
   return {
     valid: true,
@@ -447,9 +448,156 @@ export function calculateGlucoseLog(rows) {
     avgPostprandial: postprandialReadings.length ? avg(postprandialReadings) : null,
     overallAvg,
     estimatedA1c: estimatedA1c > 0 ? estimatedA1c : null,
+    validDayCount,
     hasLow,
     hasSevereLow,
     hasVeryHigh,
+  };
+}
+
+// Satır listesini tarihe göre artan sırada döndürür (tarihsiz satırlar sonda, girildikleri
+// sırada). Ölçüm günlüğü tablolarında ve grafikte kronolojik görünüm için kullanılır.
+export function sortRowsByDate(rows) {
+  return [...(rows || [])].sort((a, b) => {
+    if (!a.date && !b.date) return 0;
+    if (!a.date) return 1;
+    if (!b.date) return -1;
+    return a.date < b.date ? -1 : a.date > b.date ? 1 : 0;
+  });
+}
+
+// En güncel tarihli kayıttan geriye doğru son N günü filtreler (bugünü değil, günlükteki
+// en son tarihi çapa alır — kullanıcı bugün ölçüm girmemiş olsa da "son 7 gün" anlamlı kalır).
+export function filterRowsByRecency(rows, days) {
+  if (!days) return rows || [];
+  const dates = (rows || []).map((row) => row.date).filter(Boolean).sort();
+  if (dates.length === 0) return rows || [];
+  const latest = new Date(dates[dates.length - 1]);
+  latest.setDate(latest.getDate() - (days - 1));
+  const cutoff = latest.toISOString().slice(0, 10);
+  return (rows || []).filter((row) => row.date && row.date >= cutoff);
+}
+
+// Ev ölçüm günlüğünü çizgi grafiğe uygun günlük noktalara indirger: sabah+akşam varsa
+// ikisinin ortalaması, yalnızca biri girilmişse o tek ölçüm kullanılır.
+export function buildBloodPressureTrendPoints(rows) {
+  return (rows || [])
+    .map((row) => {
+      const mSys = Number(row.morningSys);
+      const mDia = Number(row.morningDia);
+      const eSys = Number(row.eveningSys);
+      const eDia = Number(row.eveningDia);
+      const hasMorning = Number.isFinite(mSys) && mSys > 0 && Number.isFinite(mDia) && mDia > 0;
+      const hasEvening = Number.isFinite(eSys) && eSys > 0 && Number.isFinite(eDia) && eDia > 0;
+      if (!row.date || (!hasMorning && !hasEvening)) return null;
+      let sistolik;
+      let diastolik;
+      if (hasMorning && hasEvening) {
+        sistolik = round1((mSys + eSys) / 2);
+        diastolik = round1((mDia + eDia) / 2);
+      } else if (hasMorning) {
+        sistolik = mSys;
+        diastolik = mDia;
+      } else {
+        sistolik = eSys;
+        diastolik = eDia;
+      }
+      return { date: row.date, sistolik, diastolik };
+    })
+    .filter(Boolean)
+    .sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
+}
+
+// Ev tansiyon takibi için özet istatistik kartı: son 7 gün ve genel ortalama, kılavuz
+// kategorisi, en yüksek/en düşük tekil ölçüm (sabah veya akşam, hangisi olursa).
+export function calculateBloodPressureStats(rows) {
+  const overall = calculateBloodPressureAverages(rows);
+  if (!overall.valid) return { valid: false };
+  const last7 = calculateBloodPressureAverages(filterRowsByRecency(rows, 7));
+
+  let highest = null;
+  let lowest = null;
+  (rows || []).forEach((row) => {
+    [['morningSys', 'morningDia'], ['eveningSys', 'eveningDia']].forEach(([sysField, diaField]) => {
+      const sys = Number(row[sysField]);
+      const dia = Number(row[diaField]);
+      if (Number.isFinite(sys) && sys > 0 && Number.isFinite(dia) && dia > 0) {
+        if (!highest || sys > highest.sys) highest = { sys, dia, date: row.date };
+        if (!lowest || sys < lowest.sys) lowest = { sys, dia, date: row.date };
+      }
+    });
+  });
+
+  return {
+    valid: true,
+    overallAvgSys: overall.overallAvgSys,
+    overallAvgDia: overall.overallAvgDia,
+    category: overall.assessment.category,
+    last7AvgSys: last7.valid ? last7.overallAvgSys : null,
+    last7AvgDia: last7.valid ? last7.overallAvgDia : null,
+    highest,
+    lowest,
+  };
+}
+
+// Ev şeker günlüğünü çizgi grafiğe uygun günlük noktalara indirger; açlık ve tokluk
+// birbirinden bağımsız çizgiler olduğu için biri boşsa null döner (grafik o noktada kırılır).
+export function buildGlucoseTrendPoints(rows) {
+  return (rows || [])
+    .map((row) => {
+      const fasting = Number(row.fasting);
+      const postprandial = Number(row.postprandial);
+      const validFasting = Number.isFinite(fasting) && fasting > 0 && fasting < 700;
+      const validPostprandial = Number.isFinite(postprandial) && postprandial > 0 && postprandial < 700;
+      if (!row.date || (!validFasting && !validPostprandial)) return null;
+      return {
+        date: row.date,
+        aclik: validFasting ? fasting : null,
+        tokluk: validPostprandial ? postprandial : null,
+      };
+    })
+    .filter(Boolean)
+    .sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
+}
+
+const GLISEMIK_HEDEF = GUNCEL_VERILER.glisemikHedefBandi.value;
+
+function classifyAgainstTarget(value, min, max) {
+  if (value == null) return null;
+  if (min != null && value < min) return { key: 'altinda', label: 'Hedefin altında', tone: 'warning' };
+  if (max != null && value > max) return { key: 'ustunde', label: 'Hedefin üzerinde', tone: 'warning' };
+  return { key: 'icinde', label: 'Hedef bandı içinde', tone: 'success' };
+}
+
+// Ev şeker takibi için özet istatistik kartı: son 7 gün ve genel ortalama, açlık/tokluk
+// ortalamalarının ADA hedef bandına göre durumu, en yüksek/en düşük tekil ölçüm.
+export function calculateGlucoseStats(rows) {
+  const overall = calculateGlucoseLog(rows);
+  if (!overall.valid) return { valid: false };
+  const last7 = calculateGlucoseLog(filterRowsByRecency(rows, 7));
+
+  let highest = null;
+  let lowest = null;
+  (rows || []).forEach((row) => {
+    ['fasting', 'postprandial'].forEach((field) => {
+      const value = Number(row[field]);
+      if (Number.isFinite(value) && value > 0 && value < 700) {
+        if (!highest || value > highest.value) highest = { value, field, date: row.date };
+        if (!lowest || value < lowest.value) lowest = { value, field, date: row.date };
+      }
+    });
+  });
+
+  return {
+    valid: true,
+    overallAvg: overall.overallAvg,
+    last7Avg: last7.valid ? last7.overallAvg : null,
+    avgFasting: overall.avgFasting,
+    avgPostprandial: overall.avgPostprandial,
+    fastingCategory: classifyAgainstTarget(overall.avgFasting, GLISEMIK_HEDEF.aclikMin, GLISEMIK_HEDEF.aclikMax),
+    postprandialCategory: classifyAgainstTarget(overall.avgPostprandial, null, GLISEMIK_HEDEF.toklukMax),
+    highest,
+    lowest,
   };
 }
 

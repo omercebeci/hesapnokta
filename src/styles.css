@@ -38,6 +38,11 @@
   --shadow-lg: 0 16px 40px rgba(16, 20, 40, 0.10), 0 4px 12px rgba(16, 20, 40, 0.05);
   --shadow-accent: 0 8px 20px rgba(79, 70, 229, 0.22);
 
+  /* Trend grafiği (ölçüm takibi) iki serili çizgi renkleri — palette validator ile
+     doğrulanmıştır (light: #4f46e5/#c2760a, CVD/kontrast PASS). */
+  --chart-line-1: #4f46e5;
+  --chart-line-2: #c2760a;
+
   --radius-sm: 8px;
   --radius: 12px;
   --radius-lg: 18px;
@@ -82,6 +87,11 @@
   --shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
   --shadow-lg: 0 24px 56px rgba(0, 0, 0, 0.45);
   --shadow-accent: 0 8px 24px rgba(129, 140, 248, 0.18);
+
+  /* Karanlık temada aynı çift, koyu yüzeye göre yeniden doğrulanmıştır
+     (dark: #6366f1/#c2760a, CVD/kontrast/parlaklık bandı PASS). */
+  --chart-line-1: #6366f1;
+  --chart-line-2: #c2760a;
 }
 
 /* ── Reset ── */
@@ -669,6 +679,73 @@ h1, h2, h3, h4 {
 
 .measurement-row-warning { border-left: 3px solid var(--warning); padding-left: 10px; background: var(--warning-soft); border-radius: var(--radius-sm); }
 .measurement-row-danger { border-left: 3px solid var(--danger); padding-left: 10px; background: var(--danger-soft); border-radius: var(--radius-sm); }
+
+/* ── Cihaz-içi ölçüm takibi: gizlilik notu, günlük kontrolleri, trend grafiği ── */
+.takip-privacy-notice {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-border);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+}
+.takip-privacy-notice p { flex: 1 1 320px; font-size: .84rem; color: var(--text-secondary); line-height: 1.5; }
+.takip-privacy-notice-dismiss {
+  flex-shrink: 0;
+  padding: 7px 14px;
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+  color: var(--accent-text-on);
+  font-size: .8rem;
+  font-weight: 600;
+}
+.takip-privacy-notice-dismiss:hover { background: var(--accent-hover); }
+
+.measurement-log-controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.measurement-log-controls-danger:hover { border-color: var(--danger); color: var(--danger); background: var(--danger-soft); }
+.measurement-log-controls-message { flex-basis: 100%; }
+
+.measurement-stat-card .result-metrics { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+
+.measurement-conflict-banner {
+  display: grid;
+  gap: 12px;
+  background: var(--info-soft);
+  border: 1px solid var(--accent-border);
+  border-radius: var(--radius);
+  padding: 16px;
+}
+.measurement-conflict-banner p { color: var(--text-secondary); font-size: .88rem; line-height: 1.5; }
+.measurement-conflict-banner-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+.trend-chart { display: grid; gap: 10px; }
+.trend-chart-legend { display: flex; flex-wrap: wrap; gap: 16px; }
+.trend-chart-legend-item { display: inline-flex; align-items: center; gap: 6px; font-size: .82rem; color: var(--text-secondary); font-weight: 500; }
+.trend-chart-legend-swatch { width: 14px; height: 3px; border-radius: 2px; display: inline-block; }
+.trend-chart-svg-wrap { position: relative; }
+.trend-chart-svg { width: 100%; height: auto; display: block; }
+.trend-chart-tick { font-size: 10px; fill: var(--text-dim); }
+.trend-chart-guide-label { font-size: 10px; font-weight: 600; }
+.trend-chart-tooltip {
+  position: absolute;
+  top: 4px;
+  transform: translateX(-50%);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow);
+  padding: 8px 10px;
+  font-size: .78rem;
+  color: var(--text-primary);
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 2;
+}
+.trend-chart-tooltip strong { display: block; margin-bottom: 4px; font-size: .76rem; color: var(--text-muted); font-weight: 600; }
+.trend-chart-tooltip-row { display: flex; align-items: center; gap: 6px; }
+.trend-chart-tooltip-key { width: 10px; height: 2px; display: inline-block; border-radius: 1px; }
 
 .health-disclaimer-strong {
   background: var(--warning-soft);
