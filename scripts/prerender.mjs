@@ -24,6 +24,7 @@ function escapeHtml(str = '') {
 function buildHeadHtml(head) {
   if (!head) return '';
   const canonicalUrl = `${SITE_URL}${head.path === '/' ? '/' : head.path}`;
+  const imageUrl = `${SITE_URL}${head.image || '/og-image.png'}`;
   const parts = [
     `<title>${escapeHtml(head.title)}</title>`,
     `<meta name="description" content="${escapeHtml(head.description)}" />`,
@@ -31,6 +32,14 @@ function buildHeadHtml(head) {
     `<meta property="og:title" content="${escapeHtml(head.title)}" />`,
     `<meta property="og:description" content="${escapeHtml(head.description)}" />`,
     `<meta property="og:url" content="${canonicalUrl}" />`,
+    `<meta property="og:image" content="${imageUrl}" />`,
+    `<meta property="og:image:width" content="1200" />`,
+    `<meta property="og:image:height" content="630" />`,
+    `<meta property="og:image:alt" content="HesapNokta" />`,
+    `<meta name="twitter:card" content="summary_large_image" />`,
+    `<meta name="twitter:title" content="${escapeHtml(head.title)}" />`,
+    `<meta name="twitter:description" content="${escapeHtml(head.description)}" />`,
+    `<meta name="twitter:image" content="${imageUrl}" />`,
   ];
   for (const entry of head.jsonLd || []) {
     // </script> enjeksiyonunu engellemek için JSON içindeki "<" karakterini kaçışlıyoruz.
