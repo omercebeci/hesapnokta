@@ -1,5 +1,6 @@
 import React, { Suspense, lazy } from 'react';
 import { Routes, Route } from 'react-router-dom';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 import { ThemeProvider } from './context/ThemeContext.jsx';
 import Header from './components/Header.jsx';
 import Footer from './components/Footer.jsx';
@@ -207,6 +208,7 @@ export default function App() {
         </Suspense>
       </main>
       <Footer />
+      <SpeedInsights />
     </ThemeProvider>
   );
 }
