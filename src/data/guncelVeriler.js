@@ -175,6 +175,87 @@ export const GUNCEL_VERILER = {
     lastUpdated: '2026-07-09',
   },
 
+  // ── Tansiyon (kan basıncı) sınıflandırma eşikleri ──
+  // mmHg cinsinden sistolik/diastolik aralıklar. "max" alanı Infinity ise üst sınır yoktur.
+  tansiyonSiniflandirma: {
+    value: [
+      { key: 'optimal', label: 'Optimal', sistolikMax: 119, diastolikMax: 79 },
+      { key: 'normal', label: 'Normal', sistolikMin: 120, sistolikMax: 129, diastolikMin: 80, diastolikMax: 84 },
+      { key: 'yuksekNormal', label: 'Yüksek normal', sistolikMin: 130, sistolikMax: 139, diastolikMin: 85, diastolikMax: 89 },
+      { key: 'evre1', label: 'Evre 1 hipertansiyon', sistolikMin: 140, sistolikMax: 159, diastolikMin: 90, diastolikMax: 99 },
+      { key: 'evre2', label: 'Evre 2 hipertansiyon', sistolikMin: 160, sistolikMax: 179, diastolikMin: 100, diastolikMax: 109 },
+      { key: 'evre3', label: 'Evre 3 hipertansiyon', sistolikMin: 180, diastolikMin: 110 },
+      { key: 'izoleSistolik', label: 'İzole sistolik hipertansiyon', sistolikMin: 140, diastolikMax: 89 },
+    ],
+    period: '2023 (ESH kılavuzu) / 2025 (Türk Hipertansiyon Uzlaşı Raporu)',
+    source: '2023 ESH (European Society of Hypertension) Kan Basıncı Yüksekliğinin Yönetimi Kılavuzu (J Hypertens 2023;41:1874-2071) — Türk Hipertansiyon Uzlaşı Raporu 2025 (Türk Kardiyoloji Derneği / Türkiye Endokrinoloji ve Metabolizma Derneği) aynı sınıflandırma tablosunu esas alır',
+    lastUpdated: '2026-07-09',
+  },
+
+  // ── Hipertansif acil durum / "vakit kaybetmeden başvurun" eşiği ──
+  // ÖNEMLİ: Bu, yukarıdaki evre 3 (≥180/≥110) ile AYNI ŞEY DEĞİLDİR. Evre 3 bir tanı
+  // kategorisidir; 180/120 ise hastaya yönelik "hemen sağlık kuruluşuna başvur" eylem
+  // eşiğidir (AHA hasta bilgilendirme materyali). İkisini birbirine karıştırmayın.
+  hipertansifAcilEsigi: {
+    sistolik: 180,
+    diastolik: 120,
+    period: '2026 (güncel hasta yönlendirme kılavuzu)',
+    source: 'American Heart Association - "When To Call 911 About High Blood Pressure" (heart.org); ACC/AHA 2025 Yüksek Kan Basıncının Önlenmesi, Tespiti, Değerlendirilmesi ve Yönetimi Kılavuzu ile uyumlu',
+    lastUpdated: '2026-07-09',
+  },
+
+  // ── HbA1c ↔ tahmini ortalama glukoz (eAG) dönüşüm formülü ──
+  // eAG (mg/dL) = katsayi * HbA1c(%) - sabit
+  hba1cOrtalamaGlukozFormulu: {
+    katsayi: 28.7,
+    sabit: 46.7,
+    period: '2008 (ADAG çalışması, halen ADA/NGSP tarafından referans alınır)',
+    source: 'Nathan DM, Kuenen J, Borg R, ve ark.; A1c-Derived Average Glucose (ADAG) Study Group. "Translating the A1C Assay Into Estimated Average Glucose Values." Diabetes Care. 2008;31(8):1473-1478',
+    lastUpdated: '2026-07-09',
+  },
+
+  // ── Diyabet / prediyabet tanı eşikleri (gebelik dışı yetişkinler) ──
+  diyabetTaniEsikleri: {
+    value: {
+      diyabet: { a1cMin: 6.5, aclikGlukozMin: 126, tokGlukozMin: 200 },
+      prediyabet: { a1cMin: 5.7, a1cMax: 6.4, aclikGlukozMin: 100, aclikGlukozMax: 125, tokGlukozMin: 140, tokGlukozMax: 199 },
+      normal: { a1cMax: 5.6, aclikGlukozMax: 99, tokGlukozMax: 139 },
+    },
+    period: '2026',
+    source: 'American Diabetes Association, "2. Diagnosis and Classification of Diabetes: Standards of Care in Diabetes—2026." Diabetes Care. 2026;49(Suppl.1):S27 (Tablo 2.1 ve 2.2)',
+    lastUpdated: '2026-07-09',
+  },
+
+  // ── DSÖ günlük tuz/sodyum limiti ve sodyum→tuz katsayısı ──
+  tuzSodyumLimiti: {
+    gunlukTuzGramLimiti: 5,
+    gunlukSodyumMgLimiti: 2000,
+    sodyumdanTuzaKatsayi: 2.5,
+    period: '2026 (güncelleme: 11 Mayıs 2026)',
+    source: 'Dünya Sağlık Örgütü (WHO) "Sodium reduction" Fact Sheet (who.int, son güncelleme 11.05.2026); sodyum→tuz katsayısı NaCl bileşimine dayanır (~2,54, yaygın kullanımda 2,5 olarak yuvarlanır)',
+    lastUpdated: '2026-07-09',
+  },
+
+  // ── Hipoglisemi eşikleri (ADA seviyelendirmesi) ──
+  hipoglisemiEsikleri: {
+    seviye1UyariEsigi: 70,
+    seviye2CiddiEsik: 54,
+    period: '2026',
+    source: 'American Diabetes Association, "6. Glycemic Goals, Hypoglycemia, and Hyperglycemic Crises: Standards of Care in Diabetes—2026." Diabetes Care. 2026;49(Suppl.1)',
+    lastUpdated: '2026-07-09',
+  },
+
+  // ── Hiperglisemi (çok yüksek şeker) acil durum eşiği ──
+  // Not: ADA, tek bir glukoz sayısı yerine semptom + keton varlığını esas alır (bkz. DKA/HHS
+  // kılavuzu); ancak CDC'nin hasta yönlendirme materyali somut bir eylem eşiği verir: kan
+  // şekeri 300 mg/dL'de/üzerinde takılı kalırsa ve düşmüyorsa acil servise başvurulmalıdır.
+  hiperglisemiAcilEsigi: {
+    esikMgdl: 300,
+    period: '2026',
+    source: 'CDC (Centers for Disease Control and Prevention) - "Diabetic Ketoacidosis" ve "Manage Blood Sugar" hasta bilgilendirme sayfaları (cdc.gov): kan şekeri 300 mg/dL veya üzerinde takılı kalırsa acil servise başvurun ya da 911/112 arayın',
+    lastUpdated: '2026-07-09',
+  },
+
   // ── Doğalgaz m³ → kWh dönüşümü ──
   // "ustIsilDegerKcalM3": faturalarda dönem ortalaması olarak yayınlanan değerdir, dağıtım
   // şirketine ve mevsime göre küçük farklar gösterebilir; burada tipik bir varsayılan tutulur.

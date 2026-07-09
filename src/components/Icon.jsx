@@ -11,6 +11,7 @@ import {
   BookOpen,
   Hammer, PaintRoller, Grid3x3, Blocks, Truck, Layers, Bath, CookingPot, Triangle, HardHat,
   Package, Shirt, Coins, FlameKindling, Repeat, BatteryCharging, Siren, ChefHat, Utensils, PawPrint, Shield,
+  Gauge, ClipboardList, FlaskConical, TestTube2, NotebookText, Wheat,
 } from 'lucide-react';
 
 const ICONS = {
@@ -93,6 +94,12 @@ const ICONS = {
   utensils: Utensils,
   'paw-print': PawPrint,
   shield: Shield,
+  gauge: Gauge,
+  'clipboard-list': ClipboardList,
+  'flask-conical': FlaskConical,
+  'test-tube-2': TestTube2,
+  'notebook-text': NotebookText,
+  wheat: Wheat,
 };
 
 export default function Icon({ name, size = 20, strokeWidth = 1.75, className, ...rest }) {

@@ -1,12 +1,13 @@
 import React from 'react';
 import ShareResultButton from './ShareResultButton.jsx';
 
-export function ResultCard({ label, value, note }) {
+export function ResultCard({ label, value, note, tone, action }) {
   return (
-    <div className="result-card">
+    <div className={`result-card${tone ? ` tone-${tone}` : ''}`}>
       <span className="result-label">{label}</span>
       <span className="result-value">{value}</span>
       {note && <span className="result-note">{note}</span>}
+      {action && <span className="result-action">{action}</span>}
       <ShareResultButton />
     </div>
   );

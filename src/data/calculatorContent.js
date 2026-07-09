@@ -1281,6 +1281,97 @@ export const calculatorContent = {
       { q: 'Sürem doluyor ama terhis işlemleri gecikirse ne olur?', a: 'Bu araç yalnızca yasal hizmet süresini hesaplar; birlik içi idari süreçler (evrak işlemleri, sevk organizasyonu vb.) fiili çıkışınızı birkaç gün geciktirebilir.' },
     ],
   },
+
+  // ── Sağlık (tansiyon & diyabet) ──
+  'tansiyon-degerlendirme': {
+    about: 'Tansiyon değerlendirme aracı, tek seferlik büyük (sistolik) ve küçük (diastolik) tansiyon ölçümünüzü uluslararası kılavuz kategorilerinden birine yerleştirir; ayrıca nabız basıncı ve ortalama arter basıncı (MAP) gibi tamamlayıcı metrikleri hesaplar.',
+    method: 'Sistolik değer ve diastolik değer, ESH 2023 kılavuzunun sınıflandırma tablosunda ayrı ayrı değerlendirilir; ikisinden hangisi daha ağır kategorideyse sonuç kategorisi o değere göre belirlenir. Nabız basıncı sistolik − diastolik, ortalama arter basıncı ise diastolik + (sistolik − diastolik) ÷ 3 formülüyle hesaplanır.',
+    examples: [
+      {
+        title: '118/76 mmHg',
+        rows: [{ label: 'Kategori', value: 'Optimal' }, { label: 'Nabız basıncı', value: '42 mmHg' }],
+      },
+      {
+        title: '148/94 mmHg',
+        rows: [{ label: 'Kategori', value: 'Evre 1 hipertansiyon' }, { label: 'Ortalama arter basıncı', value: '112 mmHg' }],
+      },
+      {
+        title: '185/122 mmHg',
+        rows: [{ label: 'Kategori', value: 'Evre 3 hipertansiyon' }, { label: 'Uyarı', value: '180/120 eylem eşiği üzerinde' }],
+      },
+    ],
+    faq: [
+      { q: 'Tek ölçüm hipertansiyon tanısı için yeterli mi?', a: 'Hayır. Kılavuzlar, farklı günlerde tekrarlanan poliklinik ölçümlerini ya da ev tansiyon takibini esas alır; tek bir yüksek ölçüm heyecan, kafein veya ölçüm hatasından da kaynaklanabilir.' },
+      { q: 'Nabız basıncı ve ortalama arter basıncı (MAP) ne anlatır?', a: 'Nabız basıncı, kalbin atım sırasında damarlara uyguladığı basınç farkını; MAP ise bir kalp döngüsü boyunca ortalama basıncı yansıtır. İkisi de doktorlar tarafından tamamlayıcı gösterge olarak kullanılır.' },
+      { q: 'Ölçümü nasıl doğru yapmalıyım?', a: 'En az 5 dakika dinlendikten sonra, sırtınız desteklenmiş şekilde otururken, kolunuz kalp hizasında ve uygun manşon genişliğiyle ölçüm yapmanız önerilir; ölçümden önce kafein ve sigara kullanılmaması önerilir.' },
+      { q: '180/120 mmHg üzerinde çıkarsa ne yapmalıyım?', a: 'Göğüs ağrısı, nefes darlığı, görme ya da konuşma bozukluğu gibi belirtileriniz varsa hemen 112\'yi arayın. Belirtiniz yoksa da vakit kaybetmeden bir sağlık kuruluşuna başvurun; bu ölçüm ölçüm hatasından kaynaklanmış olsa bile değerlendirilmesi gerekir.' },
+      { q: 'İzole sistolik hipertansiyon nedir?', a: 'Büyük (sistolik) tansiyonun 140 mmHg ve üzerinde, küçük (diastolik) tansiyonun ise 90 mmHg altında olduğu durumdur; özellikle ileri yaşta sık görülür.' },
+      { q: 'Bu araç tedavi ya da ilaç önerir mi?', a: 'Hayır. Bu araç yalnızca girilen ölçümü kılavuz kategorilerine yerleştirir; değerlendirme ve tedavi kararı hekiminize aittir.' },
+    ],
+  },
+  'tansiyon-olcum-ortalamasi': {
+    about: 'Ev tansiyon ölçüm ortalaması aracı, günlere yayılan sabah ve akşam ölçümlerinizden genel, sabah ve akşam ortalamalarını hesaplar ve bu ortalamayı kılavuz kategorisine yerleştirir; hekiminize götürmek üzere yazdırılabilir bir çizelge oluşturur.',
+    method: 'Girdiğiniz her geçerli sabah/akşam ölçümü tek bir listede toplanır ve aritmetik ortalaması alınır; ayrıca sabah ölçümleri kendi aralarında, akşam ölçümleri kendi aralarında ayrıca ortalanır. Genel ortalama, tansiyon değerlendirme aracındaki aynı ESH 2023 sınıflandırma mantığıyla kategorize edilir.',
+    faq: [
+      { q: 'Neden tek ölçüm yerine birkaç günün ortalaması alınıyor?', a: 'Poliklinikte alınan tek ölçüm "beyaz önlük etkisi" gibi nedenlerle gerçek değerden yüksek çıkabilir; ev ortamında birkaç gün boyunca alınan ölçümlerin ortalaması kılavuzlarca daha güvenilir kabul edilir.' },
+      { q: 'Kaç gün ölçüm girmeliyim?', a: 'Yaygın uygulama, art arda birkaç gün (genellikle bir hafta) sabah ve akşam ölçüm alıp ilk günü değerlendirme dışı bırakmaktır; kesin süre için hekiminizin önerisini esas alın.' },
+      { q: 'Sabah ve akşam ölçümü ne zaman yapılmalı?', a: 'Sabah ölçümü genellikle uyandıktan kısa süre sonra (ilaç/kahvaltı öncesi), akşam ölçümü ise yatmadan önce, her seferinde dinlenmiş halde alınır.' },
+      { q: 'Bir günün sadece sabah ölçümünü girdim, sorun olur mu?', a: 'Hayır, boş bıraktığınız hücreler hesaba katılmaz; genel ortalama yalnızca girdiğiniz ölçümler üzerinden hesaplanır.' },
+      { q: 'Çizelgeyi hekimime nasıl götürebilirim?', a: '"Ölçüm çizelgesini yazdır" düğmesiyle açılan pencereden yazdırabilir veya PDF olarak kaydedebilirsiniz.' },
+      { q: 'Ölçümlerimi kaydetmek zorunda mıyım?', a: 'Hayır, bu sayfanın adres çubuğundaki bağlantı ölçümlerinizi barındırır; bağlantıyı kaydederek veya paylaşarak daha sonra tekrar açabilirsiniz.' },
+    ],
+  },
+  'tuz-sodyum-cevirici': {
+    about: 'Tuz/sodyum çevirici, gıda etiketlerinde sıkça karşılaşılan sodyum (mg) ile günlük hayatta konuştuğumuz tuz (g) birimleri arasında dönüşüm yapar ve girdiğiniz miktarın DSÖ günlük tuz limitine oranını gösterir.',
+    method: 'Sodyum, sofra tuzunun (NaCl) yaklaşık %39\'unu oluşturduğundan tuz miktarı, sodyum miktarının yaklaşık 2,5 katına karşılık gelir: tuz (g) = sodyum (g) × 2,5. Oran çubuğu, hesaplanan tuz miktarının DSÖ\'nün önerdiği günlük 5 g sınırına bölünmesiyle bulunur.',
+    examples: [
+      { title: '400 mg sodyum', rows: [{ label: 'Tuz karşılığı', value: '1 g' }, { label: 'Günlük limite oranı', value: '%20' }] },
+      { title: '2.300 mg sodyum (bazı hazır çorbaların günlük porsiyonu)', rows: [{ label: 'Tuz karşılığı', value: '5,75 g' }, { label: 'Günlük limite oranı', value: '%115' }] },
+    ],
+    faq: [
+      { q: 'Etikette "sodyum" mu yoksa "tuz" mu yazar?', a: 'Türkiye\'de ve birçok ülkede besin değeri tablolarında genellikle sodyum (mg) yazar; bazı ürünlerde doğrudan tuz (g) değeri de verilebilir. Hangisi yazılıysa aracın ilgili yönünü kullanabilirsiniz.' },
+      { q: 'Günlük 5 g tuz sınırı herkes için mi geçerli?', a: 'Bu, DSÖ\'nün sağlıklı yetişkinler için genel önerisidir; böbrek veya kalp yetmezliği gibi durumlarda hekiminiz daha düşük bir sınır önerebilir.' },
+      { q: 'İşlenmiş gıdalarda sodyum nerede gizlenir?', a: 'Ekmek, konserve, şarküteri ürünleri, hazır çorba ve soslarda beklenenden fazla sodyum bulunabilir; toplam günlük alımınızın büyük kısmı çoğunlukla sofra tuzundan değil bu ürünlerden gelir.' },
+      { q: 'Bu araç kişiye özel bir tuz kısıtlaması öneriyor mu?', a: 'Hayır, yalnızca birim dönüşümü ve genel DSÖ limitine oranı gösterir; kişisel kısıtlama hekiminizle belirlenmelidir.' },
+    ],
+  },
+  'hba1c-ortalama-seker': {
+    about: 'HbA1c ↔ ortalama şeker çevirici, laboratuvar HbA1c sonucunuzu güncel ölçüm cihazlarında alıştığınız mg/dL veya mmol/L cinsinden tahmini ortalama kan şekerine (eAG) çevirir, ya da tersine bir ortalama şeker değerinden tahmini HbA1c hesaplar.',
+    method: 'ADA ve NGSP tarafından referans alınan ADAG çalışmasının formülü kullanılır: eAG (mg/dL) = 28,7 × HbA1c(%) − 46,7. mg/dL ↔ mmol/L dönüşümü için 18 katsayısı kullanılır (mmol/L = mg/dL ÷ 18). Sonuç, ADA\'nın normal/prediyabet/diyabet aralıklarıyla karşılaştırılır.',
+    examples: [
+      { title: 'HbA1c %7,0', rows: [{ label: 'Tahmini ortalama şeker', value: '154 mg/dL (8,6 mmol/L)' }, { label: 'Aralık', value: 'Diyabet aralığı' }] },
+      { title: 'HbA1c %5,5', rows: [{ label: 'Tahmini ortalama şeker', value: '111 mg/dL (6,2 mmol/L)' }, { label: 'Aralık', value: 'Normal aralık' }] },
+    ],
+    faq: [
+      { q: 'eAG ile gerçek ortalama şekerim neden birebir aynı değil?', a: 'ADAG formülü, geniş bir katılımcı grubunun ortalamasına dayanan istatistiksel bir ilişkidir; bireysel eritrosit ömrü ve diğer faktörler nedeniyle gerçek değeriniz birkaç birim sapabilir.' },
+      { q: 'HbA1c her durumda güvenilir mi?', a: 'Hayır, anemi, hemoglobinopati veya böbrek yetmezliği gibi bazı durumlar HbA1c sonucunu etkileyebilir; bu gibi durumlarda hekiminiz farklı bir tanı yöntemi tercih edebilir.' },
+      { q: 'mmol/L birimini ne zaman kullanmalıyım?', a: 'Türkiye\'de yaygın olarak mg/dL kullanılır; ancak birçok Avrupa ülkesinde ve bazı cihazlarda mmol/L birimi görebilirsiniz, bu durumda ilgili birimi seçmeniz yeterlidir.' },
+      { q: 'Sonucum "prediyabet aralığında" çıktı, bu tanı mı konuldu demek mi?', a: 'Hayır, bu yalnızca girdiğiniz değerin ADA aralıklarına göre nerede durduğunu gösterir; kesin tanı hekim değerlendirmesi ve laboratuvar sonucuyla birlikte konur.' },
+      { q: 'Bu araç tedavi ya da ilaç dozu önerir mi?', a: 'Hayır, yalnızca birim dönüşümü ve kılavuz aralığı bilgisi sunar.' },
+    ],
+  },
+  'seker-olcum-ortalamasi': {
+    about: 'Ev şeker ölçüm günlüğü, günlere yayılan açlık ve tokluk kan şekeri ölçümlerinizin ortalamasını ve ADAG formülüyle hesaplanan tahmini HbA1c karşılığını hesaplar; hekiminize götürmek üzere yazdırılabilir bir çizelge oluşturur.',
+    method: 'Girdiğiniz tüm açlık ve tokluk ölçümleri tek bir listede toplanıp ortalaması alınır; bu genel ortalama, ADAG formülünün tersi kullanılarak (HbA1c = (ortalama + 46,7) ÷ 28,7) tahmini bir HbA1c yüzdesine çevrilir. 70 mg/dL altındaki ölçümler uyarı, 54 mg/dL altındakiler ciddi hipoglisemi olarak ayrıca işaretlenir.',
+    faq: [
+      { q: 'Kaç gün ölçüm girmeliyim?', a: 'Ne kadar çok gün ve ölçüm girerseniz tahmini ortalama o kadar güvenilir olur; tek bir günün ölçümü genel eğilimi yansıtmayabilir.' },
+      { q: 'Tahmini HbA1c, laboratuvar sonucumdan neden farklı çıkabilir?', a: 'Laboratuvar HbA1c\'si son 2-3 ayın tamamını kapsar; bu araçtaki tahmin ise yalnızca girdiğiniz ölçümlerin ortalamasına dayanır ve ölçmediğiniz saatleri/günleri yansıtmaz.' },
+      { q: 'Neden bazı satırlar kırmızı/turuncu işaretleniyor?', a: '70 mg/dL altındaki ölçümler hipoglisemi uyarı eşiği, 54 mg/dL altındakiler ciddi hipoglisemi, 300 mg/dL ve üzerindeki düşmeyen ölçümler ise hiperglisemi acil eşiği olarak ayrıca vurgulanır.' },
+      { q: 'Düşük bir ölçüm girdiğimde ne yapmalıyım?', a: 'Bilinç bulanıklığı veya bayılma gibi belirtileriniz varsa hemen 112\'yi arayın; belirtisiz tekrarlayan düşük ölçümleri de en kısa sürede hekiminize bildirin.' },
+      { q: 'Bu araç insülin ya da ilaç dozu hesaplar mı?', a: 'Hayır, bu araç yalnızca girdiğiniz ölçümleri toplayıp ortalamasını gösterir; doz ve tedavi kararları hekiminize aittir.' },
+    ],
+  },
+  'karbonhidrat-sayimi': {
+    about: 'Karbonhidrat sayımı yardımcısı, öğün öğün girdiğiniz besinlerin karbonhidrat gramlarını toplayarak öğün başına ve gün geneli toplam karbonhidrat miktarınızı hesaplar.',
+    method: 'Her kalem için girilen karbonhidrat gramı, seçtiğiniz öğüne eklenir; öğün toplamları ve gün geneli toplam, girilen tüm kalemlerin toplanmasıyla bulunur. Karbonhidrat gramlarını siz, ürün etiketinden veya diyetisyeninizin verdiği besin listesinden girersiniz; site bir gıda veritabanı içermez.',
+    faq: [
+      { q: 'Karbonhidrat gramını nereden bulmalıyım?', a: 'Ambalajlı ürünlerde besin değeri tablosundaki "karbonhidrat" satırından, ambalajsız besinlerde ise diyetisyeninizin size verdiği porsiyon/karbonhidrat listesinden alabilirsiniz.' },
+      { q: 'Bu araç bir gıda veritabanı içeriyor mu?', a: 'Hayır, besin adı alanı yalnızca hatırlatma amaçlıdır; karbonhidrat gramını siz girersiniz.' },
+      { q: 'İnsülin/karbonhidrat oranımı bu araçla hesaplayabilir miyim?', a: 'Hayır, bu araç yalnızca öğün ve gün toplamı karbonhidrat gramını hesaplar; insülin/karbonhidrat oranı ve doz ayarlaması hekiminiz ve diyetisyeninizle birlikte belirlenmelidir.' },
+      { q: 'Ara öğünleri de eklemeli miyim?', a: 'Evet, karbonhidrat içeren her kalemi (ara öğünler dahil) ayrı bir satır olarak eklemeniz gün toplamının doğruluğunu artırır.' },
+      { q: 'Bir kalemi yanlış öğüne eklersem toplam değişir mi?', a: 'Öğün bazlı toplamlar değişir ama gün geneli toplam aynı kalır; kalemi düzenlemek için öğün alanından doğru öğünü yeniden seçebilirsiniz.' },
+    ],
+  },
 };
 
 export function getCalculatorContent(id) {

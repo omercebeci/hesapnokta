@@ -3,6 +3,7 @@ import React from 'react';
 const TONE_COLORS = {
   accent: 'var(--accent)',
   success: 'var(--success)',
+  warning: 'var(--warning)',
   danger: 'var(--danger)',
   info: 'var(--info)',
 };

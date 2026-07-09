@@ -393,6 +393,56 @@ export const calculators = [
     keywords: ['adım sayısı', 'kalori', 'yürüyüş', 'mesafe'],
   },
 
+  // ── Sağlık (tansiyon & diyabet) ──
+  {
+    id: 'tansiyon-degerlendirme',
+    title: 'Tansiyon Değerlendirme',
+    description: 'Büyük ve küçük tansiyon değerinize göre kılavuz kategorinizi, nabız basıncını ve ortalama arter basıncını hesaplayın.',
+    category: 'saglik',
+    icon: 'gauge',
+    keywords: ['tansiyon', 'kan basıncı', 'hipertansiyon', 'sistolik diastolik'],
+  },
+  {
+    id: 'tansiyon-olcum-ortalamasi',
+    title: 'Ev Tansiyon Ölçüm Ortalaması',
+    description: 'Günlere yayılan sabah/akşam ev tansiyon ölçümlerinizin ortalamasını ve kılavuz kategorinizi hesaplayın, hekiminize götürmek üzere yazdırın.',
+    category: 'saglik',
+    icon: 'clipboard-list',
+    keywords: ['ev tansiyon takibi', 'tansiyon ortalaması', 'tansiyon çizelgesi'],
+  },
+  {
+    id: 'tuz-sodyum-cevirici',
+    title: 'Tuz/Sodyum Çevirici',
+    description: 'Sodyum ile tuz miktarını birbirine çevirin ve günlük DSÖ tuz limitine oranını görün.',
+    category: 'saglik',
+    icon: 'flask-conical',
+    keywords: ['tuz', 'sodyum', 'sodyum tuz çevirici', 'günlük tuz limiti'],
+  },
+  {
+    id: 'hba1c-ortalama-seker',
+    title: 'HbA1c ↔ Ortalama Şeker Çevirici',
+    description: 'HbA1c yüzdesini tahmini ortalama kan şekerine (eAG) veya tersine çevirin, mg/dL ↔ mmol/L dönüşümü yapın.',
+    category: 'saglik',
+    icon: 'test-tube-2',
+    keywords: ['hba1c', 'ortalama şeker', 'eag', 'a1c çevirici'],
+  },
+  {
+    id: 'seker-olcum-ortalamasi',
+    title: 'Ev Şeker Ölçüm Günlüğü',
+    description: 'Açlık ve tokluk kan şekeri ölçümlerinizin ortalamasını ve tahmini HbA1c karşılığını hesaplayın, hekiminize götürmek üzere yazdırın.',
+    category: 'saglik',
+    icon: 'notebook-text',
+    keywords: ['kan şekeri takibi', 'açlık tokluk şeker', 'şeker günlüğü'],
+  },
+  {
+    id: 'karbonhidrat-sayimi',
+    title: 'Karbonhidrat Sayımı Yardımcısı',
+    description: 'Öğün kalemlerinizin karbonhidrat gramlarını toplayarak öğün ve gün bazında toplam karbonhidrat miktarınızı hesaplayın.',
+    category: 'saglik',
+    icon: 'wheat',
+    keywords: ['karbonhidrat sayımı', 'karb sayımı', 'diyabet beslenme'],
+  },
+
   // ── Eğitim (yeni) ──
   {
     id: 'ders-notu-ortalamasi-hesaplama',

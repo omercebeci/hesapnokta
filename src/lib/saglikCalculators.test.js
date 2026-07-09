@@ -9,6 +9,12 @@ import {
   calculateSleepSchedule,
   calculateCaffeineIntake,
   calculateStepsToCalories,
+  classifyBloodPressure,
+  calculateBloodPressureAverages,
+  convertSaltSodium,
+  convertHbA1cGlucose,
+  calculateGlucoseLog,
+  calculateCarbCounting,
 } from './saglikCalculators.js';
 
 describe('sağlık hesaplayıcıları', () => {
@@ -130,6 +136,175 @@ describe('sağlık hesaplayıcıları', () => {
     expect(calculateStepsToCalories({ steps: 10000, weightKg: 70, strideMeters: 0.75 })).toEqual({
       distanceKm: 7.5,
       caloriesBurned: 350,
+    });
+  });
+
+  describe('tansiyon değerlendirme', () => {
+    it('optimal aralığı doğru sınıflandırır', () => {
+      const result = classifyBloodPressure({ systolic: 115, diastolic: 75 });
+      expect(result.category).toEqual({ key: 'optimal', label: 'Optimal', tone: 'success' });
+      expect(result.isEmergencyRange).toBe(false);
+    });
+
+    it('sistolik ve diastolikten daha ağır olanı esas alır (evre 1)', () => {
+      const result = classifyBloodPressure({ systolic: 150, diastolic: 85 });
+      expect(result.category.key).toBe('evre1');
+      expect(result.isIsolatedSystolic).toBe(true);
+    });
+
+    it('nabız basıncı ve ortalama arter basıncını hesaplar', () => {
+      const result = classifyBloodPressure({ systolic: 140, diastolic: 90 });
+      expect(result.pulsePressure).toBe(50);
+      expect(result.map).toBe(106.7);
+    });
+
+    it('KRİTİK EŞİK: 180/120 mmHg ve üzerini acil aralık olarak işaretler', () => {
+      const result = classifyBloodPressure({ systolic: 182, diastolic: 121 });
+      expect(result.category.key).toBe('evre3');
+      expect(result.category.tone).toBe('danger');
+      expect(result.isEmergencyRange).toBe(true);
+    });
+
+    it('KRİTİK EŞİK: yalnızca diastolik 120 üzerindeyse de acil aralık sayılır', () => {
+      expect(classifyBloodPressure({ systolic: 160, diastolic: 121 }).isEmergencyRange).toBe(true);
+    });
+
+    it('180/120 sınır değerinin altında acil aralık tetiklenmez', () => {
+      expect(classifyBloodPressure({ systolic: 179, diastolic: 119 }).isEmergencyRange).toBe(false);
+    });
+
+    it('geçersiz girdilerde valid:false döner', () => {
+      expect(classifyBloodPressure({ systolic: 0, diastolic: 80 }).valid).toBe(false);
+      expect(classifyBloodPressure({ systolic: 120, diastolic: -5 }).valid).toBe(false);
+    });
+  });
+
+  describe('ev tansiyon ölçüm ortalaması', () => {
+    it('sabah/akşam ve genel ortalamayı hesaplar', () => {
+      const rows = [
+        { morningSys: '130', morningDia: '85', eveningSys: '120', eveningDia: '78' },
+        { morningSys: '134', morningDia: '87' },
+      ];
+      const result = calculateBloodPressureAverages(rows);
+      expect(result.valid).toBe(true);
+      expect(result.dayCount).toBe(2);
+      expect(result.readingCount).toBe(3);
+      expect(result.morningAvgSys).toBe(132);
+      expect(result.eveningAvgSys).toBe(120);
+      expect(result.assessment.category.key).toBeDefined();
+    });
+
+    it('KRİTİK EŞİK: genel ortalama 180/120 üzerindeyse acil aralık işaretlenir', () => {
+      const rows = [
+        { morningSys: '190', morningDia: '125' },
+        { eveningSys: '188', eveningDia: '123' },
+      ];
+      const result = calculateBloodPressureAverages(rows);
+      expect(result.assessment.isEmergencyRange).toBe(true);
+    });
+
+    it('hiç geçerli ölçüm yoksa valid:false döner', () => {
+      expect(calculateBloodPressureAverages([{ morningSys: '', morningDia: '' }]).valid).toBe(false);
+    });
+  });
+
+  describe('tuz/sodyum çevirici', () => {
+    it('sodyumdan tuza dönüştürür ve günlük limite oranını hesaplar', () => {
+      expect(convertSaltSodium({ mode: 'sodiumToSalt', value: 2000 })).toEqual({
+        valid: true,
+        sodiumMg: 2000,
+        saltG: 5,
+        percentOfDailyLimit: 100,
+        dailyLimitSaltG: 5,
+        dailyLimitSodiumMg: 2000,
+        isOverDailyLimit: false,
+      });
+    });
+
+    it('tuzdan sodyuma dönüştürür', () => {
+      const result = convertSaltSodium({ mode: 'saltToSodium', value: 10 });
+      expect(result.sodiumMg).toBe(4000);
+      expect(result.isOverDailyLimit).toBe(true);
+      expect(result.percentOfDailyLimit).toBe(200);
+    });
+  });
+
+  describe('HbA1c ↔ ortalama şeker çevirici', () => {
+    it('HbA1c\'den ADAG formülüyle tahmini ortalama şekeri hesaplar', () => {
+      const result = convertHbA1cGlucose({ mode: 'a1cToGlucose', value: 7 });
+      expect(result.eAGmgdl).toBe(154.2);
+      expect(result.eAGmmol).toBe(8.6);
+      expect(result.category).toEqual({ key: 'diyabet', label: 'Diyabet aralığı', tone: 'danger' });
+    });
+
+    it('mg/dL cinsinden ortalama şekerden HbA1c hesaplar', () => {
+      const result = convertHbA1cGlucose({ mode: 'glucoseToA1c', value: 100, glukozBirim: 'mgdl' });
+      expect(result.a1cPercent).toBe(5.1);
+      expect(result.category.key).toBe('normal');
+    });
+
+    it('mmol/L cinsinden ortalama şekeri mg/dL\'e çevirip HbA1c hesaplar', () => {
+      const result = convertHbA1cGlucose({ mode: 'glucoseToA1c', value: 8.6, glukozBirim: 'mmoll' });
+      expect(result.a1cPercent).toBeCloseTo(7, 1);
+    });
+
+    it('prediyabet aralığını doğru sınıflandırır', () => {
+      expect(convertHbA1cGlucose({ mode: 'a1cToGlucose', value: 6 }).category.key).toBe('prediyabet');
+    });
+  });
+
+  describe('ev şeker ölçüm günlüğü', () => {
+    it('açlık/tokluk ortalamalarını ve tahmini HbA1c\'yi hesaplar', () => {
+      const result = calculateGlucoseLog([{ fasting: 90, postprandial: 130 }, { fasting: 100, postprandial: 140 }]);
+      expect(result.valid).toBe(true);
+      expect(result.avgFasting).toBe(95);
+      expect(result.avgPostprandial).toBe(135);
+      expect(result.hasLow).toBe(false);
+      expect(result.hasSevereLow).toBe(false);
+      expect(result.hasVeryHigh).toBe(false);
+    });
+
+    it('KRİTİK EŞİK: 54 mg/dL altındaki ölçümü ciddi hipoglisemi olarak işaretler', () => {
+      const result = calculateGlucoseLog([{ fasting: 50, postprandial: 120 }]);
+      expect(result.hasSevereLow).toBe(true);
+      expect(result.hasLow).toBe(true);
+      expect(result.rows[0].hasSevereLow).toBe(true);
+    });
+
+    it('KRİTİK EŞİK: 70 mg/dL altı ama 54 üzeri değeri yalnızca uyarı (hasLow) olarak işaretler', () => {
+      const result = calculateGlucoseLog([{ fasting: 65, postprandial: 120 }]);
+      expect(result.hasLow).toBe(true);
+      expect(result.hasSevereLow).toBe(false);
+    });
+
+    it('KRİTİK EŞİK: 300 mg/dL ve üzerini hiperglisemi acil eşiği olarak işaretler', () => {
+      const result = calculateGlucoseLog([{ fasting: 90, postprandial: 310 }]);
+      expect(result.hasVeryHigh).toBe(true);
+      expect(result.rows[0].hasVeryHigh).toBe(true);
+    });
+
+    it('geçerli ölçüm yoksa valid:false döner', () => {
+      expect(calculateGlucoseLog([{ fasting: '', postprandial: '' }]).valid).toBe(false);
+    });
+  });
+
+  describe('karbonhidrat sayımı', () => {
+    it('öğün ve gün toplamlarını hesaplar', () => {
+      const result = calculateCarbCounting([
+        { meal: 'kahvalti', carbGrams: 30 },
+        { meal: 'kahvalti', carbGrams: 10 },
+        { meal: 'aksam', carbGrams: 60 },
+      ]);
+      expect(result.valid).toBe(true);
+      expect(result.dailyTotal).toBe(100);
+      expect(result.mealTotals).toEqual([
+        { key: 'kahvalti', label: 'Kahvaltı', total: 40 },
+        { key: 'aksam', label: 'Akşam yemeği', total: 60 },
+      ]);
+    });
+
+    it('geçersiz/boş kalemleri yok sayar', () => {
+      expect(calculateCarbCounting([{ meal: 'kahvalti', carbGrams: '' }]).valid).toBe(false);
     });
   });
 });

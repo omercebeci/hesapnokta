@@ -67,6 +67,12 @@ const GebelikHaftasiHesaplama = lazy(() => import('./pages/calculators/saglik/Ge
 const UykuSaatiHesaplama = lazy(() => import('./pages/calculators/saglik/UykuSaatiHesaplama.jsx'));
 const KafeinTakibiHesaplama = lazy(() => import('./pages/calculators/saglik/KafeinTakibiHesaplama.jsx'));
 const AdimKaloriDonusumuHesaplama = lazy(() => import('./pages/calculators/saglik/AdimKaloriDonusumuHesaplama.jsx'));
+const TansiyonDegerlendirmeHesaplama = lazy(() => import('./pages/calculators/saglik/TansiyonDegerlendirmeHesaplama.jsx'));
+const TansiyonOlcumOrtalamasiHesaplama = lazy(() => import('./pages/calculators/saglik/TansiyonOlcumOrtalamasiHesaplama.jsx'));
+const TuzSodyumCeviriciHesaplama = lazy(() => import('./pages/calculators/saglik/TuzSodyumCeviriciHesaplama.jsx'));
+const Hba1cOrtalamaSekerHesaplama = lazy(() => import('./pages/calculators/saglik/Hba1cOrtalamaSekerHesaplama.jsx'));
+const SekerOlcumOrtalamasiHesaplama = lazy(() => import('./pages/calculators/saglik/SekerOlcumOrtalamasiHesaplama.jsx'));
+const KarbonhidratSayimiHesaplama = lazy(() => import('./pages/calculators/saglik/KarbonhidratSayimiHesaplama.jsx'));
 
 // Eğitim
 const DersNotuOrtalamasiHesaplama = lazy(() => import('./pages/calculators/egitim/DersNotuOrtalamasiHesaplama.jsx'));
@@ -157,6 +163,12 @@ export default function App() {
             <Route path="/uyku-saati-hesaplama" element={<UykuSaatiHesaplama />} />
             <Route path="/kafein-takibi-hesaplama" element={<KafeinTakibiHesaplama />} />
             <Route path="/adim-kalori-donusumu-hesaplama" element={<AdimKaloriDonusumuHesaplama />} />
+            <Route path="/tansiyon-degerlendirme" element={<TansiyonDegerlendirmeHesaplama />} />
+            <Route path="/tansiyon-olcum-ortalamasi" element={<TansiyonOlcumOrtalamasiHesaplama />} />
+            <Route path="/tuz-sodyum-cevirici" element={<TuzSodyumCeviriciHesaplama />} />
+            <Route path="/hba1c-ortalama-seker" element={<Hba1cOrtalamaSekerHesaplama />} />
+            <Route path="/seker-olcum-ortalamasi" element={<SekerOlcumOrtalamasiHesaplama />} />
+            <Route path="/karbonhidrat-sayimi" element={<KarbonhidratSayimiHesaplama />} />
 
             <Route path="/ders-notu-ortalamasi-hesaplama" element={<DersNotuOrtalamasiHesaplama />} />
             <Route path="/sinav-puani-hesaplama" element={<SinavPuaniHesaplama />} />
