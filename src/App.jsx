@@ -35,6 +35,11 @@ const EmlakKredisiUygunlukHesaplama = lazy(() => import('./pages/calculators/fin
 const KrediKartiAsgariOdemeHesaplama = lazy(() => import('./pages/calculators/finans/KrediKartiAsgariOdemeHesaplama.jsx'));
 const EnflasyonEtkisiHesaplama = lazy(() => import('./pages/calculators/finans/EnflasyonEtkisiHesaplama.jsx'));
 const TaksitKarsilastirmaHesaplama = lazy(() => import('./pages/calculators/finans/TaksitKarsilastirmaHesaplama.jsx'));
+const KrediErkenKapatmaHesaplama = lazy(() => import('./pages/calculators/finans/KrediErkenKapatmaHesaplama.jsx'));
+const KrediYapilandirmaHesaplama = lazy(() => import('./pages/calculators/finans/KrediYapilandirmaHesaplama.jsx'));
+const KrediKarsilastirmaHesaplama = lazy(() => import('./pages/calculators/finans/KrediKarsilastirmaHesaplama.jsx'));
+const KrediNotuAraligiHesaplama = lazy(() => import('./pages/calculators/finans/KrediNotuAraligiHesaplama.jsx'));
+const KrediGecikmeFaiziHesaplama = lazy(() => import('./pages/calculators/finans/KrediGecikmeFaiziHesaplama.jsx'));
 
 // Alışveriş & Kargo
 const ZamOraniHesaplama = lazy(() => import('./pages/calculators/alisveris/ZamOraniHesaplama.jsx'));
@@ -135,6 +140,11 @@ export default function App() {
             <Route path="/kredi-karti-asgari-odeme-hesaplama" element={<KrediKartiAsgariOdemeHesaplama />} />
             <Route path="/enflasyon-etkisi-hesaplama" element={<EnflasyonEtkisiHesaplama />} />
             <Route path="/taksit-karsilastirma-hesaplama" element={<TaksitKarsilastirmaHesaplama />} />
+            <Route path="/kredi-erken-kapatma-hesaplama" element={<KrediErkenKapatmaHesaplama />} />
+            <Route path="/kredi-yapilandirma-hesaplama" element={<KrediYapilandirmaHesaplama />} />
+            <Route path="/kredi-karsilastirma" element={<KrediKarsilastirmaHesaplama />} />
+            <Route path="/kredi-notu-araligi" element={<KrediNotuAraligiHesaplama />} />
+            <Route path="/kredi-gecikme-faizi-hesaplama" element={<KrediGecikmeFaiziHesaplama />} />
 
             <Route path="/zam-orani-hesaplama" element={<ZamOraniHesaplama />} />
             <Route path="/bahsis-hesap-bolusme-hesaplama" element={<BahsisHesapBolusmeHesaplama />} />

@@ -3,9 +3,11 @@ import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import AmountInput from '../../../components/AmountInput.jsx';
 import DataPeriodNote from '../../../components/DataPeriodNote.jsx';
+import DebtPayoffChart from '../../../components/DebtPayoffChart.jsx';
+import RelatedTools from '../../../components/RelatedTools.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
-import { calculateCreditCardPayment } from '../../../lib/finansCalculators.js';
-import { formatCurrency, formatInteger, formatNumber, parseLocaleNumber } from '../../../utils/format.js';
+import { calculateCreditCardPayment, simulateMinimumPaymentPayoff, simulateFixedPaymentPayoff } from '../../../lib/finansCalculators.js';
+import { formatCurrency, formatInteger, formatNumber, formatPercent, parseLocaleNumber } from '../../../utils/format.js';
 import { GUNCEL_VERILER } from '../../../data/guncelVeriler.js';
 import { useQueryParamState } from '../../../hooks/useQueryParamState.js';
 
@@ -19,6 +21,7 @@ export default function KrediKartiAsgariOdemeHesaplama() {
   const [monthlyInterestRate, setMonthlyInterestRate] = useQueryParamState('faiz', String(EN_DUSUK_DILIM.akdiFaiz * 100));
   const [lateInterestRate, setLateInterestRate] = useQueryParamState('gecikmeFaiz', String(EN_DUSUK_DILIM.gecikmeFaizi * 100));
   const [daysLate, setDaysLate] = useQueryParamState('gecikmeGun', '0');
+  const [fixedPayment, setFixedPayment] = useQueryParamState('sabitOdeme', '');
 
   const { result, error } = useMemo(() => {
     const parsedLimit = parseLocaleNumber(cardLimit);
@@ -45,6 +48,27 @@ export default function KrediKartiAsgariOdemeHesaplama() {
       error: null,
     };
   }, [cardLimit, statementBalance, monthlyInterestRate, lateInterestRate, daysLate]);
+
+  const payoffSimulation = useMemo(() => {
+    if (error || !result) return null;
+    const parsedLimit = parseLocaleNumber(cardLimit);
+    const parsedBalance = parseLocaleNumber(statementBalance);
+    const parsedMonthlyRate = parseLocaleNumber(monthlyInterestRate);
+    const parsedFixedPayment = parseLocaleNumber(fixedPayment);
+
+    const minimumOnly = simulateMinimumPaymentPayoff({
+      cardLimit: parsedLimit,
+      statementBalance: parsedBalance,
+      monthlyInterestRate: parsedMonthlyRate,
+    });
+
+    const hasFixedComparison = Number.isFinite(parsedFixedPayment) && parsedFixedPayment > 0;
+    const fixed = hasFixedComparison
+      ? simulateFixedPaymentPayoff({ statementBalance: parsedBalance, monthlyInterestRate: parsedMonthlyRate, fixedPayment: parsedFixedPayment })
+      : null;
+
+    return { minimumOnly, fixed, hasFixedComparison, startBalance: parsedBalance };
+  }, [error, result, cardLimit, statementBalance, monthlyInterestRate, fixedPayment]);
 
   return (
     <CalculatorLayout calculatorId="kredi-karti-asgari-odeme-hesaplama">
@@ -91,6 +115,91 @@ export default function KrediKartiAsgariOdemeHesaplama() {
         </div>
       )}
 
+      {!error && payoffSimulation && (
+        <div className="calc-card" style={{ gridColumn: '1 / -1' }}>
+          <h2>Sadece asgariyi ödersem borcum kaç ayda kapanır?</h2>
+          <p className="hint" style={{ marginBottom: 12 }}>
+            Her ay yalnızca o ayın asgari tutarını ödediğinizi (aylık akdi faiz oranı sabit kalmak üzere) varsayan bir simülasyondur. Asgari ödeme tutarı her ay kalan bakiyeye göre yeniden hesaplanır.
+          </p>
+          <div className="form-grid">
+            <FormField label="Karşılaştırma için sabit aylık ödeme (TL, opsiyonel)" htmlFor="fixedPayment" full hint="Asgari yerine her ay sabit bir tutar ödeseydiniz farkı görün">
+              <AmountInput id="fixedPayment" value={fixedPayment} onChange={setFixedPayment} />
+            </FormField>
+          </div>
+
+          {payoffSimulation.minimumOnly.neverPaysOff ? (
+            <ResultCard
+              tone="danger"
+              label="Bu senaryoda borç asla kapanmıyor"
+              value="Süresiz büyüyor"
+              note={`Aylık %${formatNumber(parseLocaleNumber(monthlyInterestRate), { decimals: 2 })} faiz, asgari ödemenin karşıladığından daha hızlı işliyor.`}
+              action="Sadece asgari ödemeye devam ederseniz borcunuz KÜÇÜLMEZ, tam tersine büyümeye devam eder — mutlaka asgarinin üzerinde ödeme yapın."
+            />
+          ) : (
+            <>
+              <ResultMetrics
+                items={[
+                  { label: 'Kapanma süresi', value: `${formatInteger(payoffSimulation.minimumOnly.monthsToPayoff)} ay` },
+                  { label: 'Ödenen toplam', value: formatCurrency(payoffSimulation.minimumOnly.totalPaid) },
+                  { label: 'Toplam faiz', value: formatCurrency(payoffSimulation.minimumOnly.totalInterest) },
+                  { label: 'Faiz / anapara oranı', value: formatPercent(payoffSimulation.minimumOnly.interestToPrincipalRatio, { decimals: 0 }) },
+                ]}
+              />
+              <p className="rate-disclaimer">⚠️ Yalnızca asgari ödeyerek bu krediyi kapatmak {formatInteger(payoffSimulation.minimumOnly.monthsToPayoff)} ay sürüyor ve anaparanın %{formatNumber(payoffSimulation.minimumOnly.interestToPrincipalRatio, { decimals: 0 })}'i kadar ekstra faiz ödüyorsunuz.</p>
+            </>
+          )}
+
+          {payoffSimulation.hasFixedComparison && (
+            payoffSimulation.fixed.neverPaysOff ? (
+              <ResultCard
+                tone="danger"
+                label="Sabit ödeme senaryosunda da borç kapanmıyor"
+                value="Süresiz büyüyor"
+                note="Girdiğiniz sabit tutar bu bakiyenin aylık faizini bile karşılamıyor."
+                action="Sabit ödeme tutarını, en azından ilk ayki faiz tutarının üzerine çıkacak şekilde artırın."
+              />
+            ) : (
+              <div className="calc-card" style={{ marginTop: 14, background: 'var(--bg-soft)' }}>
+                <h2 style={{ fontSize: '1.05rem' }}>Karşılaştırma: asgari yerine ayda {formatCurrency(parseLocaleNumber(fixedPayment))} ödeseydiniz</h2>
+                <ResultMetrics
+                  items={[
+                    { label: 'Asgari ile kapanma', value: `${formatInteger(payoffSimulation.minimumOnly.monthsToPayoff)} ay` },
+                    { label: 'Sabit ödeme ile kapanma', value: `${formatInteger(payoffSimulation.fixed.monthsToPayoff)} ay` },
+                    { label: 'Asgari ile toplam faiz', value: formatCurrency(payoffSimulation.minimumOnly.totalInterest) },
+                    { label: 'Sabit ödeme ile toplam faiz', value: formatCurrency(payoffSimulation.fixed.totalInterest) },
+                  ]}
+                />
+                <p className="rate-disclaimer">
+                  {payoffSimulation.minimumOnly.monthsToPayoff - payoffSimulation.fixed.monthsToPayoff > 0
+                    ? `Sabit ödeme ile ${formatInteger(payoffSimulation.minimumOnly.monthsToPayoff - payoffSimulation.fixed.monthsToPayoff)} ay daha erken kapanır ve ${formatCurrency(payoffSimulation.minimumOnly.totalInterest - payoffSimulation.fixed.totalInterest)} daha az faiz ödersiniz.`
+                    : 'Girdiğiniz sabit tutar asgari ödemeden düşük kaldığı için bir avantaj sağlamıyor.'}
+                </p>
+              </div>
+            )
+          )}
+
+          {!payoffSimulation.minimumOnly.neverPaysOff && (
+            <div style={{ marginTop: 14 }}>
+              <DebtPayoffChart
+                ariaLabel="Borç erime grafiği"
+                series={[
+                  {
+                    label: 'Sadece asgari ödeme',
+                    color: 'var(--chart-line-1)',
+                    data: [{ month: 0, remaining: payoffSimulation.startBalance }, ...payoffSimulation.minimumOnly.schedule],
+                  },
+                  ...(payoffSimulation.hasFixedComparison && !payoffSimulation.fixed.neverPaysOff ? [{
+                    label: 'Sabit ödeme',
+                    color: 'var(--chart-line-2)',
+                    data: [{ month: 0, remaining: payoffSimulation.startBalance }, ...payoffSimulation.fixed.schedule],
+                  }] : []),
+                ]}
+              />
+            </div>
+          )}
+        </div>
+      )}
+
       <div className="info-card">
         <h2>Nasıl yorumlanır?</h2>
         <ul>
@@ -98,6 +207,11 @@ export default function KrediKartiAsgariOdemeHesaplama() {
           <li>Sadece asgari ödeme yapıp kalan bakiyeyi ödemezseniz, kalan tutara akdi faiz işlemeye devam eder.</li>
           <li>Ödemeyi geciktirirseniz, dönem borcunun tamamı üzerinden ayrıca gecikme (temerrüt) faizi hesaplanır.</li>
         </ul>
+        <RelatedTools items={[
+          { to: '/kredi-gecikme-faizi-hesaplama', label: 'Kredi Gecikme Faizi' },
+          { to: '/kredi-notu-araligi', label: 'Kredi Notu Aralığı' },
+          { to: '/taksit-karsilastirma-hesaplama', label: 'Taksit Karşılaştırma' },
+        ]} />
       </div>
     </CalculatorLayout>
   );

@@ -33,6 +33,7 @@ export default function HomePage() {
   return (
     <>
       <section className="home-hero">
+        <div className="home-hero-glow" aria-hidden="true" />
         <div className="container">
           <span className="eyebrow">{calculators.length} ücretsiz hesaplayıcı</span>
           <h1>Aradığın <span>hesaplayıcıyı</span> saniyeler içinde bul.</h1>

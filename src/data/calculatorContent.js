@@ -549,6 +549,9 @@ export const calculatorContent = {
       { q: 'Kalan bakiyeyi taksitlendirebilir miyim?', a: 'Bazı bankalar "yapılandırma" veya "taksitli borç ödeme" gibi seçenekler sunabilir; bu, bankanızla görüşerek değerlendirebileceğiniz ayrı bir üründür ve bu araca dahil değildir.' },
       { q: 'Asgari ödeme tutarını değil, tamamını öderim daha iyi olmaz mı?', a: 'Evet, mümkünse ekstrenin tamamını ödemek en avantajlı seçenektir; bu şekilde hiç akdi faiz işlemez ve borç bir sonraki döneme taşınmaz.' },
       { q: 'Farklı bankaların akdi/gecikme faiz oranları neden farklı?', a: 'TCMB her çeyrekte kredi kartlarında uygulanabilecek azami akdi ve gecikme faiz oranlarını ilan eder; bankalar bu tavanın altında serbestçe farklı oranlar belirleyebilir, bu yüzden kartınızın ekstresindeki oranı kontrol etmelisiniz.' },
+      { q: '"Borç eritme simülasyonu" ne gösterir?', a: 'Her ay yalnızca o ayın asgari tutarını ödediğinizi varsayarak borcunuzun kaç ayda kapanacağını, toplam ne kadar ödeyeceğinizi ve toplam faizi ay ay simüle eder; asgari tutar her ay kalan bakiyeye göre yeniden hesaplanır.' },
+      { q: 'Simülasyon "borç asla kapanmıyor" derse ne anlama gelir?', a: 'Bu, girdiğiniz faiz oranında asgari ödemenin o ayki faizi bile karşılamadığı, dolayısıyla sadece asgari öderseniz bakiyenizin küçülmeyip büyümeye devam edeceği anlamına gelir — mutlaka asgarinin üzerinde ödeme yapmanız gerekir.' },
+      { q: '"Sabit ödeme" karşılaştırması ne işe yarar?', a: 'Asgari ödeme yerine her ay kendi belirlediğiniz sabit bir tutar ödeseydiniz borcun kaç ayda kapanacağını ve ne kadar daha az faiz ödeyeceğinizi asgari-ödeme senaryosuyla yan yana gösterir.' },
     ],
   },
   'enflasyon-etkisi-hesaplama': {
@@ -1377,6 +1380,109 @@ export const calculatorContent = {
       { q: 'İnsülin/karbonhidrat oranımı bu araçla hesaplayabilir miyim?', a: 'Hayır, bu araç yalnızca öğün ve gün toplamı karbonhidrat gramını hesaplar; insülin/karbonhidrat oranı ve doz ayarlaması hekiminiz ve diyetisyeninizle birlikte belirlenmelidir.' },
       { q: 'Ara öğünleri de eklemeli miyim?', a: 'Evet, karbonhidrat içeren her kalemi (ara öğünler dahil) ayrı bir satır olarak eklemeniz gün toplamının doğruluğunu artırır.' },
       { q: 'Bir kalemi yanlış öğüne eklersem toplam değişir mi?', a: 'Öğün bazlı toplamlar değişir ama gün geneli toplam aynı kalır; kalemi düzenlemek için öğün alanından doğru öğünü yeniden seçebilirsiniz.' },
+    ],
+  },
+  'kredi-erken-kapatma-hesaplama': {
+    about: 'Bu araç, kalan vade, taksit tutarı ve faiz oranınıza göre kredinizi bugün kapatırsanız ödeyeceğiniz tutarı ve kurtulacağınız faizi hesaplar. İhtiyaç/taşıt kredisi ile konut kredisi arasındaki yasal fark (tazminat var mı yok mu) net şekilde ayrıştırılır.',
+    method: 'Kalan anapara, kalan taksitlerinizin bugünkü değeri olarak (anüite formülünün tersi ile) hesaplanır. İhtiyaç/taşıt gibi genel tüketici kredilerinde Tüketici Kredisi Sözleşmeleri Yönetmeliği madde 15 uyarınca erken ödeme tazminatı YASAKTIR, sadece faiz indirimi uygulanır. Konut kredisinde ve faiz SABİT ise, 6502 sayılı Kanun madde 37 uyarınca kalan vadeye göre %1 (36 aya kadar) veya %2 (36 aydan fazla) tazminat eklenebilir; faiz DEĞİŞKEN ise konut kredisinde de tazminat istenemez.',
+    examples: [
+      {
+        title: 'İhtiyaç kredisi: 12 ay kalan vade, 5.000 TL taksit, %3 aylık faiz',
+        rows: [
+          { label: 'Kalan anapara', value: '49.770,02 TL' },
+          { label: 'Kredi devam etseydi toplam ödeme', value: '60.000 TL' },
+          { label: 'Kurtulunacak faiz', value: '10.229,98 TL' },
+          { label: 'Erken ödeme tazminatı', value: 'Yok (yasak)' },
+        ],
+      },
+      {
+        title: 'Konut kredisi (sabit faiz): 24 ay kalan vade, 8.000 TL taksit, %2 aylık faiz',
+        rows: [
+          { label: 'Kalan anapara', value: '151.311,40 TL' },
+          { label: 'Erken ödeme tazminatı (%1, kalan vade ≤36 ay)', value: '1.513,11 TL' },
+          { label: 'Erken kapatma tutarı', value: '152.824,52 TL' },
+          { label: 'Net kazanç', value: '39.175,48 TL' },
+        ],
+      },
+    ],
+    faq: [
+      { q: 'İhtiyaç veya taşıt kredimi erken kapatırsam ceza öder miyim?', a: 'Hayır. Tüketici Kredisi Sözleşmeleri Yönetmeliği madde 15 uyarınca genel tüketici kredilerinde (konut hariç) erken ödeme tazminatı/ceza alınamaz; kredi veren yalnızca ödenmemiş faizi indirmekle yükümlüdür.' },
+      { q: 'Konut kredimi erken kapatırsam tazminat öder miyim?', a: 'Faiz oranınız SABİT ise evet, 6502 sayılı Kanun madde 37 uyarınca kalan vadeniz 36 ayı aşmıyorsa en fazla %1, aşıyorsa en fazla %2 tazminat istenebilir. Faiz oranınız DEĞİŞKEN ise konut kredisinde de tazminat istenemez.' },
+      { q: '"Kalan anapara" ile bankamın söylediği kapanış tutarı neden farklı olabilir?', a: 'Bu araç, kredinizin standart bir eşit taksitli (anüite) kredi olduğunu varsayarak matematiksel bir tahmin yapar; bankanızın gerçek kapanış ekstresi, ödeme tarihine, gün kesirlerine ve banka içi yuvarlamalara göre küçük farklar gösterebilir.' },
+      { q: 'Erken kapatma her zaman avantajlı mıdır?', a: 'Genellikle evet, çünkü kalan faizin tamamından ya da büyük kısmından kurtulursunuz; ancak konut kredisinde tazminat, kurtulacağınız faizden büyükse (çok kısa kalan vadelerde nadiren olabilir) net kazancınız azalabilir — "net kazanç" alanı bunu gösterir.' },
+      { q: 'Kısmi erken ödeme yapabilir miyim, yoksa tamamını mı ödemem gerekir?', a: 'Kanunen kısmi erken ödeme de mümkündür; bu araç şu an sadece TAM erken kapatma senaryosunu hesaplar.' },
+      { q: 'Erken ödeme başvurusunu nasıl yaparım?', a: 'Bankanıza (şubeden, internet/mobil bankacılıktan ya da çağrı merkezinden) erken kapatma talebinizi iletip güncel kapanış tutarını istemeniz yeterlidir; banka yasal süre içinde size tutarı bildirmekle yükümlüdür.' },
+      { q: 'Bu tazminat oranları her yıl değişir mi?', a: 'Hayır, bunlar kanunla belirlenmiş sabit yasal tavanlardır (yönetmelik değişmediği sürece); güncel durumu her ihtimale karşı bu sayfadaki kaynak notundan kontrol edebilirsiniz.' },
+    ],
+  },
+  'kredi-yapilandirma-hesaplama': {
+    about: 'Bu araç, mevcut kredinizi olduğu gibi sürdürmek ile bankanızın (veya başka bir bankanın) sunduğu bir yeniden yapılandırma/refinansman teklifini toplam maliyet açısından karşılaştırmanızı sağlar.',
+    method: 'Mevcut kredi ile devam etme maliyeti, kalan taksitlerinizin (mevcut tutar × kalan ay sayısı) toplamıdır. Yeni teklifin aylık taksiti, kalan borcunuza yeni faiz oranı ve yeni vade uygulanan standart bir anüite formülüyle hesaplanır; toplam maliyete varsa dosya masrafı da eklenir. İki toplam maliyet karşılaştırılarak hangisinin daha ucuz olduğu ve farkı gösterilir.',
+    faq: [
+      { q: 'Yapılandırma ile vadeyi uzatmak her zaman kötü müdür?', a: 'Hayır, aylık taksitinizi düşürüp nakit akışınızı rahatlatabilir; ancak genellikle toplam ödeyeceğiniz tutarı artırır. Bu araç her iki etkiyi de ayrı ayrı gösterir, kararı ihtiyacınıza göre siz verirsiniz.' },
+      { q: 'Bu araç bana yeni bir faiz teklifi mi üretiyor?', a: 'Hayır, yeni faiz oranı ve vadeyi siz girersiniz (bankanızdan aldığınız teklif); araç sadece bu teklif ile mevcut durumu karşılaştırır.' },
+      { q: 'Yapılandırma sırasında erken ödeme tazminatı da öder miyim?', a: 'Bu, mevcut kredinizin türüne (konut mu, ihtiyaç mı) ve faiz tipine bağlıdır; detaylı hesap için Kredi Erken Kapatma aracımızı kullanabilirsiniz — bu araç yapılandırma maliyetine otomatik bir tazminat eklemez.' },
+      { q: '"Dosya masrafı" zorunlu mu?', a: 'Hayır, opsiyoneldir; bankanız yeni kredi için bir masraf/ücret talep ediyorsa buraya girerek toplam maliyete dahil edebilirsiniz, talep etmiyorsa boş bırakabilirsiniz.' },
+      { q: 'Mevcut kredimin taksit sayısını tam bilmiyorsam ne yapmalıyım?', a: 'Ekstrenizde veya internet bankacılığınızda "kalan taksit sayısı" ya da "kalan vade" bilgisini bulabilirsiniz; yaklaşık bir sayı girerek de kabaca bir fikir edinebilirsiniz.' },
+      { q: 'Faiz oranı olarak yıllık mı aylık mı girmeliyim?', a: 'Aylık faiz oranı girilmelidir; bankanız size yıllık oran verdiyse yaklaşık olarak 12\'ye bölebilirsiniz (kesin dönüşüm için bankanızdan aylık orana ait tabloyu isteyin).' },
+    ],
+  },
+  'kredi-karsilastirma': {
+    about: 'İki farklı banka kredi teklifini (tutar, faiz oranı, vade ve varsa dosya masrafı) yan yana karşılaştırıp hangisinin toplamda daha ucuza geldiğini net biçimde gösterir.',
+    method: 'Her teklif için standart bir eşit taksitli (anüite) kredi formülüyle aylık taksit hesaplanır; toplam maliyet, aylık taksitlerin vade boyunca toplamına (varsa) dosya masrafının eklenmesiyle bulunur. İki teklifin toplam maliyeti karşılaştırılarak aradaki fark ve daha ucuz olan teklif belirlenir.',
+    examples: [
+      {
+        title: 'Teklif A: 100.000 TL, %3 aylık faiz, 12 ay, 500 TL masraf — Teklif B: aynı tutar, %2,5 faiz, 12 ay, 1.500 TL masraf',
+        rows: [
+          { label: 'Teklif A toplam maliyet', value: '121.054,50 TL' },
+          { label: 'Teklif B toplam maliyet', value: '118.484,55 TL' },
+          { label: 'Daha ucuz teklif', value: 'Teklif B' },
+          { label: 'Fark', value: '2.569,95 TL' },
+        ],
+      },
+    ],
+    faq: [
+      { q: 'Sadece faiz oranına bakarak karar vermek yeterli mi?', a: 'Hayır, düşük faizli bir teklif yüksek dosya masrafı veya farklı bir vade nedeniyle toplamda daha pahalıya gelebilir; bu yüzden "toplam maliyet" alanına bakmanız önerilir.' },
+      { q: 'Vadeler farklıysa karşılaştırma adil olur mu?', a: 'Toplam maliyet karşılaştırması her zaman geçerlidir, ama farklı vadeli teklifleri karşılaştırırken aylık taksit farkının bütçenize etkisini de ayrıca değerlendirmelisiniz.' },
+      { q: 'BSMV/KKDF bu hesaba dahil mi?', a: 'Hayır, bu araç sade bir anüite karşılaştırması yapar; ihtiyaç kredilerinde BSMV/KKDF dahil kesin taksit için Kredi Taksiti Hesaplama aracımızı kullanabilirsiniz.' },
+      { q: 'Banka adını girmek zorunlu mu?', a: 'Hayır, opsiyoneldir; girerseniz sonuçlarda "Teklif A/B" yerine girdiğiniz isim gösterilir.' },
+      { q: 'Üç veya daha fazla teklifi karşılaştırabilir miyim?', a: 'Bu araç şu an yalnızca iki teklifi karşılaştırır; üçüncü bir teklifi denemek için Teklif A veya B alanlarını değiştirip tekrar hesaplayabilirsiniz.' },
+      { q: '"Yıllık maliyet oranı" ile bu araç aynı şey mi hesaplıyor?', a: 'Hayır, yıllık maliyet oranı (YMO) bankaların yasal olarak bildirmek zorunda olduğu, tüm vergi ve masrafları standart bir formülle içeren bir orandır; bu araç ise sadece girdiğiniz tutar/faiz/vade/masraf ile basit bir toplam maliyet karşılaştırması yapar. Kesin karar için bankaların size verdiği YMO\'yu da karşılaştırın.' },
+    ],
+  },
+  'kredi-notu-araligi': {
+    about: 'Findeks kredi notunuzun (0-1900 arası) hangi risk aralığına denk geldiğini gösterir. Bu araç puanınızı HESAPLAMAZ veya TAHMİN ETMEZ — yalnızca zaten bildiğiniz bir puanı yaygın kullanılan referans aralıklarına yerleştirir.',
+    method: 'Girilen puan, 5 aralıktan (çok riskli, orta riskli, az riskli, iyi, çok iyi) hangisine denk geldiğine bakılarak sınıflandırılır. Bu aralıklar KKB\'nin resmi bir yayını DEĞİLDİR; hangikredi.com, sabah.com.tr gibi birden fazla bağımsız kaynakta tutarlı şekilde tekrarlanan, sektörde yaygın kullanılan bir referanstır.',
+    faq: [
+      { q: 'Bu araç Findeks puanımı hesaplıyor mu?', a: 'Hayır. Bu araç puan hesaplamaz veya tahmin etmez; yalnızca sizin zaten bildiğiniz bir puanı yaygın referans aralıklarına yerleştirir. Gerçek puanınızı yalnızca Findeks.com üzerinden öğrenebilirsiniz.' },
+      { q: 'Bu aralıklar resmi mi?', a: 'Hayır, resmi değildir. KKB (Kredi Kayıt Bürosu) kendi resmi sayfasında tam sayısal puan aralıkları yayımlamaz. Buradaki 5 aralık, birden fazla bağımsız kaynakta (hangikredi.com, sabah.com.tr ve benzerleri) tutarlı şekilde tekrarlanan, sektörde yaygın kullanılan bir referanstır — bankalar kendi iç değerlendirme modellerinde farklı eşikler kullanabilir.' },
+      { q: 'Findeks puanımı nereden öğrenebilirim?', a: 'Findeks.com üzerinden (veya bankanızın mobil uygulaması üzerinden sunduğu Findeks raporu ile) ücretli/ücretsiz kredi notu sorgulaması yapabilirsiniz.' },
+      { q: 'Puanım "iyi" veya "çok iyi" aralığındaysa kredi onayı garanti mi?', a: 'Hayır, kredi onayı bankanın kendi politikasına, gelirinize, mevcut borçlarınıza ve diğer kriterlere de bağlıdır; yüksek kredi notu onay şansınızı artırır ama tek başına garanti etmez.' },
+      { q: 'Puanım "çok riskli" veya "orta riskli" aralığındaysa hiç kredi alamaz mıyım?', a: 'Bazı bankalar bu aralıklarda başvuruları reddedebilir, ama her banka aynı politikayı uygulamayabilir; düzenli ödeme geçmişi oluşturarak zamanla puanınızı yükseltebilirsiniz.' },
+      { q: 'Puanımı nasıl yükseltirim?', a: 'Bu aracın kapsamı dışındadır, ama genel olarak ödemelerinizi geciktirmemek, kredi kartı kullanım oranınızı düşük tutmak ve gereksiz yeni kredi başvurularından kaçınmak puanınızı zamanla olumlu etkiler.' },
+    ],
+  },
+  'kredi-gecikme-faizi-hesaplama': {
+    about: 'Kredi taksidinizi geciktirdiğinizde, geciken tutar ve gün sayısına göre işleyecek gecikme (temerrüt) faizini ve ödeyeceğiniz toplam tutarı hesaplar.',
+    method: 'Azami gecikme faizi, sözleşmenizdeki akdi faiz oranının %30 fazlasını geçemez (Tüketici Kredisi Sözleşmeleri Yönetmeliği madde 4/1-e). Bu azami oran 30\'a bölünerek günlük gecikme oranı bulunur; gecikme bedeli, geciken taksit tutarı üzerinden bu günlük oranla gecikilen gün sayısı çarpılarak hesaplanır.',
+    examples: [
+      {
+        title: '5.000 TL taksit, 10 gün gecikme, %3 aylık akdi faiz',
+        rows: [
+          { label: 'Azami gecikme faizi (aylık)', value: '%3,90' },
+          { label: 'Günlük gecikme oranı', value: '%0,13' },
+          { label: 'Gecikme bedeli', value: '65 TL' },
+          { label: 'Toplam ödenecek', value: '5.065 TL' },
+        ],
+      },
+    ],
+    faq: [
+      { q: 'Gecikme faizi ile akdi faiz arasındaki fark nedir?', a: 'Akdi faiz, kredi sözleşmenizde normal şartlarda uygulanan faizdir; gecikme (temerrüt) faizi ise ödemeyi zamanında yapmadığınızda ek olarak işleyen, akdi faizin en fazla %30 fazlası kadar olabilen bir orandır.' },
+      { q: 'Bankam bu azami oranı her zaman uygular mı?', a: 'Hayır, bu bir TAVANDIR; bankanız bu sınırın altında bir gecikme faizi de uygulayabilir. Kesin oran için kredi sözleşmenizi veya ekstrenizi kontrol edin.' },
+      { q: 'Bir günlük gecikme bile faiz doğurur mu?', a: 'Evet, gecikme faizi genellikle vade tarihinden itibaren geçen her gün için işlemeye başlar; bu araç girdiğiniz gün sayısı kadar hesaplar.' },
+      { q: 'Gecikmem kredi notumu nasıl etkiler?', a: 'Gecikmeleriniz Kredi Kayıt Bürosu\'na (KKB) bildirilir ve Findeks kredi notunuzu olumsuz etkiler; gecikme ne kadar uzarsa etkisi de o kadar büyür ve sonraki kredi/kredi kartı başvurularınızda sorun yaşayabilirsiniz.' },
+      { q: 'Sadece bu taksidi mi, yoksa tüm kredi borcunu mu geciktirmiş sayılırım?', a: 'Bu hesaplama yalnızca girdiğiniz TEK taksit için gecikme bedelini gösterir; ödemeyi uzun süre hiç yapmazsanız kredi sözleşmenize göre "muacceliyet" (kalan borcun tamamının talep edilmesi) gibi ek hukuki sonuçlar doğabilir, bu araç bunu hesaplamaz.' },
+      { q: 'Gecikmiş bir taksidi öderken gecikme faizini de ayrıca mı ödemeliyim?', a: 'Evet, bankanız genellikle geciken taksit tutarına gecikme faizini ekleyerek tek bir toplam tahsilat yapar; bu araçtaki "toplam ödenecek tutar" bu toplamı tahmin eder.' },
     ],
   },
 };

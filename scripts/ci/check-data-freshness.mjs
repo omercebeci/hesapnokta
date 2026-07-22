@@ -39,11 +39,14 @@ async function main() {
   const now = new Date();
   const currentYear = now.getFullYear();
   const findings = [];
-  // Sadece 'mevzuat' türü kayıtlar tazelik kontrolüne girer. 'tur' alanı
-  // eksik bırakılan bir kayıt da (unutulmuş sınıflandırma) güvenli tarafta
-  // kalınarak mevzuat gibi kontrol edilir — muafiyet yalnızca açıkça
-  // 'bilimsel-referans' işaretlenen kayıtlara tanınır.
-  const checkedRecords = records.filter((record) => record.tur !== 'bilimsel-referans');
+  // Sadece 'tur: mevzuat' işaretli kayıtlar tazelik kontrolüne girer. 'tur' alanı
+  // TAMAMEN eksik bırakılan bir kayıt (unutulmuş sınıflandırma) güvenli tarafta
+  // kalınarak yine de kontrol edilir; muafiyet yalnızca 'mevzuat' DIŞINDA açıkça
+  // bir tür verilmiş kayıtlara tanınır ('bilimsel-referans' bilimsel kılavuz/
+  // çalışma referansları için, başka türler de olabilir — ör. 'sektor-kaynagi':
+  // resmi bir kurumun yayımlamadığı ama yaygın kullanılan sektörel referans
+  // tablolar; bunların da yayın yılı "bayatlık" anlamına gelmez).
+  const checkedRecords = records.filter((record) => (record.tur ? record.tur === 'mevzuat' : true));
 
   for (const record of checkedRecords) {
     if (record.lastUpdated && record.lastUpdated !== 'N/A') {
@@ -66,7 +69,7 @@ async function main() {
 
   if (findings.length === 0) {
     const exemptCount = records.length - checkedRecords.length;
-    console.log(`✅ ${checkedRecords.length} mevzuat kaydı tarandı, hepsi tazeliğini koruyor. (${exemptCount} bilimsel-referans kaydı muaf tutuldu.)`);
+    console.log(`✅ ${checkedRecords.length} mevzuat kaydı tarandı, hepsi tazeliğini koruyor. (${exemptCount} mevzuat-dışı referans kaydı muaf tutuldu.)`);
     process.exit(0);
   }
 

@@ -322,6 +322,72 @@ export const GUNCEL_VERILER = {
     lastUpdated: '2026-07-07',
     tur: 'mevzuat',
   },
+
+  // ── Konut kredisinde erken ödeme tazminatı tavanı (6502 sayılı Kanun m.37) ──
+  // ÖNEMLİ: Bu SADECE konut/mortgage kredisi için geçerlidir ve SADECE faiz oranı
+  // SABİT ise uygulanır (değişken faizli konut kredisinde tazminat hiç istenemez).
+  // İhtiyaç/taşıt gibi GENEL tüketici kredilerinde ise durum tamamen farklıdır — bkz.
+  // "genelTuketiciKredisiErkenOdeme" — orada tazminat YASAKTIR, sadece faiz indirimi vardır.
+  // İkisini birbirine karıştırmayın.
+  konutKredisiErkenOdemeTazminati: {
+    kalanVadeAyEsigi: 36,
+    tazminatOraniKisaVade: 0.01,
+    tazminatOraniUzunVade: 0.02,
+    period: '2026',
+    source: '6502 sayılı Tüketicinin Korunması Hakkında Kanun, madde 37 (Konut finansmanı sözleşmelerinde erken ödeme): faiz oranı sabit konut kredilerinde erken ödeme tazminatı, kalan vadesi 36 ayı aşmayan kredilerde erken ödenen tutarın %1\'ini, 36 ayı aşan kredilerde %2\'sini geçemez; faiz oranı değişken ise tazminat hiç istenemez.',
+    lastUpdated: '2026-07-22',
+    tur: 'mevzuat',
+  },
+
+  // ── Genel tüketici kredisinde (ihtiyaç/taşıt vb.) erken ödeme kuralı ──
+  // Sabit bir ORAN değil, bir KURAL: tazminat/ceza YASAKTIR, kredi veren sadece
+  // erken ödenen tutar üzerindeki tahakkuk etmemiş faizi indirmekle yükümlüdür.
+  // "tazminatYasak: true" alanı hesaplayıcıda bu kuralı netleştirmek için kullanılır.
+  genelTuketiciKredisiErkenOdeme: {
+    tazminatYasak: true,
+    period: '2026',
+    source: 'Tüketici Kredisi Sözleşmeleri Yönetmeliği (22.05.2015 t. 29363 s. RG), madde 15: tüketici kredi borcunun tamamını veya bir kısmını vadesinden önce ödeyebilir, kredi veren gerekli faiz indirimini yapmakla yükümlüdür; genel tüketici kredilerinde (konut kredisi hariç) erken ödeme tazminatı/cezası alınamaz.',
+    lastUpdated: '2026-07-22',
+    tur: 'mevzuat',
+  },
+
+  // ── Tüketici kredisinde azami gecikme (temerrüt) faizi kuralı ──
+  // Sabit bir ORAN değil bir TAVAN KURALI: gecikme faizi, sözleşmedeki akdi faiz
+  // oranının %30 fazlasını geçemez. "azamiCarpan: 1.30" ile kullanıcının girdiği
+  // akdi faiz oranından azami gecikme faizi hesaplanır (kredi kartı için ayrı ve
+  // farklı bir TCMB düzenlemesi zaten "krediKartiFaizOranlari" altında var — bunu
+  // genel tüketici kredisi taksitleri için kullanın, kredi kartı için değil).
+  tuketiciKredisiGecikmeFaizTavani: {
+    azamiCarpan: 1.30,
+    period: '2026',
+    source: 'Tüketici Kredisi Sözleşmeleri Yönetmeliği (22.05.2015 t. 29363 s. RG), madde 4/1-e (Temerrüt faiz oranı tanımı): belirli süreli tüketici kredisi sözleşmelerinde gecikme faizi, akdi faiz oranının yüzde otuz fazlasını geçemez.',
+    lastUpdated: '2026-07-22',
+    tur: 'mevzuat',
+  },
+
+  // ── Findeks kredi notu risk aralıkları ──
+  // ⚠️ RESMİ DEĞİL: Kredi Kayıt Bürosu (KKB) kendi resmi sayfasında (kkb.com.tr)
+  // tam sayısal puan aralıklarını yayımlamaz — bu tablo, hangikredi.com, sabah.com.tr
+  // ve benzeri birden fazla bağımsız kaynakta TUTARLI şekilde tekrarlanan, sektörde
+  // yaygın kullanılan bir referans aralığıdır; resmi KKB kaynağı değildir ve bankalar
+  // kendi iç değerlendirmelerinde farklı eşikler kullanabilir. "tur: 'sektor-kaynagi'"
+  // olarak işaretlendi (ne mevzuat ne bilimsel çalışma) — haftalık veri tazeliği
+  // kontrolünden muaftır çünkü zaten resmi/dönemsel bir kaynağa bağlı değil.
+  findeksPuanAraliklari: {
+    value: [
+      { key: 'cokRiskli', label: 'Çok riskli', min: 0, max: 699 },
+      { key: 'ortaRiskli', label: 'Orta riskli', min: 700, max: 1099 },
+      { key: 'azRiskli', label: 'Az riskli', min: 1100, max: 1499 },
+      { key: 'iyi', label: 'İyi', min: 1500, max: 1699 },
+      { key: 'cokIyi', label: 'Çok iyi', min: 1700, max: 1900 },
+    ],
+    puanMin: 0,
+    puanMax: 1900,
+    period: 'Yaygın sektör kullanımı (resmi KKB kaynağı değil)',
+    source: 'KKB (Kredi Kayıt Bürosu), Findeks Kredi Notu 0-1900 arası hesaplanır (kkb.com.tr/urunler/findeks-kredi-notu) — ancak KKB\'nin kendisi tam sayısal risk aralığı tablosu yayımlamaz. Buradaki 5 aralık, hangikredi.com ve sabah.com.tr dahil birden fazla bağımsız kaynakta tutarlı şekilde tekrarlanan YAYGIN SEKTÖR REFERANSIDIR, resmi bir KKB yayını değildir; bankalar kendi skorlama modellerinde farklı eşikler kullanabilir.',
+    lastUpdated: '2026-07-22',
+    tur: 'sektor-kaynagi',
+  },
 };
 
 // Aşağıdaki yardımcı fonksiyonlara dokunmanız gerekmez; sayfalar veriyi

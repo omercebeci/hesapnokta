@@ -221,9 +221,21 @@ h1, h2, h3, h4 {
   position: relative;
   padding: 88px 0 40px;
   text-align: center;
-  overflow: hidden;
+  /* ÖNEMLİ: burada overflow:hidden KULLANILMAZ. Eskiden buradaydı ve dekoratif
+     ::before gradyanını taşırmamak için gerekliydi, ama arama kutusunun altında
+     açılan .search-results paneli de aynı konteynerin (.container) içinde
+     olduğundan hero'nun alt sınırında kesiliyordu (sonuç paneli ilk satırdan
+     sonra kırpılıyordu). Dekoratif katman artık kendi .home-hero-glow sarmalayıcısında
+     izole edildi; hero'nun kendisi artık taşmayı kesmiyor, panel serbestçe açılabiliyor. */
 }
-.home-hero::before {
+.home-hero-glow {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+.home-hero-glow::before {
   content: '';
   position: absolute;
   top: -220px;
@@ -232,8 +244,6 @@ h1, h2, h3, h4 {
   width: 900px;
   height: 480px;
   background: radial-gradient(ellipse at center, color-mix(in srgb, var(--accent) 20%, transparent) 0%, transparent 68%);
-  pointer-events: none;
-  z-index: 0;
 }
 .home-hero .container { position: relative; z-index: 1; }
 .home-hero .eyebrow {
@@ -789,6 +799,12 @@ h1, h2, h3, h4 {
 .info-card p, .info-card li { color: var(--text-muted); font-size: .9rem; }
 .info-card ul { padding-left: 18px; list-style: disc; display: grid; gap: 6px; }
 .info-card + .info-card { margin-top: 14px; }
+
+.related-tools { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border-soft); }
+.related-tools strong { display: block; font-size: .82rem; color: var(--text-secondary); margin-bottom: 8px; }
+.related-tools-links { display: flex; flex-wrap: wrap; gap: 8px 20px; }
+.related-tools-link { display: inline-flex; align-items: center; gap: 3px; font-size: .84rem; font-weight: 600; color: var(--accent); white-space: nowrap; }
+.related-tools-link:hover { color: var(--accent-hover); text-decoration: underline; text-underline-offset: 2px; }
 
 /* ── Alışveriş listesi (miktar hesaplayıcılarının sonuç kartı altında) ── */
 .shopping-list-card {

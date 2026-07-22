@@ -456,6 +456,11 @@ export function calculateMortgageAffordability({ monthlyIncome, existingDebtPaym
 // Asgari ödeme eşiği ve oranları — src/data/guncelVeriler.js dosyasından okunur (2026 BDDK düzenlemesi).
 const { esikTutar: CREDIT_CARD_MIN_PAYMENT_THRESHOLD, esikAltiOran: CREDIT_CARD_RATE_BELOW, esikUstuOran: CREDIT_CARD_RATE_ABOVE } = GUNCEL_VERILER.krediKartiAsgariOdeme;
 
+// Erken ödeme / gecikme faizi / Findeks aralıkları — src/data/guncelVeriler.js'ten okunur.
+const { kalanVadeAyEsigi: KONUT_ERKEN_ODEME_VADE_ESIGI, tazminatOraniKisaVade: KONUT_ERKEN_ODEME_ORANI_KISA, tazminatOraniUzunVade: KONUT_ERKEN_ODEME_ORANI_UZUN } = GUNCEL_VERILER.konutKredisiErkenOdemeTazminati;
+const { azamiCarpan: GECIKME_FAIZI_AZAMI_CARPAN } = GUNCEL_VERILER.tuketiciKredisiGecikmeFaizTavani;
+const FINDEKS_PUAN_ARALIKLARI = GUNCEL_VERILER.findeksPuanAraliklari.value;
+
 export function calculateCreditCardPayment({ cardLimit, statementBalance, monthlyInterestRate, lateInterestRate, daysLate = 0 }) {
   const limit = Math.max(0, safeNumber(cardLimit));
   const balance = Math.max(0, safeNumber(statementBalance));
@@ -477,6 +482,129 @@ export function calculateCreditCardPayment({ cardLimit, statementBalance, monthl
     nextCycleInterest: round2(nextCycleInterest),
     lateInterestAmount: round2(lateInterestAmount),
     totalNextCycleDebt: round2(totalNextCycleDebt),
+  };
+}
+
+// Simülasyonların sonsuz döngüye girmesini önleyen güvenlik sınırı (50 yıl) ve
+// "borç kapandı" kabul edilen küçük bakiye eşiği (1 TL altı küsuratlar son ay
+// tamamen ödenmiş sayılır).
+const DEBT_PAYOFF_MAX_MONTHS = 600;
+const DEBT_PAYOFF_EPSILON = 1;
+
+// "Her ay yalnızca asgariyi ödersem borç kaç ayda kapanır?" simülasyonu. Asgari
+// ödeme oranı (limite göre %20/%40, bkz. calculateCreditCardPayment) HER AY o
+// ayın kalan bakiyesine göre yeniden hesaplanır — sabit bir TL tutarı değildir.
+// Döngü, calculateCreditCardPayment'daki TEK DÖNGÜLÜK formülün (asgari önce
+// düşülür, faiz kalan bakiye üzerinden bir SONRAKİ ekstreye işler) ardışık
+// olarak zincirlenmesiyle kurulur — iki hesaplama arasında tutarlılık sağlar.
+export function simulateMinimumPaymentPayoff({ cardLimit, statementBalance, monthlyInterestRate }) {
+  const limit = Math.max(0, safeNumber(cardLimit));
+  const initialBalance = Math.max(0, safeNumber(statementBalance));
+  const monthlyRate = Math.max(0, safeNumber(monthlyInterestRate)) / 100;
+  const minimumPaymentRate = limit > CREDIT_CARD_MIN_PAYMENT_THRESHOLD ? CREDIT_CARD_RATE_ABOVE : CREDIT_CARD_RATE_BELOW;
+
+  // KRİTİK: asgari ödeme oranı sabit olduğundan, her ay bakiyenin çarpıldığı
+  // (1 - asgariOran) * (1 + aylıkFaiz) çarpanı da sabittir. Bu çarpan 1'e eşit
+  // veya büyükse, asgari ödeme o ayki faizi hiç karşılamıyor demektir — bakiye
+  // hiçbir zaman küçülmez (aynı kalır ya da büyür). Bunu tüm ayları simüle
+  // etmeden ÖNCEDEN, analitik olarak tespit ederiz.
+  const monthlyMultiplier = (1 - minimumPaymentRate) * (1 + monthlyRate);
+  const neverPaysOff = initialBalance > 0 && monthlyMultiplier >= 1;
+
+  const schedule = [];
+  let totalPaid = 0;
+  let totalInterest = 0;
+  let balance = initialBalance;
+
+  if (initialBalance > 0 && !neverPaysOff) {
+    let month = 0;
+    while (balance > DEBT_PAYOFF_EPSILON && month < DEBT_PAYOFF_MAX_MONTHS) {
+      month += 1;
+      const scheduledPayment = balance * minimumPaymentRate;
+      const remainingAfterPayment = balance - scheduledPayment;
+      const scheduledInterest = remainingAfterPayment * monthlyRate;
+      let nextBalance = remainingAfterPayment + scheduledInterest;
+      let payment = scheduledPayment;
+      let interest = scheduledInterest;
+
+      if (nextBalance <= DEBT_PAYOFF_EPSILON) {
+        // Son ay: küçük kalan bakiyeyi tamamen kapatmak için formülün ürettiği
+        // asgari yerine borcun tamamı ödenir (küsurat kapanışı).
+        payment = balance;
+        interest = 0;
+        nextBalance = 0;
+      }
+
+      totalPaid += payment;
+      totalInterest += interest;
+      schedule.push({ month, payment: round2(payment), interest: round2(interest), remaining: round2(Math.max(0, nextBalance)) });
+      balance = nextBalance;
+    }
+  }
+
+  const monthsToPayoff = neverPaysOff || initialBalance <= 0 ? null : schedule.length;
+
+  return {
+    neverPaysOff,
+    monthsToPayoff,
+    totalPaid: round2(totalPaid),
+    totalInterest: round2(totalInterest),
+    interestToPrincipalRatio: initialBalance > 0 ? round2((totalInterest / initialBalance) * 100) : 0,
+    schedule,
+  };
+}
+
+// Karşılaştırma senaryosu: "asgari yerine her ay sabit X TL ödeseydim". Standart
+// bir taksitli geri ödeme gibi modellenir — ÖNCE mevcut bakiyeye o ayın faizi
+// işler, SONRA sabit ödeme düşülür (asgari-ödeme modelinden farklı sırayla;
+// çünkü burada "asgari ekstre yüzdesi" değil kullanıcının kendi belirlediği
+// sabit bir taksit tutarı var — günlük hayattaki "her ay bu kadar ayırıyorum"
+// mantığına karşılık gelir).
+export function simulateFixedPaymentPayoff({ statementBalance, monthlyInterestRate, fixedPayment }) {
+  const initialBalance = Math.max(0, safeNumber(statementBalance));
+  const monthlyRate = Math.max(0, safeNumber(monthlyInterestRate)) / 100;
+  const payment = Math.max(0, safeNumber(fixedPayment));
+
+  // Bakiye küçüldükçe faiz de küçülür; bu yüzden ödeme İLK ayın faizini
+  // karşılıyorsa sonraki tüm aylarda da karşılar (analitik kısayol).
+  const firstMonthInterest = initialBalance * monthlyRate;
+  const neverPaysOff = initialBalance > 0 && payment <= firstMonthInterest;
+
+  const schedule = [];
+  let totalPaid = 0;
+  let totalInterest = 0;
+  let balance = initialBalance;
+
+  if (initialBalance > 0 && !neverPaysOff) {
+    let month = 0;
+    while (balance > DEBT_PAYOFF_EPSILON && month < DEBT_PAYOFF_MAX_MONTHS) {
+      month += 1;
+      const interest = balance * monthlyRate;
+      const balanceWithInterest = balance + interest;
+      let actualPayment = payment;
+      let nextBalance = balanceWithInterest - actualPayment;
+
+      if (nextBalance <= DEBT_PAYOFF_EPSILON) {
+        actualPayment = balanceWithInterest;
+        nextBalance = 0;
+      }
+
+      totalPaid += actualPayment;
+      totalInterest += interest;
+      schedule.push({ month, payment: round2(actualPayment), interest: round2(interest), remaining: round2(Math.max(0, nextBalance)) });
+      balance = nextBalance;
+    }
+  }
+
+  const monthsToPayoff = neverPaysOff || initialBalance <= 0 ? null : schedule.length;
+
+  return {
+    neverPaysOff,
+    monthsToPayoff,
+    totalPaid: round2(totalPaid),
+    totalInterest: round2(totalInterest),
+    interestToPrincipalRatio: initialBalance > 0 ? round2((totalInterest / initialBalance) * 100) : 0,
+    schedule,
   };
 }
 
@@ -512,5 +640,160 @@ export function calculateInstallmentComparison({ cashPrice, installmentCount, mo
     totalInstallmentPrice: round2(totalInstallmentPrice),
     extraCost: round2(extraCost),
     extraCostRate: round2(extraCostRate),
+  };
+}
+
+// ═══════════════════════════════════════════════════════════════
+// KREDİ ERKEN KAPATMA
+// ═══════════════════════════════════════════════════════════════
+// Kalan vade + taksit + faizden (standart anüite formülünün TERSİNE çalışarak)
+// kalan anaparayı türetir, sonra kredi türüne göre erken kapatma tutarını hesaplar:
+// - 'ihtiyac-tasit': tazminat YASAKTIR (Tüketici Kredisi Sözl. Yönetmeliği m.15),
+//   erken kapatma tutarı = kalan anapara.
+// - 'konut' + sabit faiz: kalan vadeye göre %1/%2 tazminat eklenir (6502 m.37).
+// - 'konut' + değişken faiz: tazminat YASAKTIR (6502 m.37, aynı madde).
+export function calculateEarlyLoanPayoff({ remainingMonths, monthlyInstallment, monthlyRate, loanType = 'ihtiyac-tasit', rateType = 'sabit' }) {
+  const n = Math.max(1, Math.floor(safeNumber(remainingMonths, 1)));
+  const installment = Math.max(0, safeNumber(monthlyInstallment));
+  const rate = Math.max(0, safeNumber(monthlyRate)) / 100;
+
+  // Kalan anapara = kalan taksitlerin bugünkü değeri (anüitenin bugünkü değeri formülü).
+  const remainingPrincipal = rate === 0
+    ? installment * n
+    : installment * (1 - Math.pow(1 + rate, -n)) / rate;
+
+  const totalRemainingIfContinued = installment * n;
+  const interestSaved = Math.max(0, totalRemainingIfContinued - remainingPrincipal);
+
+  const isKonut = loanType === 'konut';
+  const isSabitFaizli = rateType === 'sabit';
+  const tazminatUygulanir = isKonut && isSabitFaizli;
+
+  const tazminatOrani = n <= KONUT_ERKEN_ODEME_VADE_ESIGI ? KONUT_ERKEN_ODEME_ORANI_KISA : KONUT_ERKEN_ODEME_ORANI_UZUN;
+  const penalty = tazminatUygulanir ? remainingPrincipal * tazminatOrani : 0;
+
+  const payoffAmount = remainingPrincipal + penalty;
+  const netSaving = interestSaved - penalty;
+
+  return {
+    remainingPrincipal: round2(remainingPrincipal),
+    totalRemainingIfContinued: round2(totalRemainingIfContinued),
+    interestSaved: round2(interestSaved),
+    tazminatUygulanir,
+    tazminatOrani: round2(tazminatOrani * 100),
+    penalty: round2(penalty),
+    payoffAmount: round2(payoffAmount),
+    netSaving: round2(netSaving),
+  };
+}
+
+// ═══════════════════════════════════════════════════════════════
+// KREDİ YAPILANDIRMA KARŞILAŞTIRMA
+// ═══════════════════════════════════════════════════════════════
+// Mevcut kredinin (kalan borç, taksit, kalan vade) devamı ile yeni bir
+// yapılandırma teklifinin (faiz, vade, opsiyonel dosya masrafı) toplam
+// maliyetini karşılaştırır.
+export function calculateLoanRestructure({ currentRemainingBalance, currentInstallment, currentRemainingMonths, newMonthlyRate, newMonths, newFee = 0 }) {
+  const currentBalance = Math.max(0, safeNumber(currentRemainingBalance));
+  const currentPayment = Math.max(0, safeNumber(currentInstallment));
+  const currentMonths = Math.max(1, Math.floor(safeNumber(currentRemainingMonths, 1)));
+  const newRate = Math.max(0, safeNumber(newMonthlyRate)) / 100;
+  const newN = Math.max(1, Math.floor(safeNumber(newMonths, 1)));
+  const fee = Math.max(0, safeNumber(newFee));
+
+  const currentTotalIfContinued = currentPayment * currentMonths;
+
+  const newMonthlyPayment = newRate === 0
+    ? currentBalance / newN
+    : currentBalance * (newRate * Math.pow(1 + newRate, newN)) / (Math.pow(1 + newRate, newN) - 1);
+  const newTotalPayment = newMonthlyPayment * newN + fee;
+
+  const totalDifference = newTotalPayment - currentTotalIfContinued;
+  const monthlyPaymentDifference = newMonthlyPayment - currentPayment;
+
+  return {
+    currentTotalIfContinued: round2(currentTotalIfContinued),
+    newMonthlyPayment: round2(newMonthlyPayment),
+    newTotalPayment: round2(newTotalPayment),
+    totalDifference: round2(totalDifference),
+    monthlyPaymentDifference: round2(monthlyPaymentDifference),
+    isNewOfferCheaper: totalDifference < 0,
+  };
+}
+
+// ═══════════════════════════════════════════════════════════════
+// İKİ KREDİ TEKLİFİNİ KARŞILAŞTIRMA
+// ═══════════════════════════════════════════════════════════════
+function calculateSingleLoanOffer({ amount, monthlyRate, months, fee = 0 }) {
+  const principal = Math.max(0, safeNumber(amount));
+  const rate = Math.max(0, safeNumber(monthlyRate)) / 100;
+  const n = Math.max(1, Math.floor(safeNumber(months, 1)));
+  const processingFee = Math.max(0, safeNumber(fee));
+
+  const monthlyPayment = rate === 0
+    ? principal / n
+    : principal * (rate * Math.pow(1 + rate, n)) / (Math.pow(1 + rate, n) - 1);
+  const totalPayment = monthlyPayment * n + processingFee;
+  const totalInterest = totalPayment - principal - processingFee;
+
+  return {
+    monthlyPayment: round2(monthlyPayment),
+    totalPayment: round2(totalPayment),
+    totalInterest: round2(totalInterest),
+    totalCost: round2(totalPayment),
+  };
+}
+
+export function compareTwoLoanOffers({ offerA, offerB }) {
+  const resultA = calculateSingleLoanOffer(offerA);
+  const resultB = calculateSingleLoanOffer(offerB);
+  const costDifference = round2(resultB.totalCost - resultA.totalCost);
+
+  let cheaperOffer = 'esit';
+  if (costDifference > 0.005) cheaperOffer = 'A';
+  else if (costDifference < -0.005) cheaperOffer = 'B';
+
+  return { offerA: resultA, offerB: resultB, costDifference: Math.abs(costDifference), cheaperOffer };
+}
+
+// ═══════════════════════════════════════════════════════════════
+// KREDİ NOTU (FİNDEKS) ARALIĞI — puan hesaplamaz/tahmin etmez, sadece
+// GUNCEL_VERILER'daki (resmi olmayan, yaygın referans) tabloya göre girilen
+// puanın hangi aralığa düştüğünü gösterir.
+// ═══════════════════════════════════════════════════════════════
+export function getFindeksScoreRange(score) {
+  const raw = safeNumber(score, NaN);
+  const isValid = Number.isFinite(raw);
+  const clamped = isValid ? Math.min(1900, Math.max(0, raw)) : 0;
+  const isOutOfBounds = isValid && (raw < 0 || raw > 1900);
+
+  const range = FINDEKS_PUAN_ARALIKLARI.find((r) => clamped >= r.min && clamped <= r.max) || null;
+  const rangeSize = range ? range.max - range.min : 0;
+  const positionInRange = range && rangeSize > 0 ? round2(((clamped - range.min) / rangeSize) * 100) : 0;
+
+  return { score: round2(clamped), isValid, isOutOfBounds, range, positionInRange };
+}
+
+// ═══════════════════════════════════════════════════════════════
+// GECİKME (TEMERRÜT) FAİZİ
+// ═══════════════════════════════════════════════════════════════
+// Azami gecikme faizi = akdi faiz oranının %30 fazlasını GEÇEMEZ (Tüketici
+// Kredisi Sözleşmeleri Yönetmeliği m.4/1-e). Kullanıcı akdi faiz oranını
+// değiştirebilir; azami çarpan GUNCEL_VERILER'dan gelir.
+export function calculateLoanLateFee({ installmentAmount, daysLate, contractMonthlyRate }) {
+  const installment = Math.max(0, safeNumber(installmentAmount));
+  const days = Math.max(0, safeNumber(daysLate));
+  const contractRate = Math.max(0, safeNumber(contractMonthlyRate));
+
+  const maxLateRate = contractRate * GECIKME_FAIZI_AZAMI_CARPAN;
+  const dailyRate = maxLateRate / 30;
+  const lateFeeAmount = installment * (dailyRate / 100) * days;
+  const totalPayable = installment + lateFeeAmount;
+
+  return {
+    maxLateMonthlyRate: round2(maxLateRate),
+    dailyRate: round2(dailyRate),
+    lateFeeAmount: round2(lateFeeAmount),
+    totalPayable: round2(totalPayable),
   };
 }

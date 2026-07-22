@@ -1,0 +1,17 @@
+Ana sayfa arama sonuç panelinin hero altında kesilmesini düzelt
+
+Kök sebep: .home-hero'daki dekoratif gradyan efekti için konan
+overflow:hidden, aynı konteynerdeki arama sonuç panelini (.search-results)
+de hero'nun alt sınırında kırpıyordu — panel ilk sonuçtan sonra kesiliyor,
+kalan sonuçlar görünmüyordu (masaüstü ve mobilde aynı).
+
+Gradyan efekti kendi izole .home-hero-glow katmanına taşındı (position:
+absolute; inset:0; overflow:hidden sadece bu katmanda), .home-hero'nun
+kendisinden overflow:hidden kaldırıldı. Panel zaten z-index:30 ile doğru
+şekilde kategori kartlarının üstünde duruyordu — asıl engel kırpılmaydı.
+
+Playwright ile gerçek tarayıcıda (1440x900 masaüstü, 390x844 mobil)
+doğrulandı: "kredi" araması 4 sonucun tamamını, elementFromPoint ile
+teyit edilmiş şekilde gerçekten görünür ve üstte gösteriyor.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>

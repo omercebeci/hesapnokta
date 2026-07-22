@@ -295,10 +295,10 @@ export const calculators = [
   {
     id: 'kredi-karti-asgari-odeme-hesaplama',
     title: 'Kredi Kartı Asgari Ödeme ve Gecikme Faizi Hesaplama',
-    description: 'Kart limitinize göre asgari ödeme tutarını ve gecikme durumunda işleyecek faizi hesaplayın.',
+    description: 'Kart limitinize göre asgari ödeme tutarını, gecikme faizini ve sadece asgari öderseniz borcun kaç ayda kapanacağını hesaplayın.',
     category: 'finans',
     icon: 'credit-card',
-    keywords: ['kredi kartı', 'asgari ödeme', 'gecikme faizi', 'temerrüt faizi'],
+    keywords: ['kredi kartı', 'asgari ödeme', 'gecikme faizi', 'temerrüt faizi', 'borç kapanma süresi'],
   },
   {
     id: 'enflasyon-etkisi-hesaplama',
@@ -641,6 +641,48 @@ export const calculators = [
     category: 'gunluk-yasam',
     icon: 'shield',
     keywords: ['askerlik terhis tarihi', 'sevk tarihi hesaplama', 'terhise kaç gün kaldı'],
+  },
+
+  // ── Finans (kredi turu) ──
+  {
+    id: 'kredi-erken-kapatma-hesaplama',
+    title: 'Kredi Erken Kapatma Hesaplama',
+    description: 'Kalan vade, taksit ve faize göre erken kapatma tutarınızı, kurtulacağınız faizi ve (varsa) erken ödeme tazminatını hesaplayın.',
+    category: 'finans',
+    icon: 'shield-check',
+    keywords: ['kredi erken kapatma', 'erken ödeme', 'erken ödeme tazminatı', 'kalan anapara'],
+  },
+  {
+    id: 'kredi-yapilandirma-hesaplama',
+    title: 'Kredi Yapılandırma Karşılaştırma',
+    description: 'Mevcut kredinizi olduğu gibi sürdürmek ile yeni bir yapılandırma teklifini toplam maliyet açısından karşılaştırın.',
+    category: 'finans',
+    icon: 'refresh-cw',
+    keywords: ['kredi yapılandırma', 'refinansman', 'yeniden yapılandırma', 'taksit karşılaştırma'],
+  },
+  {
+    id: 'kredi-karsilastirma',
+    title: 'İki Kredi Karşılaştırma',
+    description: 'İki farklı banka kredi teklifini (tutar, faiz, vade, masraf) taksit ve toplam maliyet açısından yan yana karşılaştırın.',
+    category: 'finans',
+    icon: 'git-compare',
+    keywords: ['kredi karşılaştırma', 'banka teklifi karşılaştırma', 'hangi kredi daha ucuz'],
+  },
+  {
+    id: 'kredi-notu-araligi',
+    title: 'Kredi Notu (Findeks) Aralığı',
+    description: 'Findeks kredi notunuzun hangi risk aralığına (çok riskli - çok iyi) denk geldiğini görün. Puan hesaplamaz, sadece konumlandırır.',
+    category: 'finans',
+    icon: 'gauge',
+    keywords: ['findeks', 'kredi notu', 'kkb', 'risk grubu', 'kredi puanı'],
+  },
+  {
+    id: 'kredi-gecikme-faizi-hesaplama',
+    title: 'Kredi Gecikme Faizi Hesaplama',
+    description: 'Geciken taksit tutarı, gecikme günü ve akdi faiz oranına göre azami gecikme faizini ve ödeyeceğiniz toplam tutarı hesaplayın.',
+    category: 'finans',
+    icon: 'clock',
+    keywords: ['kredi gecikme faizi', 'temerrüt faizi', 'geciken taksit', 'azami gecikme faizi'],
   },
 ];
 
