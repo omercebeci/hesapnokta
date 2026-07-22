@@ -3,6 +3,7 @@ import { createRoot, hydrateRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { Analytics } from '@vercel/analytics/react';
 import App from './App.jsx';
+import UpdatePrompt from './components/UpdatePrompt.jsx';
 import './styles.css';
 
 const container = document.getElementById('root');
@@ -11,6 +12,11 @@ const app = (
     <BrowserRouter>
       <App />
       <Analytics />
+      {/* virtual:pwa-register/react sadece istemci (Vite client) derlemesinde var olan bir
+          sanal modüldür — vite.config.js SSR derlemesinde VitePWA eklentisini devre dışı
+          bırakır (!isSsrBuild). UpdatePrompt bu yüzden App.jsx'e değil, SSR'ın hiç dokunmadığı
+          bu client-only giriş noktasına eklenir (Analytics/SpeedInsights ile aynı desen). */}
+      <UpdatePrompt />
     </BrowserRouter>
   </React.StrictMode>
 );
