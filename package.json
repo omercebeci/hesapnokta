@@ -12,6 +12,7 @@
     "build:ssr": "vite build --ssr src/entry-server.jsx --outDir dist-ssr",
     "clean:ssr": "node -e \"require('fs').rmSync('dist-ssr', { recursive: true, force: true })\"",
     "preview": "vite preview --host 0.0.0.0",
+    "pretest": "npm run generate:rehber",
     "test": "vitest run"
   },
   "dependencies": {
