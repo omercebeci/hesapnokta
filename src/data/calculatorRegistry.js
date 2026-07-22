@@ -314,7 +314,7 @@ export const calculators = [
     description: 'Peşin fiyat ile taksitli toplam fiyatı karşılaştırıp taksitlendirmenin gerçek maliyetini görün.',
     category: 'finans',
     icon: 'git-compare',
-    keywords: ['taksit', 'peşin', 'karşılaştırma', 'vade farkı'],
+    keywords: ['taksit', 'peşin', 'karşılaştırma', 'vade farkı', 'kredi kartı'],
   },
   {
     id: 'zam-orani-hesaplama',

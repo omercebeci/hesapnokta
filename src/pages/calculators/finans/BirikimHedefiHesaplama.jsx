@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
+import AmountInput from '../../../components/AmountInput.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculateSavingsGoal } from '../../../lib/finansCalculators.js';
 import { formatCurrency, formatNumber, parseLocaleNumber } from '../../../utils/format.js';
@@ -62,10 +63,10 @@ export default function BirikimHedefiHesaplama() {
             </div>
           </FormField>
           <FormField label="Hedef tutar (TL)" htmlFor="targetAmount">
-            <input id="targetAmount" type="text" inputMode="decimal" value={targetAmount} onChange={(e) => setTargetAmount(e.target.value)} />
+            <AmountInput id="targetAmount" value={targetAmount} onChange={setTargetAmount} />
           </FormField>
           <FormField label="Mevcut birikim (TL)" htmlFor="currentSavings">
-            <input id="currentSavings" type="text" inputMode="decimal" value={currentSavings} onChange={(e) => setCurrentSavings(e.target.value)} />
+            <AmountInput id="currentSavings" value={currentSavings} onChange={setCurrentSavings} />
           </FormField>
 
           {mode === 'monthlyNeeded' ? (
@@ -75,7 +76,7 @@ export default function BirikimHedefiHesaplama() {
           ) : (
             <>
               <FormField label="Aylık katkı (TL)" htmlFor="monthlyContribution">
-                <input id="monthlyContribution" type="text" inputMode="decimal" value={monthlyContribution} onChange={(e) => setMonthlyContribution(e.target.value)} />
+                <AmountInput id="monthlyContribution" value={monthlyContribution} onChange={setMonthlyContribution} />
               </FormField>
               <FormField label="Yıllık getiri oranı (%)" htmlFor="annualReturnRate" hint="Faizsiz birikim için 0 bırakın">
                 <input id="annualReturnRate" type="text" inputMode="decimal" value={annualReturnRate} onChange={(e) => setAnnualReturnRate(e.target.value)} />

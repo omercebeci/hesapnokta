@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
+import AmountInput from '../../../components/AmountInput.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculateDiscount } from '../../../lib/finansCalculators.js';
 import { formatCurrency, parseLocaleNumber } from '../../../utils/format.js';
@@ -30,7 +31,7 @@ export default function IndirimHesaplama() {
         <h2>Fiyat bilgileri</h2>
         <div className="form-grid">
           <FormField label="Ürün fiyatı (TL)" htmlFor="listPrice">
-            <input id="listPrice" type="text" inputMode="decimal" value={listPrice} onChange={(e) => setListPrice(e.target.value)} />
+            <AmountInput id="listPrice" value={listPrice} onChange={setListPrice} />
           </FormField>
           <FormField label="İndirim oranı (%)" htmlFor="discountRate">
             <input id="discountRate" type="text" inputMode="decimal" value={discountRate} onChange={(e) => setDiscountRate(e.target.value)} />

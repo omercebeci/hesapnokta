@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
+import AmountInput from '../../../components/AmountInput.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculateElectricityCost } from '../../../lib/gunlukYasamCalculators.js';
 import { formatCurrency, formatNumber, parseLocaleNumber } from '../../../utils/format.js';
@@ -54,7 +55,7 @@ export default function ElektrikTuketimiHesaplama() {
             <input id="daysPerMonth" type="text" inputMode="numeric" value={daysPerMonth} onChange={(e) => setDaysPerMonth(e.target.value)} />
           </FormField>
           <FormField label="Elektrik birim fiyatı (TL/kWh)" htmlFor="pricePerKwh">
-            <input id="pricePerKwh" type="text" inputMode="decimal" value={pricePerKwh} onChange={(e) => setPricePerKwh(e.target.value)} />
+            <AmountInput id="pricePerKwh" value={pricePerKwh} onChange={setPricePerKwh} />
           </FormField>
         </div>
       </div>

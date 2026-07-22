@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
+import AmountInput from '../../../components/AmountInput.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculateTipSplit } from '../../../lib/alisverisCalculators.js';
 import { formatCurrency, parseLocaleNumber } from '../../../utils/format.js';
@@ -38,7 +39,7 @@ export default function BahsisHesapBolusmeHesaplama() {
         <h2>Hesap bilgileri</h2>
         <div className="form-grid">
           <FormField label="Hesap tutarı (TL)" htmlFor="billAmount" full>
-            <input id="billAmount" type="text" inputMode="decimal" value={billAmount} onChange={(e) => setBillAmount(e.target.value)} />
+            <AmountInput id="billAmount" value={billAmount} onChange={setBillAmount} />
           </FormField>
           <FormField label="Bahşiş oranı (%)" htmlFor="tipPercentage">
             <input id="tipPercentage" type="text" inputMode="decimal" value={tipPercentage} onChange={(e) => setTipPercentage(e.target.value)} />

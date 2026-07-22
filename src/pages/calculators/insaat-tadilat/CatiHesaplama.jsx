@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
+import AmountInput from '../../../components/AmountInput.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import ShoppingListCard from '../../../components/ShoppingListCard.jsx';
 import { calculateRoofNeed, calculateOptionalCost } from '../../../lib/insaatTadilatCalculators.js';
@@ -64,7 +65,7 @@ export default function CatiHesaplama() {
             <input id="wasteRate" type="text" inputMode="decimal" value={wasteRate} onChange={(e) => setWasteRate(e.target.value)} />
           </FormField>
           <FormField label="m² fiyatı (TL, opsiyonel)" htmlFor="m2Price" full hint="Girerseniz toplam maliyeti hesaplarız. Güncel fiyatları ustanızdan/satıcınızdan alın.">
-            <input id="m2Price" type="text" inputMode="decimal" value={m2Price} onChange={(e) => setM2Price(e.target.value)} />
+            <AmountInput id="m2Price" value={m2Price} onChange={setM2Price} />
           </FormField>
         </div>
       </div>

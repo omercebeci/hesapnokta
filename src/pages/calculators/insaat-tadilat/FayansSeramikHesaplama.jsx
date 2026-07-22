@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
+import AmountInput from '../../../components/AmountInput.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import ShoppingListCard from '../../../components/ShoppingListCard.jsx';
 import { calculateTileNeed, calculateGroutNeed, calculateOptionalCost } from '../../../lib/insaatTadilatCalculators.js';
@@ -79,7 +80,7 @@ export default function FayansSeramikHesaplama() {
             </div>
           </FormField>
           <FormField label="Fayans adet fiyatı (TL, opsiyonel)" htmlFor="tilePrice" full hint="Girerseniz toplam maliyeti hesaplarız. Güncel fiyatları satıcınızdan alın.">
-            <input id="tilePrice" type="text" inputMode="decimal" value={tilePrice} onChange={(e) => setTilePrice(e.target.value)} />
+            <AmountInput id="tilePrice" value={tilePrice} onChange={setTilePrice} />
           </FormField>
         </div>
       </div>

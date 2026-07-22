@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
+import AmountInput from '../../../components/AmountInput.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import RatioBar from '../../../components/RatioBar.jsx';
 import { calculateRoommateSplit } from '../../../lib/gunlukYasamCalculators.js';
@@ -70,7 +71,7 @@ export default function EvArkadasiFaturaBolusmeHesaplama() {
                 <input id={`item-label-${item.id}`} type="text" value={item.label} onChange={(e) => updateItem(item.id, 'label', e.target.value)} />
               </FormField>
               <FormField label="Tutar (TL)" htmlFor={`item-amount-${item.id}`}>
-                <input id={`item-amount-${item.id}`} type="text" inputMode="decimal" value={item.amount} onChange={(e) => updateItem(item.id, 'amount', e.target.value)} />
+                <AmountInput id={`item-amount-${item.id}`} value={item.amount} onChange={(raw) => updateItem(item.id, 'amount', raw)} />
               </FormField>
               {items.length > 1 && (
                 <button type="button" className="header-home-link" style={{ justifySelf: 'start' }} onClick={() => removeItem(item.id)}>

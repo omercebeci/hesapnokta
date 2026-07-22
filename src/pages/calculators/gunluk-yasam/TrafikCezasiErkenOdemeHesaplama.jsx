@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
+import AmountInput from '../../../components/AmountInput.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import DataPeriodNote from '../../../components/DataPeriodNote.jsx';
 import { calculateTrafficFineDiscount } from '../../../lib/gunlukYasamCalculators.js';
@@ -27,7 +28,7 @@ export default function TrafikCezasiErkenOdemeHesaplama() {
         <h2>Ceza bilgisi</h2>
         <div className="form-grid">
           <FormField label="Ceza tutarı (TL)" htmlFor="amount" full>
-            <input id="amount" type="text" inputMode="decimal" value={amount} onChange={(e) => setAmount(e.target.value)} />
+            <AmountInput id="amount" value={amount} onChange={setAmount} />
           </FormField>
         </div>
       </div>

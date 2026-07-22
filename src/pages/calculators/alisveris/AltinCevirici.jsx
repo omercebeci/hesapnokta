@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
+import AmountInput from '../../../components/AmountInput.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { convertGoldUnits, GOLD_UNIT_GRAMS } from '../../../lib/alisverisCalculators.js';
 import { formatNumber, formatCurrency, parseLocaleNumber } from '../../../utils/format.js';
@@ -53,7 +54,7 @@ export default function AltinCevirici() {
             </select>
           </FormField>
           <FormField label="Gram fiyatı (TL, opsiyonel)" htmlFor="gramPrice" hint="Güncel kur için kuyumcunuza bakın.">
-            <input id="gramPrice" type="text" inputMode="decimal" value={gramPrice} onChange={(e) => setGramPrice(e.target.value)} />
+            <AmountInput id="gramPrice" value={gramPrice} onChange={setGramPrice} />
           </FormField>
         </div>
       </div>

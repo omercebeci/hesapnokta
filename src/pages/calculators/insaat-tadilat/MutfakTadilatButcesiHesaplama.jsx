@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
+import AmountInput from '../../../components/AmountInput.jsx';
 import { ResultCard, ResultMetrics } from '../../../components/Result.jsx';
 import RatioBar from '../../../components/RatioBar.jsx';
 import Icon from '../../../components/Icon.jsx';
@@ -72,14 +73,7 @@ export default function MutfakTadilatButcesiHesaplama() {
                 )}
               </div>
               <FormField label="Teklif/tahmini tutar (TL)" htmlFor={`amount-${ITEMS[index].key}`}>
-                <input
-                  id={`amount-${ITEMS[index].key}`}
-                  type="text"
-                  inputMode="decimal"
-                  value={row.amount}
-                  disabled={row.enabled !== '1'}
-                  onChange={(e) => updateAmount(index, e.target.value)}
-                />
+                <AmountInput id={`amount-${ITEMS[index].key}`} value={row.amount} disabled={row.enabled !== '1'} onChange={(raw) => updateAmount(index, raw)} />
               </FormField>
             </div>
           ))}

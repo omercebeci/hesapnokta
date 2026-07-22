@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
+import AmountInput from '../../../components/AmountInput.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import ShoppingListCard from '../../../components/ShoppingListCard.jsx';
 import { calculateRoomWallArea, calculatePaintNeed, calculateOptionalCost } from '../../../lib/insaatTadilatCalculators.js';
@@ -103,7 +104,7 @@ export default function BoyaHesaplama() {
             <input id="coverage" type="text" inputMode="decimal" value={coverage} onChange={(e) => setCoverage(e.target.value)} />
           </FormField>
           <FormField label="Litre fiyatı (TL, opsiyonel)" htmlFor="literPrice" full hint="Girerseniz toplam maliyeti hesaplarız. Güncel fiyatları satıcınızdan alın.">
-            <input id="literPrice" type="text" inputMode="decimal" value={literPrice} onChange={(e) => setLiterPrice(e.target.value)} />
+            <AmountInput id="literPrice" value={literPrice} onChange={setLiterPrice} />
           </FormField>
         </div>
       </div>

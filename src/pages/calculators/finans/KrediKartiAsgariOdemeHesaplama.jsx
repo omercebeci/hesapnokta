@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
+import AmountInput from '../../../components/AmountInput.jsx';
 import DataPeriodNote from '../../../components/DataPeriodNote.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculateCreditCardPayment } from '../../../lib/finansCalculators.js';
@@ -51,10 +52,10 @@ export default function KrediKartiAsgariOdemeHesaplama() {
         <h2>Kart bilgileri</h2>
         <div className="form-grid">
           <FormField label="Kart limiti (TL)" htmlFor="cardLimit" hint="Asgari ödeme oranı limite göre belirlenir">
-            <input id="cardLimit" type="text" inputMode="decimal" value={cardLimit} onChange={(e) => setCardLimit(e.target.value)} />
+            <AmountInput id="cardLimit" value={cardLimit} onChange={setCardLimit} />
           </FormField>
           <FormField label="Dönem borcu (TL)" htmlFor="statementBalance">
-            <input id="statementBalance" type="text" inputMode="decimal" value={statementBalance} onChange={(e) => setStatementBalance(e.target.value)} />
+            <AmountInput id="statementBalance" value={statementBalance} onChange={setStatementBalance} />
           </FormField>
           <FormField label="Aylık akdi faiz (%)" htmlFor="monthlyInterestRate">
             <input id="monthlyInterestRate" type="text" inputMode="decimal" value={monthlyInterestRate} onChange={(e) => setMonthlyInterestRate(e.target.value)} />

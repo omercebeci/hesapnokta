@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
+import AmountInput from '../../../components/AmountInput.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import RatioBar from '../../../components/RatioBar.jsx';
 import Icon from '../../../components/Icon.jsx';
@@ -45,22 +46,22 @@ export default function AracSahipOlmaMaliyetiHesaplama() {
         <h2>Yıllık gider kalemleri</h2>
         <div className="form-grid">
           <FormField label="MTV (TL/yıl)" htmlFor="mtv">
-            <input id="mtv" type="text" inputMode="decimal" value={mtv} onChange={(e) => setMtv(e.target.value)} />
+            <AmountInput id="mtv" value={mtv} onChange={setMtv} />
           </FormField>
           <FormField label="Trafik sigortası (TL/yıl)" htmlFor="sigorta">
-            <input id="sigorta" type="text" inputMode="decimal" value={sigorta} onChange={(e) => setSigorta(e.target.value)} />
+            <AmountInput id="sigorta" value={sigorta} onChange={setSigorta} />
           </FormField>
           <FormField label="Kasko (TL/yıl)" htmlFor="kasko">
-            <input id="kasko" type="text" inputMode="decimal" value={kasko} onChange={(e) => setKasko(e.target.value)} />
+            <AmountInput id="kasko" value={kasko} onChange={setKasko} />
           </FormField>
           <FormField label="Bakım/servis (TL/yıl)" htmlFor="bakim">
-            <input id="bakim" type="text" inputMode="decimal" value={bakim} onChange={(e) => setBakim(e.target.value)} />
+            <AmountInput id="bakim" value={bakim} onChange={setBakim} />
           </FormField>
           <FormField label="Lastik (TL/yıl)" htmlFor="lastik">
-            <input id="lastik" type="text" inputMode="decimal" value={lastik} onChange={(e) => setLastik(e.target.value)} />
+            <AmountInput id="lastik" value={lastik} onChange={setLastik} />
           </FormField>
           <FormField label="Yakıt (TL/yıl)" htmlFor="yakit" hint="Yakıt maliyetinizi bilmiyorsanız yakıt maliyeti aracını kullanabilirsiniz">
-            <input id="yakit" type="text" inputMode="decimal" value={yakit} onChange={(e) => setYakit(e.target.value)} />
+            <AmountInput id="yakit" value={yakit} onChange={setYakit} />
           </FormField>
           <FormField label="Yıllık kilometre" htmlFor="kmPerYear">
             <input id="kmPerYear" type="text" inputMode="decimal" value={kmPerYear} onChange={(e) => setKmPerYear(e.target.value)} />

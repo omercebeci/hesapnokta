@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
+import AmountInput from '../../../components/AmountInput.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculateLoan, generateLoanSchedule } from '../../../lib/finansCalculators.js';
 import { formatCurrency, formatNumber, parseLocaleNumber } from '../../../utils/format.js';
@@ -51,7 +52,7 @@ export default function KrediHesaplama() {
         <h2>Kredi bilgileri</h2>
         <div className="form-grid">
           <FormField label="Kredi tutarı (TL)" htmlFor="amount">
-            <input id="amount" type="text" inputMode="decimal" value={amount} onChange={(e) => setAmount(e.target.value)} />
+            <AmountInput id="amount" value={amount} onChange={setAmount} />
           </FormField>
           <FormField label="Aylık faiz oranı (%)" htmlFor="monthlyRate">
             <input id="monthlyRate" type="text" inputMode="decimal" value={monthlyRate} onChange={(e) => setMonthlyRate(e.target.value)} />

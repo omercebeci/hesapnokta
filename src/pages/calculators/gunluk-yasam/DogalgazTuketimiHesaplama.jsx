@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
+import AmountInput from '../../../components/AmountInput.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import DataPeriodNote from '../../../components/DataPeriodNote.jsx';
 import { calculateNaturalGasCost } from '../../../lib/gunlukYasamCalculators.js';
@@ -38,7 +39,7 @@ export default function DogalgazTuketimiHesaplama() {
             <input id="m3" type="text" inputMode="decimal" value={m3} onChange={(e) => setM3(e.target.value)} />
           </FormField>
           <FormField label="m³ birim fiyatı (TL)" htmlFor="pricePerM3" hint="Faturanızdaki birim fiyatı girin">
-            <input id="pricePerM3" type="text" inputMode="decimal" value={pricePerM3} onChange={(e) => setPricePerM3(e.target.value)} />
+            <AmountInput id="pricePerM3" value={pricePerM3} onChange={setPricePerM3} />
           </FormField>
         </div>
       </div>

@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
+import AmountInput from '../../../components/AmountInput.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import ShoppingListCard from '../../../components/ShoppingListCard.jsx';
 import { calculateConcreteNeed, calculateManualMixMaterials, calculateOptionalCost } from '../../../lib/insaatTadilatCalculators.js';
@@ -60,7 +61,7 @@ export default function BetonSapHesaplama() {
             <input id="mixerCapacity" type="text" inputMode="decimal" value={mixerCapacity} onChange={(e) => setMixerCapacity(e.target.value)} />
           </FormField>
           <FormField label="Beton/şap m³ fiyatı (TL, opsiyonel)" htmlFor="m3Price" full hint="Girerseniz toplam maliyeti hesaplarız. Güncel fiyatları satıcınızdan/hazır beton firmasından alın.">
-            <input id="m3Price" type="text" inputMode="decimal" value={m3Price} onChange={(e) => setM3Price(e.target.value)} />
+            <AmountInput id="m3Price" value={m3Price} onChange={setM3Price} />
           </FormField>
         </div>
       </div>

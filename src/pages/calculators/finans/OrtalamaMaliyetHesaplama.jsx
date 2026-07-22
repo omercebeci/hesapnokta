@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
+import AmountInput from '../../../components/AmountInput.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculateAverageCost } from '../../../lib/finansCalculators.js';
 import { formatCurrency, formatNumber, parseLocaleNumber } from '../../../utils/format.js';
@@ -49,7 +50,7 @@ export default function OrtalamaMaliyetHesaplama() {
                 <input id={`qty-${row.id}`} type="text" inputMode="decimal" value={row.quantity} onChange={(e) => updateRow(row.id, 'quantity', e.target.value)} />
               </FormField>
               <FormField label="Birim fiyat (TL)" htmlFor={`price-${row.id}`}>
-                <input id={`price-${row.id}`} type="text" inputMode="decimal" value={row.price} onChange={(e) => updateRow(row.id, 'price', e.target.value)} />
+                <AmountInput id={`price-${row.id}`} value={row.price} onChange={(raw) => updateRow(row.id, 'price', raw)} />
               </FormField>
               {rows.length > 1 && (
                 <button type="button" className="header-home-link" style={{ justifySelf: 'start' }} onClick={() => removeRow(row.id)}>

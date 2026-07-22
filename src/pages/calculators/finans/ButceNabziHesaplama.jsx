@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
+import AmountInput from '../../../components/AmountInput.jsx';
 import { ResultCard, ResultError } from '../../../components/Result.jsx';
 import RatioBar from '../../../components/RatioBar.jsx';
 import { calculateBudgetPulse } from '../../../lib/finansCalculators.js';
@@ -45,16 +46,16 @@ export default function ButceNabziHesaplama() {
         <h2>Aylık bütçe bilgileri</h2>
         <div className="form-grid">
           <FormField label="Aylık gelir (TL)" htmlFor="monthlyIncome" full>
-            <input id="monthlyIncome" type="text" inputMode="decimal" value={monthlyIncome} onChange={(e) => setMonthlyIncome(e.target.value)} />
+            <AmountInput id="monthlyIncome" value={monthlyIncome} onChange={setMonthlyIncome} />
           </FormField>
           <FormField label="Sabit giderler (TL)" htmlFor="fixedExpenses">
-            <input id="fixedExpenses" type="text" inputMode="decimal" value={fixedExpenses} onChange={(e) => setFixedExpenses(e.target.value)} />
+            <AmountInput id="fixedExpenses" value={fixedExpenses} onChange={setFixedExpenses} />
           </FormField>
           <FormField label="Borç ödemeleri (TL)" htmlFor="debtPayments">
-            <input id="debtPayments" type="text" inputMode="decimal" value={debtPayments} onChange={(e) => setDebtPayments(e.target.value)} />
+            <AmountInput id="debtPayments" value={debtPayments} onChange={setDebtPayments} />
           </FormField>
           <FormField label="Birikim (TL)" htmlFor="savings" full>
-            <input id="savings" type="text" inputMode="decimal" value={savings} onChange={(e) => setSavings(e.target.value)} />
+            <AmountInput id="savings" value={savings} onChange={setSavings} />
           </FormField>
         </div>
       </div>

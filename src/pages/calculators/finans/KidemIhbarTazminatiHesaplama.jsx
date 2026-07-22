@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
+import AmountInput from '../../../components/AmountInput.jsx';
 import DataPeriodNote from '../../../components/DataPeriodNote.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculateSeveranceAndNotice } from '../../../lib/finansCalculators.js';
@@ -38,7 +39,7 @@ export default function KidemIhbarTazminatiHesaplama() {
         <h2>Çalışma bilgileri</h2>
         <div className="form-grid">
           <FormField label="Brüt maaş (TL)" htmlFor="grossSalary" full>
-            <input id="grossSalary" type="text" inputMode="decimal" value={grossSalary} onChange={(e) => setGrossSalary(e.target.value)} />
+            <AmountInput id="grossSalary" value={grossSalary} onChange={setGrossSalary} />
           </FormField>
           <FormField label="İşe başlama tarihi" htmlFor="startDate">
             <input id="startDate" type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />

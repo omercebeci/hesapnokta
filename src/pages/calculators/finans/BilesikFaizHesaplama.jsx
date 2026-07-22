@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
+import AmountInput from '../../../components/AmountInput.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculateCompoundInterest } from '../../../lib/finansCalculators.js';
 import { formatCurrency, parseLocaleNumber } from '../../../utils/format.js';
@@ -47,7 +48,7 @@ export default function BilesikFaizHesaplama() {
         <h2>Yatırım bilgileri</h2>
         <div className="form-grid">
           <FormField label="Başlangıç anaparası (TL)" htmlFor="principal">
-            <input id="principal" type="text" inputMode="decimal" value={principal} onChange={(e) => setPrincipal(e.target.value)} />
+            <AmountInput id="principal" value={principal} onChange={setPrincipal} />
           </FormField>
           <FormField label="Yıllık faiz oranı (%)" htmlFor="annualRate">
             <input id="annualRate" type="text" inputMode="decimal" value={annualRate} onChange={(e) => setAnnualRate(e.target.value)} />
@@ -56,7 +57,7 @@ export default function BilesikFaizHesaplama() {
             <input id="years" type="text" inputMode="decimal" value={years} onChange={(e) => setYears(e.target.value)} />
           </FormField>
           <FormField label="Aylık katkı (TL)" htmlFor="monthlyContribution" hint="Düzenli katkı yoksa 0 bırakın">
-            <input id="monthlyContribution" type="text" inputMode="decimal" value={monthlyContribution} onChange={(e) => setMonthlyContribution(e.target.value)} />
+            <AmountInput id="monthlyContribution" value={monthlyContribution} onChange={setMonthlyContribution} />
           </FormField>
           <FormField label="Bileşiklenme sıklığı" htmlFor="frequency" full>
             <div className="segmented" role="group" aria-label="Bileşiklenme sıklığı">

@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
+import AmountInput from '../../../components/AmountInput.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculateInvestmentReturn } from '../../../lib/finansCalculators.js';
 import { formatCurrency, formatPercent, parseLocaleNumber } from '../../../utils/format.js';
@@ -37,10 +38,10 @@ export default function KarZararHesaplama() {
         <h2>Yatırım bilgileri</h2>
         <div className="form-grid">
           <FormField label="Alış fiyatı (birim)" htmlFor="buyPrice">
-            <input id="buyPrice" type="text" inputMode="decimal" value={buyPrice} onChange={(e) => setBuyPrice(e.target.value)} />
+            <AmountInput id="buyPrice" value={buyPrice} onChange={setBuyPrice} />
           </FormField>
           <FormField label="Güncel fiyat (birim)" htmlFor="currentPrice">
-            <input id="currentPrice" type="text" inputMode="decimal" value={currentPrice} onChange={(e) => setCurrentPrice(e.target.value)} />
+            <AmountInput id="currentPrice" value={currentPrice} onChange={setCurrentPrice} />
           </FormField>
           <FormField label="Adet / miktar" htmlFor="quantity" full>
             <input id="quantity" type="text" inputMode="decimal" value={quantity} onChange={(e) => setQuantity(e.target.value)} />

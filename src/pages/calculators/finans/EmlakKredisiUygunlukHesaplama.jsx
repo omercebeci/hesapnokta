@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
+import AmountInput from '../../../components/AmountInput.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculateMortgageAffordability } from '../../../lib/finansCalculators.js';
 import { formatCurrency, parseLocaleNumber } from '../../../utils/format.js';
@@ -51,10 +52,10 @@ export default function EmlakKredisiUygunlukHesaplama() {
         <h2>Gelir ve kredi bilgileri</h2>
         <div className="form-grid">
           <FormField label="Aylık net gelir (TL)" htmlFor="monthlyIncome" full>
-            <input id="monthlyIncome" type="text" inputMode="decimal" value={monthlyIncome} onChange={(e) => setMonthlyIncome(e.target.value)} />
+            <AmountInput id="monthlyIncome" value={monthlyIncome} onChange={setMonthlyIncome} />
           </FormField>
           <FormField label="Mevcut borç ödemeleri (TL)" htmlFor="existingDebtPayments">
-            <input id="existingDebtPayments" type="text" inputMode="decimal" value={existingDebtPayments} onChange={(e) => setExistingDebtPayments(e.target.value)} />
+            <AmountInput id="existingDebtPayments" value={existingDebtPayments} onChange={setExistingDebtPayments} />
           </FormField>
           <FormField label="Maks. taksit/gelir oranı (%)" htmlFor="maxDebtToIncomeRatio" hint="Bankalarda yaygın uygulama ~%40">
             <input id="maxDebtToIncomeRatio" type="text" inputMode="decimal" value={maxDebtToIncomeRatio} onChange={(e) => setMaxDebtToIncomeRatio(e.target.value)} />

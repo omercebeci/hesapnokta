@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
+import AmountInput from '../../../components/AmountInput.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculateStackedDiscount } from '../../../lib/alisverisCalculators.js';
 import { formatCurrency, formatPercent, parseLocaleNumber } from '../../../utils/format.js';
@@ -38,7 +39,7 @@ export default function IndirimUstuneIndirimHesaplama() {
         <h2>Kampanya bilgileri</h2>
         <div className="form-grid">
           <FormField label="Ürün fiyatı (TL)" htmlFor="price" full>
-            <input id="price" type="text" inputMode="decimal" value={price} onChange={(e) => setPrice(e.target.value)} />
+            <AmountInput id="price" value={price} onChange={setPrice} />
           </FormField>
           <FormField label="1. indirim oranı (%)" htmlFor="firstDiscount">
             <input id="firstDiscount" type="text" inputMode="decimal" value={firstDiscount} onChange={(e) => setFirstDiscount(e.target.value)} />

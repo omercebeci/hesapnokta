@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
+import AmountInput from '../../../components/AmountInput.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculateInflationImpact } from '../../../lib/finansCalculators.js';
 import { formatCurrency, formatPercent, parseLocaleNumber } from '../../../utils/format.js';
@@ -38,7 +39,7 @@ export default function EnflasyonEtkisiHesaplama() {
         <h2>Senaryo bilgileri</h2>
         <div className="form-grid">
           <FormField label="Bugünkü tutar (TL)" htmlFor="amount" full>
-            <input id="amount" type="text" inputMode="decimal" value={amount} onChange={(e) => setAmount(e.target.value)} />
+            <AmountInput id="amount" value={amount} onChange={setAmount} />
           </FormField>
           <FormField label="Varsayılan yıllık enflasyon (%)" htmlFor="annualInflationRate" hint="Kendi senaryonuza göre değiştirebilirsiniz">
             <input id="annualInflationRate" type="text" inputMode="decimal" value={annualInflationRate} onChange={(e) => setAnnualInflationRate(e.target.value)} />

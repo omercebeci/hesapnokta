@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
+import AmountInput from '../../../components/AmountInput.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculateSalaryIncrease } from '../../../lib/finansCalculators.js';
 import { formatCurrency, parseLocaleNumber } from '../../../utils/format.js';
@@ -30,7 +31,7 @@ export default function MaasZamHesaplama() {
         <h2>Maaş bilgileri</h2>
         <div className="form-grid">
           <FormField label="Mevcut maaş (TL)" htmlFor="currentSalary">
-            <input id="currentSalary" type="text" inputMode="decimal" value={currentSalary} onChange={(e) => setCurrentSalary(e.target.value)} />
+            <AmountInput id="currentSalary" value={currentSalary} onChange={setCurrentSalary} />
           </FormField>
           <FormField label="Zam oranı (%)" htmlFor="increaseRate">
             <input id="increaseRate" type="text" inputMode="decimal" value={increaseRate} onChange={(e) => setIncreaseRate(e.target.value)} />

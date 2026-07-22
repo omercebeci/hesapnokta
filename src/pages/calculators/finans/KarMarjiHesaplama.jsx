@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
+import AmountInput from '../../../components/AmountInput.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculateProfitMargin } from '../../../lib/finansCalculators.js';
 import { formatCurrency, formatPercent, parseLocaleNumber } from '../../../utils/format.js';
@@ -35,10 +36,10 @@ export default function KarMarjiHesaplama() {
         <h2>Ürün bilgileri</h2>
         <div className="form-grid">
           <FormField label="Birim maliyet (TL)" htmlFor="cost">
-            <input id="cost" type="text" inputMode="decimal" value={cost} onChange={(e) => setCost(e.target.value)} />
+            <AmountInput id="cost" value={cost} onChange={setCost} />
           </FormField>
           <FormField label="Birim satış fiyatı (TL)" htmlFor="salePrice">
-            <input id="salePrice" type="text" inputMode="decimal" value={salePrice} onChange={(e) => setSalePrice(e.target.value)} />
+            <AmountInput id="salePrice" value={salePrice} onChange={setSalePrice} />
           </FormField>
           <FormField label="Adet" htmlFor="quantity" full>
             <input id="quantity" type="text" inputMode="numeric" value={quantity} onChange={(e) => setQuantity(e.target.value)} />

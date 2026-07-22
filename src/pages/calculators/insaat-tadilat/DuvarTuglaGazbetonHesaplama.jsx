@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
+import AmountInput from '../../../components/AmountInput.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import ShoppingListCard from '../../../components/ShoppingListCard.jsx';
 import { calculateWallBlockNeed, calculateOptionalCost } from '../../../lib/insaatTadilatCalculators.js';
@@ -64,7 +65,7 @@ export default function DuvarTuglaGazbetonHesaplama() {
             <input id="mortarPerM2" type="text" inputMode="decimal" value={mortarPerM2} onChange={(e) => setMortarPerM2(e.target.value)} />
           </FormField>
           <FormField label="Blok adet fiyatı (TL, opsiyonel)" htmlFor="blockPrice" full hint="Girerseniz toplam maliyeti hesaplarız. Güncel fiyatları satıcınızdan alın.">
-            <input id="blockPrice" type="text" inputMode="decimal" value={blockPrice} onChange={(e) => setBlockPrice(e.target.value)} />
+            <AmountInput id="blockPrice" value={blockPrice} onChange={setBlockPrice} />
           </FormField>
         </div>
       </div>

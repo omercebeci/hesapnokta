@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
+import AmountInput from '../../../components/AmountInput.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import ShoppingListCard from '../../../components/ShoppingListCard.jsx';
 import { calculateFlooringNeed, calculateOptionalCost } from '../../../lib/insaatTadilatCalculators.js';
@@ -58,7 +59,7 @@ export default function ParkeLaminatHesaplama() {
             <input id="perimeter" type="text" inputMode="decimal" value={perimeter} onChange={(e) => setPerimeter(e.target.value)} />
           </FormField>
           <FormField label="Paket fiyatı (TL, opsiyonel)" htmlFor="packagePrice" full hint="Girerseniz toplam maliyeti hesaplarız. Güncel fiyatları satıcınızdan alın.">
-            <input id="packagePrice" type="text" inputMode="decimal" value={packagePrice} onChange={(e) => setPackagePrice(e.target.value)} />
+            <AmountInput id="packagePrice" value={packagePrice} onChange={setPackagePrice} />
           </FormField>
         </div>
       </div>

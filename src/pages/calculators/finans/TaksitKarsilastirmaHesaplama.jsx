@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
+import AmountInput from '../../../components/AmountInput.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculateInstallmentComparison } from '../../../lib/finansCalculators.js';
 import { formatCurrency, formatNumber, parseLocaleNumber } from '../../../utils/format.js';
@@ -38,13 +39,13 @@ export default function TaksitKarsilastirmaHesaplama() {
         <h2>Fiyat bilgileri</h2>
         <div className="form-grid">
           <FormField label="Peşin fiyat (TL)" htmlFor="cashPrice" full>
-            <input id="cashPrice" type="text" inputMode="decimal" value={cashPrice} onChange={(e) => setCashPrice(e.target.value)} />
+            <AmountInput id="cashPrice" value={cashPrice} onChange={setCashPrice} />
           </FormField>
           <FormField label="Taksit sayısı" htmlFor="installmentCount">
             <input id="installmentCount" type="text" inputMode="numeric" value={installmentCount} onChange={(e) => setInstallmentCount(e.target.value)} />
           </FormField>
           <FormField label="Aylık taksit tutarı (TL)" htmlFor="monthlyInstallment">
-            <input id="monthlyInstallment" type="text" inputMode="decimal" value={monthlyInstallment} onChange={(e) => setMonthlyInstallment(e.target.value)} />
+            <AmountInput id="monthlyInstallment" value={monthlyInstallment} onChange={setMonthlyInstallment} />
           </FormField>
         </div>
       </div>

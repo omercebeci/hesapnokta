@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
+import AmountInput from '../../../components/AmountInput.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculatePriceChangeRate } from '../../../lib/alisverisCalculators.js';
 import { formatCurrency, formatPercent, parseLocaleNumber } from '../../../utils/format.js';
@@ -30,10 +31,10 @@ export default function ZamOraniHesaplama() {
         <h2>Fiyat bilgileri</h2>
         <div className="form-grid">
           <FormField label="Eski fiyat (TL)" htmlFor="oldPrice">
-            <input id="oldPrice" type="text" inputMode="decimal" value={oldPrice} onChange={(e) => setOldPrice(e.target.value)} />
+            <AmountInput id="oldPrice" value={oldPrice} onChange={setOldPrice} />
           </FormField>
           <FormField label="Yeni fiyat (TL)" htmlFor="newPrice">
-            <input id="newPrice" type="text" inputMode="decimal" value={newPrice} onChange={(e) => setNewPrice(e.target.value)} />
+            <AmountInput id="newPrice" value={newPrice} onChange={setNewPrice} />
           </FormField>
         </div>
       </div>

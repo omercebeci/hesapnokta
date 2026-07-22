@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
+import AmountInput from '../../../components/AmountInput.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculateEvChargingCost } from '../../../lib/gunlukYasamCalculators.js';
 import { formatCurrency, parseLocaleNumber } from '../../../utils/format.js';
@@ -54,10 +55,10 @@ export default function ElektrikliAracSarjMaliyetiHesaplama() {
             <input id="consumptionPer100Km" type="text" inputMode="decimal" value={consumptionPer100Km} onChange={(e) => setConsumptionPer100Km(e.target.value)} />
           </FormField>
           <FormField label="Ev elektrik fiyatı (TL/kWh)" htmlFor="homePricePerKwh">
-            <input id="homePricePerKwh" type="text" inputMode="decimal" value={homePricePerKwh} onChange={(e) => setHomePricePerKwh(e.target.value)} />
+            <AmountInput id="homePricePerKwh" value={homePricePerKwh} onChange={setHomePricePerKwh} />
           </FormField>
           <FormField label="Şarj istasyonu fiyatı (TL/kWh, opsiyonel)" htmlFor="stationPricePerKwh">
-            <input id="stationPricePerKwh" type="text" inputMode="decimal" value={stationPricePerKwh} onChange={(e) => setStationPricePerKwh(e.target.value)} />
+            <AmountInput id="stationPricePerKwh" value={stationPricePerKwh} onChange={setStationPricePerKwh} />
           </FormField>
         </div>
       </div>
@@ -69,7 +70,7 @@ export default function ElektrikliAracSarjMaliyetiHesaplama() {
             <input id="fuelConsumptionPer100Km" type="text" inputMode="decimal" value={fuelConsumptionPer100Km} onChange={(e) => setFuelConsumptionPer100Km(e.target.value)} />
           </FormField>
           <FormField label="Yakıt fiyatı (TL/L)" htmlFor="fuelPrice">
-            <input id="fuelPrice" type="text" inputMode="decimal" value={fuelPrice} onChange={(e) => setFuelPrice(e.target.value)} />
+            <AmountInput id="fuelPrice" value={fuelPrice} onChange={setFuelPrice} />
           </FormField>
         </div>
       </div>

@@ -4,6 +4,7 @@ import { SpeedInsights } from '@vercel/speed-insights/react';
 import { ThemeProvider } from './context/ThemeContext.jsx';
 import Header from './components/Header.jsx';
 import Footer from './components/Footer.jsx';
+import ScrollToTop from './components/ScrollToTop.jsx';
 import HomePage from './pages/HomePage.jsx';
 import NotFoundPage from './pages/NotFoundPage.jsx';
 
@@ -107,6 +108,7 @@ const EvYapimMaliyetiPlanlayici = lazy(() => import('./pages/calculators/insaat-
 export default function App() {
   return (
     <ThemeProvider>
+      <ScrollToTop />
       <Header />
       <main>
         <Suspense fallback={null}>

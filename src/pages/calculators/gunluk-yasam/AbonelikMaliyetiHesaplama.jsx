@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
+import AmountInput from '../../../components/AmountInput.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculateSubscriptionCost } from '../../../lib/gunlukYasamCalculators.js';
 import { formatCurrency, formatInteger, parseLocaleNumber } from '../../../utils/format.js';
@@ -48,7 +49,7 @@ export default function AbonelikMaliyetiHesaplama() {
                 <input id={`name-${row.id}`} type="text" value={row.name} onChange={(e) => updateRow(row.id, 'name', e.target.value)} />
               </FormField>
               <FormField label="Aylık tutar (TL)" htmlFor={`amount-${row.id}`}>
-                <input id={`amount-${row.id}`} type="text" inputMode="decimal" value={row.monthlyAmount} onChange={(e) => updateRow(row.id, 'monthlyAmount', e.target.value)} />
+                <AmountInput id={`amount-${row.id}`} value={row.monthlyAmount} onChange={(raw) => updateRow(row.id, 'monthlyAmount', raw)} />
               </FormField>
               {rows.length > 1 && (
                 <button type="button" className="header-home-link" style={{ justifySelf: 'start' }} onClick={() => removeRow(row.id)}>

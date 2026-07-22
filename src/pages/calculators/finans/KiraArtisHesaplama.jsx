@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
+import AmountInput from '../../../components/AmountInput.jsx';
 import DataPeriodNote from '../../../components/DataPeriodNote.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculateRentIncrease } from '../../../lib/finansCalculators.js';
@@ -43,7 +44,7 @@ export default function KiraArtisHesaplama() {
         <h2>Kira bilgileri</h2>
         <div className="form-grid">
           <FormField label="Mevcut kira (TL)" htmlFor="currentRent">
-            <input id="currentRent" type="text" inputMode="decimal" value={currentRent} onChange={(e) => setCurrentRent(e.target.value)} />
+            <AmountInput id="currentRent" value={currentRent} onChange={setCurrentRent} />
           </FormField>
           <FormField label="İstenen artış oranı (%)" htmlFor="increaseRate">
             <input id="increaseRate" type="text" inputMode="decimal" value={increaseRate} onChange={(e) => setIncreaseRate(e.target.value)} />

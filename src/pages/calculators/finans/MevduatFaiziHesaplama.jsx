@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
+import AmountInput from '../../../components/AmountInput.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculateDeposit } from '../../../lib/finansCalculators.js';
 import { formatCurrency, parseLocaleNumber } from '../../../utils/format.js';
@@ -45,7 +46,7 @@ export default function MevduatFaiziHesaplama() {
         <h2>Mevduat bilgileri</h2>
         <div className="form-grid">
           <FormField label="Anapara (TL)" htmlFor="principal">
-            <input id="principal" type="text" inputMode="decimal" value={principal} onChange={(e) => setPrincipal(e.target.value)} />
+            <AmountInput id="principal" value={principal} onChange={setPrincipal} />
           </FormField>
           <FormField label="Yıllık faiz oranı (%)" htmlFor="annualRate">
             <input id="annualRate" type="text" inputMode="decimal" value={annualRate} onChange={(e) => setAnnualRate(e.target.value)} />

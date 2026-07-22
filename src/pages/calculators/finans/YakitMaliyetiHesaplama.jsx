@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
+import AmountInput from '../../../components/AmountInput.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculateFuelCost } from '../../../lib/finansCalculators.js';
 import { formatCurrency, formatNumber, parseLocaleNumber } from '../../../utils/format.js';
@@ -44,7 +45,7 @@ export default function YakitMaliyetiHesaplama() {
             <input id="consumptionPer100Km" type="text" inputMode="decimal" value={consumptionPer100Km} onChange={(e) => setConsumptionPer100Km(e.target.value)} />
           </FormField>
           <FormField label="Yakıt fiyatı (TL/L)" htmlFor="fuelPrice">
-            <input id="fuelPrice" type="text" inputMode="decimal" value={fuelPrice} onChange={(e) => setFuelPrice(e.target.value)} />
+            <AmountInput id="fuelPrice" value={fuelPrice} onChange={setFuelPrice} />
           </FormField>
         </div>
       </div>

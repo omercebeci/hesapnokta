@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
+import AmountInput from '../../../components/AmountInput.jsx';
 import { ResultCard, ResultMetrics, ResultError } from '../../../components/Result.jsx';
 import { calculateVat } from '../../../lib/finansCalculators.js';
 import { formatCurrency, parseLocaleNumber } from '../../../utils/format.js';
@@ -31,7 +32,7 @@ export default function KdvHesaplama() {
         <h2>Tutar bilgileri</h2>
         <div className="form-grid">
           <FormField label="Tutar (TL)" htmlFor="amount" full>
-            <input id="amount" type="text" inputMode="decimal" value={amount} onChange={(e) => setAmount(e.target.value)} />
+            <AmountInput id="amount" value={amount} onChange={setAmount} />
           </FormField>
           <FormField label="KDV oranı (%)" htmlFor="vatRate">
             <input id="vatRate" type="text" inputMode="decimal" value={vatRate} onChange={(e) => setVatRate(e.target.value)} />
