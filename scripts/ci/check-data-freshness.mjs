@@ -1,7 +1,10 @@
-// src/data/guncelVeriler.js içindeki her mevzuata bağlı değerin "lastUpdated"
+// src/data/guncelVeriler.js içindeki "tur: 'mevzuat'" kayıtlarının "lastUpdated"
 // tarihini ve "period" alanındaki yılı kontrol eder; 90 günden eski güncellemeleri
 // veya içinde bulunduğumuz yıldan eski bir yıl geçen "period" değerlerini
-// raporlar (bkz. .github/workflows/haftalik-saglik-kontrolu.yml).
+// raporlar (bkz. .github/workflows/haftalik-saglik-kontrolu.yml). "tur:
+// 'bilimsel-referans'" kayıtları (bilimsel kılavuz/çalışma referansları) bu
+// kontrolden muaftır — bir çalışmanın yayın yılı (ör. "2008 ADAG çalışması")
+// verinin bayatladığı anlamına gelmez.
 import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -18,7 +21,7 @@ function collectLeafRecords(node, pathParts, results) {
   const isLeafRecord = Object.prototype.hasOwnProperty.call(node, 'period')
     && Object.prototype.hasOwnProperty.call(node, 'lastUpdated');
   if (isLeafRecord) {
-    results.push({ path: pathParts.join('.'), period: node.period, lastUpdated: node.lastUpdated });
+    results.push({ path: pathParts.join('.'), period: node.period, lastUpdated: node.lastUpdated, tur: node.tur });
     return;
   }
   for (const [key, value] of Object.entries(node)) {
@@ -36,8 +39,13 @@ async function main() {
   const now = new Date();
   const currentYear = now.getFullYear();
   const findings = [];
+  // Sadece 'mevzuat' türü kayıtlar tazelik kontrolüne girer. 'tur' alanı
+  // eksik bırakılan bir kayıt da (unutulmuş sınıflandırma) güvenli tarafta
+  // kalınarak mevzuat gibi kontrol edilir — muafiyet yalnızca açıkça
+  // 'bilimsel-referans' işaretlenen kayıtlara tanınır.
+  const checkedRecords = records.filter((record) => record.tur !== 'bilimsel-referans');
 
-  for (const record of records) {
+  for (const record of checkedRecords) {
     if (record.lastUpdated && record.lastUpdated !== 'N/A') {
       const lastUpdatedDate = new Date(record.lastUpdated);
       if (!Number.isNaN(lastUpdatedDate.getTime())) {
@@ -57,7 +65,8 @@ async function main() {
   }
 
   if (findings.length === 0) {
-    console.log(`✅ ${records.length} güncel veri kaydı tarandı, hepsi tazeliğini koruyor.`);
+    const exemptCount = records.length - checkedRecords.length;
+    console.log(`✅ ${checkedRecords.length} mevzuat kaydı tarandı, hepsi tazeliğini koruyor. (${exemptCount} bilimsel-referans kaydı muaf tutuldu.)`);
     process.exit(0);
   }
 

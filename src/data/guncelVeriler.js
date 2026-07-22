@@ -34,6 +34,18 @@
 // ADLANDIRMAYIN — aksi halde hesaplayıcılar çalışmaz ve sitede hata
 // oluşur. Bir şeyden emin değilseniz değiştirmeden bırakın.
 //
+// "tur" ALANI NE İŞE YARAR?
+// -------------------------
+// Her kayıt "tur: 'mevzuat'" ya da "tur: 'bilimsel-referans'" taşır.
+// - 'mevzuat': Türk kanun/yönetmelik/kurum kararına dayanan, dönemsel
+//   olarak (genelde yıllık) resmen güncellenen değerler (asgari ücret,
+//   vergi dilimi, TÜİK oranı vb.). Haftalık sağlık kontrolündeki veri
+//   tazeliği script'i SADECE bu türü yıl/güncellik açısından denetler.
+// - 'bilimsel-referans': Bilimsel bir kılavuz, uzlaşı raporu veya
+//   araştırmaya dayanan (ESH, ADA, WHO, CDC, ADAG çalışması gibi) değerler.
+//   Kaynağın yayın yılı (ör. "2008 ADAG çalışması") verinin bayatladığı
+//   anlamına gelmez — bu tür kayıtlar tazelik kontrolünden muaftır.
+//
 // ═══════════════════════════════════════════════════════════════════════
 
 export const GUNCEL_VERILER = {
@@ -45,12 +57,14 @@ export const GUNCEL_VERILER = {
       period: '2026',
       source: 'Aile, Çalışma ve Sosyal Hizmetler Bakanlığı - Asgari Ücret Tespit Komisyonu Kararı',
       lastUpdated: '2026-07-07',
+      tur: 'mevzuat',
     },
     netAylik: {
       value: 28075.50,
       period: '2026',
       source: 'Aile, Çalışma ve Sosyal Hizmetler Bakanlığı - Asgari Ücret Tespit Komisyonu Kararı',
       lastUpdated: '2026-07-07',
+      tur: 'mevzuat',
     },
   },
 
@@ -68,6 +82,7 @@ export const GUNCEL_VERILER = {
     period: '2026',
     source: 'Gelir İdaresi Başkanlığı - 2026 Yılı Gelir Vergisi Tarifesi',
     lastUpdated: '2026-07-07',
+    tur: 'mevzuat',
   },
 
   // ── SGK ve işsizlik sigortası çalışan payı oranları ──
@@ -76,12 +91,14 @@ export const GUNCEL_VERILER = {
     period: '2026',
     source: '5510 sayılı Sosyal Sigortalar ve Genel Sağlık Sigortası Kanunu',
     lastUpdated: '2026-07-07',
+    tur: 'mevzuat',
   },
   issizlikSigortasiIsciPayiOrani: {
     value: 0.01,
     period: '2026',
     source: '4447 sayılı İşsizlik Sigortası Kanunu',
     lastUpdated: '2026-07-07',
+    tur: 'mevzuat',
   },
 
   // ── Damga vergisi oranı (ücret bordrosu) ──
@@ -90,6 +107,7 @@ export const GUNCEL_VERILER = {
     period: '2026',
     source: 'Damga Vergisi Kanunu Genel Tebliği (Seri No: 71)',
     lastUpdated: '2026-07-07',
+    tur: 'mevzuat',
   },
 
   // ── Kira artışı yasal üst sınırı (TÜFE 12 aylık ortalama) ──
@@ -99,6 +117,7 @@ export const GUNCEL_VERILER = {
     period: 'Temmuz 2026',
     source: 'TÜİK - TÜFE 12 Aylık Ortalamalara Göre Değişim Oranı',
     lastUpdated: '2026-07-07',
+    tur: 'mevzuat',
   },
 
   // ── Kıdem tazminatı tavanı ──
@@ -108,6 +127,7 @@ export const GUNCEL_VERILER = {
     period: '2026 2. Dönem (Temmuz-Aralık)',
     source: 'Hazine ve Maliye Bakanlığı Genelgesi',
     lastUpdated: '2026-07-07',
+    tur: 'mevzuat',
   },
 
   // ── İhbar süreleri (İş Kanunu m.17) ──
@@ -123,6 +143,7 @@ export const GUNCEL_VERILER = {
     period: 'Sabit (kanunla belirlenir, dönemsel değişmez)',
     source: '4857 sayılı İş Kanunu, madde 17',
     lastUpdated: 'N/A',
+    tur: 'mevzuat',
   },
 
   // ── Kredi kartı asgari ödeme oranı ──
@@ -134,6 +155,7 @@ export const GUNCEL_VERILER = {
     period: '2026',
     source: 'BDDK Kararı (26.09.2024 tarih, 10970 sayılı)',
     lastUpdated: '2026-07-07',
+    tur: 'mevzuat',
   },
 
   // ── Kredi kartı azami (yasal üst sınır) faiz oranları ──
@@ -148,6 +170,7 @@ export const GUNCEL_VERILER = {
     period: '2026',
     source: 'TCMB - Kredi Kartı İşlemlerinde Uygulanacak Azami Faiz Oranları',
     lastUpdated: '2026-07-07',
+    tur: 'mevzuat',
   },
 
   // ── Trafik idari para cezası erken ödeme indirimi (KTK madde 115) ──
@@ -160,6 +183,7 @@ export const GUNCEL_VERILER = {
     period: '2026',
     source: '2918 sayılı Karayolları Trafik Kanunu madde 115 (%25 indirim ilkesi); "Trafik İdari Para Cezası Karar Tutanaklarının Düzenlenmesinde, Tahsilinde ve Takibinde Uygulanacak Usul ve Esaslar Hakkında Yönetmelik"te 31.01.2024 tarihli değişiklik (indirimli ödeme süresi 15 günden 1 aya uzatıldı) — İçişleri Bakanlığı duyurusu, icisleri.gov.tr',
     lastUpdated: '2026-07-09',
+    tur: 'mevzuat',
   },
 
   // ── Askerlik hizmet süreleri ──
@@ -173,6 +197,7 @@ export const GUNCEL_VERILER = {
     period: '2026',
     source: '7179 sayılı Askeralma Kanunu, madde 5/2 (er/erbaş 6 ay, yedek subay/yedek astsubay 12 ay) — mevzuat.gov.tr; kesin celp/terhis tarihiniz için ASAL (asal.msb.gov.tr) veya e-Devlet üzerinden "Askerlik Durum Belgesi" sorgulamasını esas alın',
     lastUpdated: '2026-07-09',
+    tur: 'mevzuat',
   },
 
   // ── Tansiyon (kan basıncı) sınıflandırma eşikleri ──
@@ -190,6 +215,7 @@ export const GUNCEL_VERILER = {
     period: '2023 (ESH kılavuzu) / 2025 (Türk Hipertansiyon Uzlaşı Raporu)',
     source: '2023 ESH (European Society of Hypertension) Kan Basıncı Yüksekliğinin Yönetimi Kılavuzu (J Hypertens 2023;41:1874-2071) — Türk Hipertansiyon Uzlaşı Raporu 2025 (Türk Kardiyoloji Derneği / Türkiye Endokrinoloji ve Metabolizma Derneği) aynı sınıflandırma tablosunu esas alır',
     lastUpdated: '2026-07-09',
+    tur: 'bilimsel-referans',
   },
 
   // ── Hipertansif acil durum / "vakit kaybetmeden başvurun" eşiği ──
@@ -202,6 +228,7 @@ export const GUNCEL_VERILER = {
     period: '2026 (güncel hasta yönlendirme kılavuzu)',
     source: 'American Heart Association - "When To Call 911 About High Blood Pressure" (heart.org); ACC/AHA 2025 Yüksek Kan Basıncının Önlenmesi, Tespiti, Değerlendirilmesi ve Yönetimi Kılavuzu ile uyumlu',
     lastUpdated: '2026-07-09',
+    tur: 'bilimsel-referans',
   },
 
   // ── HbA1c ↔ tahmini ortalama glukoz (eAG) dönüşüm formülü ──
@@ -212,6 +239,7 @@ export const GUNCEL_VERILER = {
     period: '2008 (ADAG çalışması, halen ADA/NGSP tarafından referans alınır)',
     source: 'Nathan DM, Kuenen J, Borg R, ve ark.; A1c-Derived Average Glucose (ADAG) Study Group. "Translating the A1C Assay Into Estimated Average Glucose Values." Diabetes Care. 2008;31(8):1473-1478',
     lastUpdated: '2026-07-09',
+    tur: 'bilimsel-referans',
   },
 
   // ── Diyabet / prediyabet tanı eşikleri (gebelik dışı yetişkinler) ──
@@ -224,6 +252,7 @@ export const GUNCEL_VERILER = {
     period: '2026',
     source: 'American Diabetes Association, "2. Diagnosis and Classification of Diabetes: Standards of Care in Diabetes—2026." Diabetes Care. 2026;49(Suppl.1):S27 (Tablo 2.1 ve 2.2)',
     lastUpdated: '2026-07-09',
+    tur: 'bilimsel-referans',
   },
 
   // ── DSÖ günlük tuz/sodyum limiti ve sodyum→tuz katsayısı ──
@@ -234,6 +263,7 @@ export const GUNCEL_VERILER = {
     period: '2026 (güncelleme: 11 Mayıs 2026)',
     source: 'Dünya Sağlık Örgütü (WHO) "Sodium reduction" Fact Sheet (who.int, son güncelleme 11.05.2026); sodyum→tuz katsayısı NaCl bileşimine dayanır (~2,54, yaygın kullanımda 2,5 olarak yuvarlanır)',
     lastUpdated: '2026-07-09',
+    tur: 'bilimsel-referans',
   },
 
   // ── Hipoglisemi eşikleri (ADA seviyelendirmesi) ──
@@ -243,6 +273,7 @@ export const GUNCEL_VERILER = {
     period: '2026',
     source: 'American Diabetes Association, "6. Glycemic Goals, Hypoglycemia, and Hyperglycemic Crises: Standards of Care in Diabetes—2026." Diabetes Care. 2026;49(Suppl.1)',
     lastUpdated: '2026-07-09',
+    tur: 'bilimsel-referans',
   },
 
   // ── Hiperglisemi (çok yüksek şeker) acil durum eşiği ──
@@ -254,6 +285,7 @@ export const GUNCEL_VERILER = {
     period: '2026',
     source: 'CDC (Centers for Disease Control and Prevention) - "Diabetic Ketoacidosis" ve "Manage Blood Sugar" hasta bilgilendirme sayfaları (cdc.gov): kan şekeri 300 mg/dL veya üzerinde takılı kalırsa acil servise başvurun ya da 911/112 arayın',
     lastUpdated: '2026-07-09',
+    tur: 'bilimsel-referans',
   },
 
   // ── Ev tansiyon ölçümü (HBPM) tanı eşiği ──
@@ -265,6 +297,7 @@ export const GUNCEL_VERILER = {
     period: '2023 (ESH kılavuzu)',
     source: '2023 ESH (European Society of Hypertension) Kan Basıncı Yüksekliğinin Yönetimi Kılavuzu (J Hypertens 2023;41:1874-2071) — ofis ölçümünde ≥140/90 mmHg tanısına karşılık gelen ev ölçümü (HBPM) eşiği',
     lastUpdated: '2026-07-09',
+    tur: 'bilimsel-referans',
   },
 
   // ── Glisemik hedef bandı (gebe olmayan çoğu yetişkin, ADA) ──
@@ -273,6 +306,7 @@ export const GUNCEL_VERILER = {
     period: '2026',
     source: 'American Diabetes Association, "6. Glycemic Goals, Hypoglycemia, and Hyperglycemic Crises: Standards of Care in Diabetes—2026." Diabetes Care. 2026;49(Suppl.1) — çoğu gebe olmayan yetişkin için açlık/öğün öncesi 80-130 mg/dL, tokluk (öğün başlangıcından 1-2 saat sonra) <180 mg/dL hedefi',
     lastUpdated: '2026-07-09',
+    tur: 'bilimsel-referans',
   },
 
   // ── Doğalgaz m³ → kWh dönüşümü ──
@@ -286,6 +320,7 @@ export const GUNCEL_VERILER = {
     period: '2026 (dönem ortalaması, tipik değer)',
     source: 'EPDK / dağıtım şirketi fatura hesaplama kılavuzları (fiili üst ısıl değer dönem ve bölgeye göre değişir)',
     lastUpdated: '2026-07-07',
+    tur: 'mevzuat',
   },
 };
 
