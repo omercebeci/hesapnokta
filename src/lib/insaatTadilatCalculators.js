@@ -387,3 +387,59 @@ export function calculateRadiatorSections(heatLossKcal, heightMm) {
   const outputPerSection = RADIATOR_DILIM_OUTPUT_KCAL[heightMm] || RADIATOR_DILIM_OUTPUT_KCAL[600];
   return Math.ceil(kcal / outputPerSection);
 }
+
+// ── 13) Mantolama (ısı yalıtımı) hesaplama ──
+// Levha ölçüleri: EPS/XPS için 50×100 cm = 0,5 m² (İMPOR, Flextab ürün verileri
+// ile teyitli standart piyasa ölçüsü); taşyünü mantolama levhası için 60×120 cm
+// = 0,72 m² (Flextab/Rockwool ürün verisi). Dübel yoğunluğu bina yüksekliğine
+// göre kademeli: ≤8 m için 6 adet/m², 8-20 m için 8 adet/m², 20 m üzeri için
+// 10 adet/m² (yaygın uygulanan saha pratiği). File sarfiyatı %10 bindirme
+// payıyla 1,10 m² file/m² cephe (sove.istanbul kaynaklı). Yapıştırıcı sarfiyatı
+// 4,5 kg/m² (4-5 kg/m² aralığının ortası), toplam sıva (donatı gömme + üst kat)
+// sarfiyatı 5 kg/m² (3 kg/m² + 2 kg/m²) — mekatronyapi.com.tr kaynaklı.
+export const MANTOLAMA_MATERIALS = {
+  eps: { label: 'EPS (Genleştirilmiş Polistiren)', boardAreaM2: 0.5 },
+  xps: { label: 'XPS (Ekstrüde Polistiren)', boardAreaM2: 0.5 },
+  tasyunu: { label: 'Taşyünü (Mineral Yün)', boardAreaM2: 0.72 },
+};
+
+function pickDubelDensityPerM2(buildingHeightM) {
+  const height = Math.max(0, safeNumber(buildingHeightM, 8));
+  if (height <= 8) return 6;
+  if (height <= 20) return 8;
+  return 10;
+}
+
+// Dübel uzunluğu = levha kalınlığı + yapıştırma kalınlığı (5 mm) + kaba sıva payı
+// (10 mm) + ankraj derinliği (50 mm); piyasa pratiğinden kaynaklı formül.
+const DUBEL_ADHESIVE_MM = 5;
+const DUBEL_PLASTER_ALLOWANCE_MM = 10;
+const DUBEL_ANCHOR_DEPTH_MM = 50;
+
+export function calculateMantolamaNeed({ area, materialKey, thicknessMm = 50, wasteRate = 5, buildingHeightM = 8 }) {
+  const a = Math.max(0, safeNumber(area));
+  const thickness = Math.max(0, safeNumber(thicknessMm, 50));
+  const waste = Math.max(0, safeNumber(wasteRate, 5));
+  const material = MANTOLAMA_MATERIALS[materialKey] || MANTOLAMA_MATERIALS.eps;
+
+  const areaWithWaste = a * (1 + waste / 100);
+  const boardCount = Math.ceil(areaWithWaste / material.boardAreaM2);
+  const dubelPerM2 = pickDubelDensityPerM2(buildingHeightM);
+  const dubelCount = Math.ceil(a * dubelPerM2);
+  const fileM2 = round2(a * 1.1);
+  const adhesiveKg = round2(a * 4.5);
+  const plasterKg = round2(a * 5);
+  const recommendedDubelLengthMm = Math.ceil(thickness + DUBEL_ADHESIVE_MM + DUBEL_PLASTER_ALLOWANCE_MM + DUBEL_ANCHOR_DEPTH_MM);
+
+  return {
+    areaWithWaste: round2(areaWithWaste),
+    boardCount,
+    dubelPerM2,
+    dubelCount,
+    fileM2,
+    adhesiveKg,
+    plasterKg,
+    recommendedDubelLengthMm,
+    materialLabel: material.label,
+  };
+}

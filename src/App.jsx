@@ -112,6 +112,7 @@ const EvYapimMaliyetiPlanlayici = lazy(() => import('./pages/calculators/insaat-
 const AlciSivaHesaplama = lazy(() => import('./pages/calculators/insaat-tadilat/AlciSivaHesaplama.jsx'));
 const KlimaBtuHesaplama = lazy(() => import('./pages/calculators/insaat-tadilat/KlimaBtuHesaplama.jsx'));
 const RadyatorDilimHesaplama = lazy(() => import('./pages/calculators/insaat-tadilat/RadyatorDilimHesaplama.jsx'));
+const MantolamaHesaplama = lazy(() => import('./pages/calculators/insaat-tadilat/MantolamaHesaplama.jsx'));
 
 export default function App() {
   return (
@@ -213,6 +214,7 @@ export default function App() {
             <Route path="/alci-siva-hesaplama" element={<AlciSivaHesaplama />} />
             <Route path="/klima-btu-hesaplama" element={<KlimaBtuHesaplama />} />
             <Route path="/radyator-dilim-hesaplama" element={<RadyatorDilimHesaplama />} />
+            <Route path="/mantolama-hesaplama" element={<MantolamaHesaplama />} />
 
             <Route path="/rehber" element={<RehberIndexPage />} />
             <Route path="/rehber/:slug" element={<RehberPostPage />} />

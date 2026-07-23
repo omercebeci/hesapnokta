@@ -18,6 +18,7 @@ import {
   calculateAcBtuNeed,
   calculateRoomHeatLoss,
   calculateRadiatorSections,
+  calculateMantolamaNeed,
 } from './insaatTadilatCalculators.js';
 
 describe('insaat & tadilat hesaplayıcıları', () => {
@@ -219,6 +220,28 @@ describe('insaat & tadilat hesaplayıcıları', () => {
     expect(calculateRadiatorSections(3750, 600)).toBe(36);
     expect(calculateRadiatorSections(3750, 300)).toBe(66);
     expect(calculateRadiatorSections(3750, 9999)).toBe(36);
+  });
+
+  it('EPS levha, dübel, file ve sıva ihtiyacını cephe alanına göre hesaplar', () => {
+    const result = calculateMantolamaNeed({ area: 30, materialKey: 'eps', thicknessMm: 50, wasteRate: 5, buildingHeightM: 8 });
+    expect(result.areaWithWaste).toBe(31.5);
+    expect(result.boardCount).toBe(63);
+    expect(result.dubelPerM2).toBe(6);
+    expect(result.dubelCount).toBe(180);
+    expect(result.fileM2).toBe(33);
+    expect(result.adhesiveKg).toBe(135);
+    expect(result.plasterKg).toBe(150);
+    expect(result.recommendedDubelLengthMm).toBe(115);
+  });
+
+  it('taşyünü farklı levha ölçüsü kullanır ve bina yüksekliği arttıkça dübel yoğunluğu artar', () => {
+    const tasyunu = calculateMantolamaNeed({ area: 30, materialKey: 'tasyunu', wasteRate: 0, buildingHeightM: 25 });
+    expect(tasyunu.boardCount).toBe(Math.ceil(30 / 0.72));
+    expect(tasyunu.dubelPerM2).toBe(10);
+    expect(tasyunu.dubelCount).toBe(300);
+
+    const orta = calculateMantolamaNeed({ area: 30, materialKey: 'eps', wasteRate: 0, buildingHeightM: 15 });
+    expect(orta.dubelPerM2).toBe(8);
   });
 });
 

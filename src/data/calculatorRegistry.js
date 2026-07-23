@@ -558,6 +558,14 @@ export const calculators = [
     icon: 'flame',
     keywords: ['radyatör hesaplama', 'petek dilim hesaplama', 'kalorifer peteği hesaplama', 'kaç dilim radyatör', 'ısı kaybı hesabı'],
   },
+  {
+    id: 'mantolama-hesaplama',
+    title: 'Mantolama (Isı Yalıtımı) Hesaplama',
+    description: 'Cephe alanı, levha kalınlığı ve türüne (EPS/XPS/taşyünü) göre gereken levha adedini, dübel sayısını, file metrekaresini ve yapıştırıcı/sıva miktarını hesaplayın.',
+    category: 'insaat-tadilat',
+    icon: 'layers',
+    keywords: ['mantolama hesaplama', 'ısı yalıtımı hesaplama', 'eps hesaplama', 'dübel sayısı hesaplama', 'mantolama m2 hesabı'],
+  },
 
   // ── Alışveriş & Kargo (yeni) ──
   {

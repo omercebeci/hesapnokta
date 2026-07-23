@@ -1041,6 +1041,39 @@ export const calculatorContent = {
       { q: 'Panel radyatör ile alüminyum/dökme dilimli radyatör aynı mı sayılır?', a: 'Hayır, ısı verimleri farklıdır; bu araçtaki dilim verimi değerleri alüminyum panel radyatör tipine dayanır. Farklı bir radyatör türü kullanıyorsanız üretici teknik föyündeki değerleri esas almanız daha doğru olur.' },
     ],
   },
+  'mantolama-hesaplama': {
+    about: 'Mantolama (dış cephe ısı yalıtımı) hesaplama aracı, cephe alanına, levha kalınlığına ve türüne (EPS, XPS veya taşyünü) göre gereken levha adedini, dübel sayısını, donatı filesi metrekaresini ve yapıştırıcı/sıva miktarını hesaplar. Bina yüksekliğine göre dübel yoğunluğu ve levha kalınlığına göre önerilen dübel uzunluğu da otomatik hesaplanır.',
+    method: 'Levha sayısı, fire payı eklenen cephe alanının, seçtiğiniz levha türünün standart ölçüsüne (EPS/XPS için 50×100 cm = 0,5 m², taşyünü için 60×120 cm = 0,72 m²) bölünüp yukarı yuvarlanmasıyla bulunur. Dübel sayısı, bina yüksekliğine göre kademeli yoğunlukla (≤8 m için 6, 8-20 m için 8, 20 m üzeri için 10 adet/m²) cephe alanının çarpılmasıyla hesaplanır; önerilen dübel uzunluğu levha kalınlığına yapıştırma payı (5 mm), kaba sıva payı (10 mm) ve ankraj derinliği (50 mm) eklenerek bulunur. Donatı filesi %10 bindirme payıyla (1,10 m² file/m² cephe), yapıştırıcı 4,5 kg/m², donatı gömme + üst kat sıvası toplamda 5 kg/m² sarfiyat üzerinden hesaplanır.',
+    examples: [
+      {
+        title: '100 m² cephe, 50 mm EPS, %5 fire, ≤8 m bina',
+        rows: [
+          { label: 'Levha sayısı', value: '210 adet' },
+          { label: 'Dübel sayısı', value: '600 adet (6/m²)' },
+          { label: 'File', value: '110 m²' },
+          { label: 'Yapıştırıcı', value: '450 kg' },
+          { label: 'Sıva', value: '500 kg' },
+        ],
+      },
+      {
+        title: '50 m² cephe, 80 mm taşyünü, %5 fire, 20 m üzeri bina',
+        rows: [
+          { label: 'Levha sayısı', value: '73 adet' },
+          { label: 'Dübel sayısı', value: '500 adet (10/m²)' },
+          { label: 'Önerilen dübel uzunluğu', value: '~145 mm' },
+        ],
+      },
+    ],
+    faq: [
+      { q: 'EPS, XPS ve taşyünü arasındaki fark nedir?', a: 'EPS (genleştirilmiş polistiren) ve XPS (ekstrüde polistiren) petrol bazlı köpük yalıtım levhalarıdır; XPS daha yüksek basınç dayanımına ve nem direncine sahiptir, genellikle temel/zemin altı gibi nemli alanlarda tercih edilir. Taşyünü ise mineral esaslı, yanmaz (A1 sınıfı) bir yalıtım malzemesidir ve yangın güvenliği öncelikli projelerde (yüksek binalar, yönetmelik gereği belirli katlar) tercih edilir.' },
+      { q: 'Levha ölçüleri neden EPS/XPS ile taşyünü arasında farklı?', a: 'EPS/XPS levhalar piyasada standart olarak 50×100 cm (0,5 m²) ölçüsünde üretilir; taşyünü mantolama levhaları ise daha yaygın olarak 60×120 cm (0,72 m²) ölçüsündedir. Bu araç, seçtiğiniz türe göre doğru ölçüyü otomatik kullanır.' },
+      { q: 'Dübel sayısı neden bina yüksekliğine göre değişiyor?', a: 'Yükseklik arttıkça cepheye etki eden rüzgar emme/basınç yükü artar; bu nedenle daha yüksek binalarda levhaların yerinden çıkmaması için daha sık dübel uygulaması gerekir (≤8 m: 6 adet/m², 8-20 m: 8 adet/m², 20 m üzeri: 10 adet/m²).' },
+      { q: 'Önerilen dübel uzunluğunu nasıl kullanmalıyım?', a: 'Hesaplanan değer bir alt sınırdır; piyasada satılan standart dübel uzunluklarından (ör. 90, 120, 140, 160, 180, 200 mm) hesaplanan değere eşit veya bir büyük olanını seçmeniz, dübelin duvara yeterli derinlikte ankrajlanmasını sağlar.' },
+      { q: 'File neden cephe alanından %10 daha fazla hesaplanıyor?', a: 'Donatı filesi, çatlama riskini azaltmak için yatayda ve düşeyde en az 10 cm bindirilerek (üst üste) döşenir; bu bindirme payı nedeniyle gerçek file ihtiyacı, ölçülen cephe alanından biraz daha fazladır.' },
+      { q: 'Yapıştırıcı ile sıva aynı ürün mü?', a: 'Hayır, farklı işlevleri vardır: yapıştırıcı levhayı duvara sabitlemek için, sıva ise levhaların üzerine (donatı filesini gömerek ve üst kat olarak) uygulanan koruyucu/dekoratif kaplama içindir. Bu araç ikisini ayrı ayrı hesaplar.' },
+      { q: 'Köşe profili, su tahliye profili gibi yardımcı malzemeler hesaba dahil mi?', a: 'Hayır, bu araç yalnızca ana malzemeleri (levha, dübel, file, yapıştırıcı, sıva) hesaplar; pencere/kapı köşe profilleri, su tahliye profili, silikon gibi tamamlayıcı malzemeler projenin detaylarına göre ayrıca hesaplanmalıdır.' },
+    ],
+  },
 
   // ── Alışveriş & Kargo (yeni) ──
   'kargo-desi-hesaplama': {
