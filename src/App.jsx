@@ -116,6 +116,7 @@ const MantolamaHesaplama = lazy(() => import('./pages/calculators/insaat-tadilat
 const MolozHafriyatHesaplama = lazy(() => import('./pages/calculators/insaat-tadilat/MolozHafriyatHesaplama.jsx'));
 const DemirAgirlikHesaplama = lazy(() => import('./pages/calculators/insaat-tadilat/DemirAgirlikHesaplama.jsx'));
 const MerdivenHesaplama = lazy(() => import('./pages/calculators/insaat-tadilat/MerdivenHesaplama.jsx'));
+const TadilatTakvimi = lazy(() => import('./pages/calculators/insaat-tadilat/TadilatTakvimi.jsx'));
 
 export default function App() {
   return (
@@ -221,6 +222,7 @@ export default function App() {
             <Route path="/moloz-hafriyat-hesaplama" element={<MolozHafriyatHesaplama />} />
             <Route path="/demir-agirlik-hesaplama" element={<DemirAgirlikHesaplama />} />
             <Route path="/merdiven-hesaplama" element={<MerdivenHesaplama />} />
+            <Route path="/tadilat-takvimi" element={<TadilatTakvimi />} />
 
             <Route path="/rehber" element={<RehberIndexPage />} />
             <Route path="/rehber/:slug" element={<RehberPostPage />} />

@@ -1163,6 +1163,34 @@ export const calculatorContent = {
       { q: 'Sonuçlar kesin bir mimari/statik proje yerine geçer mi?', a: 'Hayır, bu araç yalnızca ön fikir vermek için bir ergonomi/geometri kontrolüdür; korkuluk yüksekliği, sahanlık ölçüleri, taşıyıcı sistem ve yangın kaçış merdiveni gibi ek yönetmelik gereklilikleri için bir mimar/mühendisle çalışmanız gerekir.' },
     ],
   },
+  'tadilat-takvimi': {
+    about: 'Tadilat takvimi planlayıcı, yapmayı planladığınız işleri (yıkım, tesisat, elektrik, şap, sıva/alçı, seramik, boya, parke, dolap/mobilya montajı, temizlik) seçmenizi sağlar; bunları doğru sıraya dizer, her iş için tipik süre aralığını ve bir sonraki işe geçmeden önce beklenmesi gereken kuruma sürelerini (şap kuruması, sıva/alçı kuruması, derz sertleşmesi) ekleyerek toplam tadilat takviminizi çıkarır. Başlangıç tarihi girerseniz her işin tahmini takvim tarihlerini de gösterir.',
+    method: 'İşler, genel kabul gören tadilat sırasına göre otomatik dizilir: yıkım → tesisat/elektrik → şap → sıva/alçı → seramik → boya → zemin kaplaması (parke) → mobilya/dolap → temizlik. Şap dökümü, sıva/alçı ve seramik gibi işlerden sonra, malzemenin kuruması/priz alması için bir bekleme süresi eklenir; bu araç bir sonraki işin ancak önceki işin HEM çalışma HEM kuruma süresi tamamlandıktan sonra başlayabileceğini varsayar (bu, gerçekte bazı işlerin paralel yürütülebileceği durumlara göre daha temkinli/güvenli bir tahmindir). Tüm süreler, belirsizliği dürüstçe yansıtmak için tek bir sayı değil bir aralık (en iyi - en kötü senaryo) olarak gösterilir.',
+    examples: [
+      {
+        title: 'Tam kapsamlı tadilat (10 işin tamamı)',
+        rows: [
+          { label: 'Toplam süre', value: '42 - 75 gün (yaklaşık 6-11 hafta)' },
+        ],
+      },
+      {
+        title: 'Sadece yenileme (yıkım + sıva/alçı + boya + temizlik)',
+        rows: [
+          { label: 'Toplam süre', value: '10 - 22 gün (yaklaşık 1,5-3 hafta)' },
+        ],
+      },
+    ],
+    faq: [
+      { q: 'Bir daire tadilatı ortalama kaç günde/haftada biter?', a: 'Kapsamına bağlıdır. Sadece boya/sıva gibi yüzeysel bir yenileme 1,5-3 hafta sürebilirken, şap dökümü dahil kapsamlı bir daire tadilatı (yıkımdan temizliğe kadar) genellikle 6-11 hafta arasında sürer; bunun büyük kısmı şap ve sıva kuruma süreleridir. Bu araçta seçtiğiniz işlere göre kendi tahmini takviminizi görebilirsiniz.' },
+      { q: 'Şap kaç günde kurur?', a: 'Geleneksel çimento esaslı şap, üzerine döşeme yapılabilmesi için genellikle 21-28 gün kürlenmeye ihtiyaç duyar; her ek santimetre kalınlık kuruma süresini birkaç gün daha uzatır. Hızlı tip çimento şaplarda bu süre 7-10 güne, akıllı (self-levelling) şaplarda ise saatler mertebesine inebilir — ancak bu araç, en yaygın kullanılan geleneksel şap süresini varsayılan olarak kullanır.' },
+      { q: 'Sıva/alçı boyadan önce kaç gün kurumalı?', a: 'En hızlı senaryoda birkaç gün (yaklaşık 4 gün) yeterli olabilir, ancak kalınlığa, havalandırmaya ve mevsime bağlı olarak tam kuruma 7-10 güne kadar uzayabilir. Nemli havada veya kalın uygulamalarda boyaya geçmeden önce yüzeyin gerçekten kuru olduğundan emin olmak, sonradan oluşabilecek boya kabarması/lekelenme sorunlarını önler.' },
+      { q: 'Neden süreler kesin bir sayı değil aralık olarak veriliyor?', a: 'Kuruma süreleri; hava sıcaklığı, nem oranı, havalandırma ve kullanılan malzemenin kalınlığı gibi bu araca girmeyen birçok değişkene bağlıdır. Kesin bir gün sayısı vermek yanıltıcı olacağından, gerçekçi bir aralık gösterilir; kış aylarında veya nemli ortamlarda üst sınıra, yaz aylarında iyi havalandırılan mekanlarda alt sınıra yakın süreler beklenebilir.' },
+      { q: '"Evde kalınabilir mi" uyarısı neye göre veriliyor?', a: 'Yıkım aşamasında toz/gürültü, şap dökümünde ıslak zemine basılmaması gerekliliği, boyada ise koku/havalandırma ihtiyacı gibi genel gözlemlere dayanır. Kişisel toleransınız (küçük çocuk, alerjik/astımlı biri, evcil hayvan vb.) farklılık gösterebileceğinden nihai kararı kendi durumunuza göre vermeniz gerekir.' },
+      { q: 'Su veya elektrik kesintisi ne zaman olabilir?', a: 'Tesisat (sıhhi tesisat) işleri sırasında su kesintisi, elektrik (kaba tesisat) işleri sırasında ise elektrik kesintisi yaşanması olasıdır. Kesin kesinti gün/saatlerini ustanızla/tesisatçınızla önceden netleştirmeniz, özellikle evde kalmaya devam edecekseniz önemlidir.' },
+      { q: 'Tesisat ve elektrik işlerini aynı anda yaptırırsam süre kısalır mı?', a: 'Evet, gerçekte usta ekipleri uygunsa bu iki iş genellikle paralel yürütülebilir ve toplam süreyi kısaltabilir. Bu araç ise daha temkinli bir tahmin vermek için işleri sıralı (art arda) varsayar; ekibinizle paralel çalışma imkanını görüşerek gerçek süreyi kısaltabilirsiniz.' },
+      { q: 'Bu takvime göre taşınma tarihi belirleyebilir miyim?', a: 'Bu araç size gerçekçi bir başlangıç noktası verir, ancak beklenmedik gecikmeler (malzeme tedariki, hava koşulları, ek işler) her zaman mümkündür; kritik bir tarih (ör. kira sözleşmesi bitişi, taşınma günü) için hesaplanan üst sınıra ek olarak birkaç günlük bir güvenlik payı daha bırakmanız önerilir.' },
+    ],
+  },
 
   // ── Alışveriş & Kargo (yeni) ──
   'kargo-desi-hesaplama': {

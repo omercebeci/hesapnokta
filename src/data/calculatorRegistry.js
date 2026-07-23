@@ -590,6 +590,14 @@ export const calculators = [
     icon: 'triangle',
     keywords: ['merdiven hesaplama', 'basamak sayısı hesaplama', 'rıht yüksekliği hesaplama', 'blondel formülü', 'merdiven eğimi hesaplama'],
   },
+  {
+    id: 'tadilat-takvimi',
+    title: 'Tadilat Takvimi Planlayıcı',
+    description: 'Yapacağınız işleri seçin; araç bunları doğru sıraya dizip kuruma/bekleme sürelerini (şap kuruması, sıva priz alma, boya kuruması) ekleyerek toplam tadilat takviminizi ve tahmini bitiş tarihinizi hesaplar.',
+    category: 'insaat-tadilat',
+    icon: 'calendar-clock',
+    keywords: ['tadilat takvimi', 'tadilat süresi ne kadar sürer', 'şap kaç günde kurur', 'tadilat sırası', 'ev tadilatı planlama'],
+  },
 
   // ── Alışveriş & Kargo (yeni) ──
   {

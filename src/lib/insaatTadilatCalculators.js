@@ -571,3 +571,141 @@ export function calculateStaircase({ floorHeightCm, horizontalLengthM, targetRis
     belowTreadRegulation: treadCm < STAIR_MIN_TREAD_REGULATION_CM,
   };
 }
+
+// ── 17) Tadilat takvimi planlayıcı ──
+// İş sırası, genel kabul gören tadilat pratiğine dayanır (dekormar.com "Komple
+// Ev Tadilatı Sıralaması": yıkım → tesisat/elektrik → şap → sıva → seramik →
+// boya → zemin kaplaması → mobilya/dolap → temizlik — "sıra karışırsa masraf
+// ikiye katlanır" uyarısıyla). İş süreleri, ortalama bir daire/oda kapsamı için
+// yaygın kaynaklarda tekrarlanan tahmini aralıklardır. Kuruma/bekleme süreleri
+// kaynaklı: şap (çimento esaslı) 21-28 gün (eminsap.com.tr, dekormar.com — hızlı
+// tip şaplarda 7-10 güne inebilir ama bu araç geleneksel/varsayılan değeri
+// kullanır), sıva/alçı boya öncesi kuruma 4-10 gün (Selim Usta: en çabuk 4 gün;
+// genel pratik 7-10 gün), seramik/fayans derz-yapıştırıcı tam mukavemet 1-3 gün
+// (impor.com.tr, vinaseramik.com: zeminde 24 saat-3 gün). Bu süreler hava
+// koşullarına, mevsime ve malzeme türüne göre önemli ölçüde değişebilir.
+export const RENOVATION_TASKS = {
+  yikim: {
+    label: 'Yıkım/Söküm',
+    order: 1,
+    workDaysMin: 1,
+    workDaysMax: 3,
+    homeStayWarning: 'Toz ve gürültü nedeniyle bu aşamada evde kalmak genellikle zordur.',
+  },
+  tesisat: {
+    label: 'Tesisat (sıhhi tesisat)',
+    order: 2,
+    workDaysMin: 2,
+    workDaysMax: 4,
+    utilityWarning: 'Su kesintisi olabilir.',
+  },
+  elektrik: {
+    label: 'Elektrik (kaba tesisat)',
+    order: 3,
+    workDaysMin: 2,
+    workDaysMax: 4,
+    utilityWarning: 'Elektrik kesintisi olabilir.',
+  },
+  sap: {
+    label: 'Şap (zemin) dökümü',
+    order: 4,
+    workDaysMin: 1,
+    workDaysMax: 2,
+    waitDaysMin: 21,
+    waitDaysMax: 28,
+    waitLabel: 'Şap kuruması (çimento esaslı, geleneksel — hızlı tip/akıllı şapla daha kısa sürebilir)',
+    homeStayWarning: 'Şap kuruyana kadar döküm yapılan alana girilmemesi ve ağır yük konulmaması önerilir.',
+  },
+  siva: {
+    label: 'Sıva/Alçı',
+    order: 5,
+    workDaysMin: 2,
+    workDaysMax: 4,
+    waitDaysMin: 4,
+    waitDaysMax: 10,
+    waitLabel: 'Sıva/alçı kuruması (boya öncesi)',
+  },
+  seramik: {
+    label: 'Seramik/Fayans',
+    order: 6,
+    workDaysMin: 3,
+    workDaysMax: 6,
+    waitDaysMin: 1,
+    waitDaysMax: 3,
+    waitLabel: 'Derz/yapıştırıcı tam mukavemet kazanması',
+  },
+  boya: {
+    label: 'Boya',
+    order: 7,
+    workDaysMin: 2,
+    workDaysMax: 4,
+    homeStayWarning: 'Koku ve nem nedeniyle iyi havalandırma gerekir; hassas kişiler (bebek, astım vb.) için birkaç gün uzakta kalmak düşünülebilir.',
+  },
+  parke: {
+    label: 'Parke/Laminat',
+    order: 8,
+    workDaysMin: 1,
+    workDaysMax: 3,
+  },
+  dolap: {
+    label: 'Dolap/Mobilya Montajı',
+    order: 9,
+    workDaysMin: 1,
+    workDaysMax: 3,
+  },
+  temizlik: {
+    label: 'Temizlik',
+    order: 10,
+    workDaysMin: 1,
+    workDaysMax: 1,
+  },
+};
+
+export function calculateRenovationTimeline({ selectedTaskKeys }) {
+  const keys = Array.isArray(selectedTaskKeys) ? selectedTaskKeys : [];
+  const steps = keys
+    .filter((key) => RENOVATION_TASKS[key])
+    .map((key) => ({ key, ...RENOVATION_TASKS[key] }))
+    .sort((a, b) => a.order - b.order);
+
+  let cursorMin = 0;
+  let cursorMax = 0;
+
+  const timeline = steps.map((step) => {
+    const startDayMin = cursorMin;
+    const startDayMax = cursorMax;
+    const workEndDayMin = startDayMin + step.workDaysMin;
+    const workEndDayMax = startDayMax + step.workDaysMax;
+    const waitDaysMin = step.waitDaysMin || 0;
+    const waitDaysMax = step.waitDaysMax || 0;
+    const readyDayMin = workEndDayMin + waitDaysMin;
+    const readyDayMax = workEndDayMax + waitDaysMax;
+
+    cursorMin = readyDayMin;
+    cursorMax = readyDayMax;
+
+    return {
+      key: step.key,
+      label: step.label,
+      workDaysMin: step.workDaysMin,
+      workDaysMax: step.workDaysMax,
+      waitDaysMin,
+      waitDaysMax,
+      waitLabel: step.waitLabel || null,
+      homeStayWarning: step.homeStayWarning || null,
+      utilityWarning: step.utilityWarning || null,
+      startDayMin,
+      startDayMax,
+      workEndDayMin,
+      workEndDayMax,
+      readyDayMin,
+      readyDayMax,
+    };
+  });
+
+  return {
+    timeline,
+    totalDaysMin: cursorMin,
+    totalDaysMax: cursorMax,
+  };
+}

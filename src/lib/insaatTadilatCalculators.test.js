@@ -25,6 +25,7 @@ import {
   calculateRebarWeight,
   calculateHollowProfileWeight,
   calculateStaircase,
+  calculateRenovationTimeline,
 } from './insaatTadilatCalculators.js';
 
 describe('insaat & tadilat hesaplayıcıları', () => {
@@ -309,6 +310,40 @@ describe('insaat & tadilat hesaplayıcıları', () => {
     const result = calculateStaircase({ floorHeightCm: 270, horizontalLengthM: 4 });
     expect(result.blondelCm).toBe(60.42);
     expect(result.isErgonomic).toBe(false);
+  });
+
+  it('seçilen işleri doğru sıraya dizer ve kuruma sürelerini bir sonraki işin başlangıcına ekler', () => {
+    const result = calculateRenovationTimeline({ selectedTaskKeys: ['boya', 'yikim', 'siva', 'sap'] });
+    expect(result.timeline.map((step) => step.key)).toEqual(['yikim', 'sap', 'siva', 'boya']);
+
+    const [yikim, sap, siva, boya] = result.timeline;
+    expect(yikim.startDayMin).toBe(0);
+    expect(yikim.readyDayMin).toBe(1);
+    expect(yikim.readyDayMax).toBe(3);
+
+    expect(sap.startDayMin).toBe(1);
+    expect(sap.startDayMax).toBe(3);
+    expect(sap.readyDayMin).toBe(23);
+    expect(sap.readyDayMax).toBe(33);
+    expect(sap.waitLabel).toMatch(/Şap kuruması/);
+
+    expect(siva.startDayMin).toBe(23);
+    expect(siva.readyDayMin).toBe(29);
+    expect(siva.readyDayMax).toBe(47);
+
+    expect(boya.startDayMin).toBe(29);
+    expect(boya.readyDayMin).toBe(31);
+    expect(boya.readyDayMax).toBe(51);
+
+    expect(result.totalDaysMin).toBe(31);
+    expect(result.totalDaysMax).toBe(51);
+  });
+
+  it('bilinmeyen görev anahtarlarını yok sayar, boş seçimde sıfır gün döner', () => {
+    const result = calculateRenovationTimeline({ selectedTaskKeys: ['bilinmeyen-is'] });
+    expect(result.timeline).toEqual([]);
+    expect(result.totalDaysMin).toBe(0);
+    expect(result.totalDaysMax).toBe(0);
   });
 });
 
