@@ -21,6 +21,65 @@ function escapeHtml(str = '') {
     .replace(/"/g, '&quot;');
 }
 
+// react-dom/server'ın renderToPipeableStream'i (App.jsx'teki tüm sayfa route'ları
+// React.lazy() ile yüklendiği için) onAllReady'de bile bazen Suspense boundary'sini
+// "askıda" biçimde yazar: görünür konumda boş bir <template> yer tutucu bırakır,
+// gerçek (çözülmüş) içeriği sayfanın sonuna gizli bir <div hidden> içine koyar ve
+// bunları DOM'da yer değiştiren bir $RC(...) betiği ekler — bu mekanizma gerçek bir
+// ağ üzerinden akan yanıt için tasarlanmıştır, tek seferlik statik bir dosya için değil.
+// Bu haliyle bırakılırsa: JS çalışmayan/geç çalışan istemcilerde (bazı crawler'lar,
+// yavaş bağlantılar) gerçek içerik hiç görünmeyebilir, ayrıca $RC betiği tarayıcıda
+// requestAnimationFrame ile zamanlandığından React'in hydrateRoot'uyla gereksiz
+// yere yarışabilir. Prerender çıktısını CI'da/tarayıcıda test ederken bu, gerçek
+// kök nedenle (bkz. vercel.json "cleanUrls" düzeltmesi — temiz URL'lerin yanlış
+// sayfanın statik dosyasına düşmesi) karışabilecek ayrı bir kırılganlık kaynağıydı;
+// derleme zamanında burada çözüp tamamen düz statik HTML üretiyoruz.
+export function resolveSuspenseReplay(html) {
+  const rcCallPattern = /\$RC\("(B:\d+)","(S:\d+)"\)/g;
+  const pairs = [...html.matchAll(rcCallPattern)].map((match) => [match[1], match[2]]);
+  if (pairs.length === 0) return html;
+
+  let result = html;
+
+  for (const [boundaryId, slotId] of pairs) {
+    const slotOpenTag = `<div hidden id="${slotId}">`;
+    const slotStart = result.indexOf(slotOpenTag);
+    if (slotStart === -1) continue;
+
+    let depth = 1;
+    let cursor = slotStart + slotOpenTag.length;
+    while (depth > 0) {
+      const nextOpen = result.indexOf('<div', cursor);
+      const nextClose = result.indexOf('</div>', cursor);
+      if (nextClose === -1) break;
+      if (nextOpen !== -1 && nextOpen < nextClose) {
+        depth += 1;
+        cursor = nextOpen + 4;
+      } else {
+        depth -= 1;
+        cursor = nextClose + 6;
+      }
+    }
+    const slotEnd = cursor;
+    const resolvedContent = result.slice(slotStart + slotOpenTag.length, slotEnd - '</div>'.length);
+
+    // Önce (belgede daha sonra konumlanan) gizli slot'u kaldır, sonra
+    // (daha önce konumlanan) boundary yer tutucusunu değiştir — aksi halde
+    // ilk değiştirme, henüz hesaplanmış slot indekslerini kaydırır.
+    result = result.slice(0, slotStart) + result.slice(slotEnd);
+
+    const boundaryPattern = new RegExp(`<!--\\$\\?-->[\\s\\S]*?<template id="${boundaryId}"><\\/template>[\\s\\S]*?<!--\\/\\$-->`);
+    result = result.replace(boundaryPattern, `<!--$-->${resolvedContent}<!--/$-->`);
+  }
+
+  // Artık kullanılmayan replay betiklerini temizle ($RT zamanlama betiği + $RB/$RV/$RC
+  // tanımı ve çağrıları içeren betik).
+  result = result.replace(/<script>requestAnimationFrame\(function\(\)\{\$RT=performance\.now\(\)\}\);<\/script>/g, '');
+  result = result.replace(/<script>\$RB=\[\];\$RV=function[\s\S]*?\$RC\("B:\d+","S:\d+"\)(?:;\$RC\("B:\d+","S:\d+"\))*<\/script>/g, '');
+
+  return result;
+}
+
 function buildHeadHtml(head) {
   if (!head) return '';
   const canonicalUrl = `${SITE_URL}${head.path === '/' ? '/' : head.path}`;
@@ -76,8 +135,9 @@ async function main() {
 
   for (const url of routes) {
     const { html, head } = await render(url);
+    const resolvedHtml = resolveSuspenseReplay(html);
     const finalHtml = template
-      .replace('<!--app-html-->', html)
+      .replace('<!--app-html-->', resolvedHtml)
       .replace('<!--app-head-->', buildHeadHtml(head));
 
     const outPath = url === '/'
@@ -92,4 +152,6 @@ async function main() {
   console.log(`✓ ${count} sayfa statik HTML olarak üretildi (prerender tamamlandı).`);
 }
 
-main();
+if (import.meta.url === pathToFileURL(process.argv[1]).href) {
+  main();
+}
