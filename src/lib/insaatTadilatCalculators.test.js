@@ -16,6 +16,8 @@ import {
   calculateBagCount,
   calculatePlasterCoverage,
   calculateAcBtuNeed,
+  calculateRoomHeatLoss,
+  calculateRadiatorSections,
 } from './insaatTadilatCalculators.js';
 
 describe('insaat & tadilat hesaplayıcıları', () => {
@@ -194,6 +196,29 @@ describe('insaat & tadilat hesaplayıcıları', () => {
     const result = calculateAcBtuNeed({ area: 50 });
     expect(result.estimatedBtu).toBe(30000);
     expect(result.recommendedClass).toBeNull();
+  });
+
+  it('oda hacmi ve yalıtım/cephe durumuna göre ısı kaybını kcal ve watt olarak hesaplar', () => {
+    const result = calculateRoomHeatLoss({ volumeM3: 75, tierKey: 'db-guney-tek-cam' });
+    expect(result.estimatedKcal).toBe(3750);
+    expect(result.minKcal).toBe(3375);
+    expect(result.maxKcal).toBe(4125);
+    expect(result.estimatedWatt).toBe(4361.25);
+    expect(result.tierLabel).toBe('Doğu/Batı/Güney, ara kat, tek cam');
+  });
+
+  it('iyi yalıtımlı güney cepheli odalarda ısı kaybı daha düşük çıkar', () => {
+    const iyi = calculateRoomHeatLoss({ volumeM3: 75, tierKey: 'guney-ic-cift-cam' });
+    const kotu = calculateRoomHeatLoss({ volumeM3: 75, tierKey: 'ust-kuzey-cati-yalitimsiz' });
+    expect(iyi.estimatedKcal).toBe(3000);
+    expect(kotu.estimatedKcal).toBe(5250);
+    expect(kotu.estimatedKcal).toBeGreaterThan(iyi.estimatedKcal);
+  });
+
+  it('gereken ısı yüküne ve panel yüksekliğine göre dilim sayısını yukarı yuvarlar', () => {
+    expect(calculateRadiatorSections(3750, 600)).toBe(36);
+    expect(calculateRadiatorSections(3750, 300)).toBe(66);
+    expect(calculateRadiatorSections(3750, 9999)).toBe(36);
   });
 });
 

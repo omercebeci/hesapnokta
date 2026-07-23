@@ -333,3 +333,57 @@ export function calculateAcBtuNeed({ area, ceilingHeight = AC_BTU_BASE_CEILING_H
     exposureLabel: exposure.label,
   };
 }
+
+// ── 12) Radyatör/Petek dilim hesaplama ──
+// Isı kaybı katsayıları (kcal/h per m³) — tesisat.org "Pratik Isı Kaybı Hesabı"
+// rehberinde verilen, Türkiye'deki tesisatçı pratiğinde yaygın kullanılan
+// kat/cephe yönü/cam türü kombinasyonlarına göre kaynaklı tablo.
+export const ROOM_HEAT_LOSS_TIERS = {
+  'guney-ic-cift-cam': { label: 'Güney cephe, ara kat, çift cam (iyi yalıtım)', kcalPerM3: 40 },
+  'db-kose-tek-cam': { label: 'Doğu/Batı köşe, ara kat, tek cam (yalıtımlı)', kcalPerM3: 45 },
+  'db-guney-tek-cam': { label: 'Doğu/Batı/Güney, ara kat, tek cam', kcalPerM3: 50 },
+  'ust-cift-cam': { label: 'Üst kat/çatı katı/bodrum, çift cam (yalıtımlı)', kcalPerM3: 55 },
+  'ust-db-tek-cam': { label: 'Üst kat/çatı katı/bodrum, Doğu/Batı, tek cam', kcalPerM3: 60 },
+  'ust-kuzey-yalitimsiz': { label: 'Üst kat/bodrum, kuzey cephe, yalıtımsız duvar', kcalPerM3: 65 },
+  'ust-kuzey-cati-yalitimsiz': { label: 'Üst kat/çatı katı, kuzey, yalıtımsız çatı, tek cam', kcalPerM3: 70 },
+};
+
+const KCAL_TO_WATT = 1.163; // standart dönüşüm: 1 kcal/h = 1,163 W
+
+export function calculateRoomHeatLoss({ volumeM3, tierKey }) {
+  const volume = Math.max(0, safeNumber(volumeM3));
+  const tier = ROOM_HEAT_LOSS_TIERS[tierKey] || ROOM_HEAT_LOSS_TIERS['db-guney-tek-cam'];
+
+  const estimatedKcal = volume * tier.kcalPerM3;
+
+  return {
+    estimatedKcal: round2(estimatedKcal),
+    minKcal: round2(estimatedKcal * 0.9),
+    maxKcal: round2(estimatedKcal * 1.1),
+    estimatedWatt: round2(estimatedKcal * KCAL_TO_WATT),
+    minWatt: round2(estimatedKcal * 0.9 * KCAL_TO_WATT),
+    maxWatt: round2(estimatedKcal * 1.1 * KCAL_TO_WATT),
+    tierLabel: tier.label,
+  };
+}
+
+// Alüminyum panel radyatör dilim verimi (kcal/h per dilim) — RADYAL Isıtma
+// Sistemleri A.Ş. "KN" (Konak) serisi teknik verileri, ΔT60 (90/70-20°C)
+// standart ısıl güç ratingine göre. Marka/modele göre ±%10-15 değişebilir.
+export const RADIATOR_DILIM_OUTPUT_KCAL = {
+  300: 57,
+  375: 70,
+  450: 83,
+  525: 95,
+  600: 106,
+  750: 130,
+  825: 140,
+  900: 149,
+  1000: 163,
+};
+
+export function calculateRadiatorSections(heatLossKcal, heightMm) {
+  const kcal = Math.max(0, safeNumber(heatLossKcal));
+  const outputPerSection = RADIATOR_DILIM_OUTPUT_KCAL[heightMm] || RADIATOR_DILIM_OUTPUT_KCAL[600];
+  return Math.ceil(kcal / outputPerSection);
+}

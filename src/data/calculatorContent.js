@@ -1010,6 +1010,37 @@ export const calculatorContent = {
       { q: 'Hesaplanan BTU\'dan daha küçük bir klima alırsam ne olur?', a: 'Klima sürekli tam kapasitede çalışmak zorunda kalır, istenen sıcaklığa hiç ulaşamayabilir veya çok geç ulaşır, enerji tüketimi ve aşınma artar; bu yüzden sınırda kalan durumlarda bir üst kapasiteyi tercih etmek genellikle daha güvenlidir.' },
     ],
   },
+  'radyator-dilim-hesaplama': {
+    about: 'Radyatör/petek dilim hesaplama aracı, oda hacmine (alan × tavan yüksekliği) ve yalıtım/cephe yönü/kat durumuna göre gereken ısı yükünü (kcal/h ve W) hesaplar; ardından seçtiğiniz panel yüksekliğine göre kaç dilim radyatöre ihtiyacınız olduğunu bulur. Sonuç, gerçek koşullardaki belirsizliği yansıtmak için bir aralık olarak sunulur.',
+    method: 'Oda hacmi, tesisatçı pratiğinde yaygın kullanılan bir tabloya göre seçtiğiniz yalıtım/cephe yönü/kat kombinasyonuna karşılık gelen kcal/h/m³ katsayısıyla (40-70 arası) çarpılır; bu katsayı 1 kcal/h = 1,163 W dönüşümüyle Watt\'a da çevrilir. Sonuç ±%10 aralık olarak gösterilir. Gereken dilim sayısı, bu ısı yükünün (orta değer), seçtiğiniz panel yüksekliğine karşılık gelen dilim başına kcal/h veriminine bölünüp yukarı yuvarlanmasıyla bulunur.',
+    examples: [
+      {
+        title: '15 m² alan, 2,7 m tavan, Doğu/Batı/Güney tek cam, 600 mm panel',
+        rows: [
+          { label: 'Oda hacmi', value: '40,5 m³' },
+          { label: 'Gereken ısı yükü', value: '1.822,5 - 2.227,5 kcal/h' },
+          { label: 'Gereken dilim sayısı', value: '20 dilim' },
+        ],
+      },
+      {
+        title: '20 m² alan, 2,5 m tavan, üst kat/çatı katı + kuzey + yalıtımsız çatı, 600 mm panel',
+        rows: [
+          { label: 'Oda hacmi', value: '50 m³' },
+          { label: 'Gereken ısı yükü', value: '3.150 - 3.850 kcal/h' },
+          { label: 'Gereken dilim sayısı', value: '34 dilim' },
+        ],
+      },
+    ],
+    faq: [
+      { q: 'Isı kaybı hesabı için oda alanını mı yoksa hacmini mi kullanmalıyım?', a: 'Hacim kullanılmalıdır; tavan yüksekliği arttıkça ısıtılması gereken hava miktarı da artar. Bu araç, girdiğiniz alan ve tavan yüksekliğini otomatik olarak çarpıp hacmi bulur.' },
+      { q: 'Yalıtım/cephe/kat durumunu nasıl seçmeliyim?', a: 'Odanızı en yakın tarif eden seçeneği işaretleyin: güney cepheli ve çift camlı bir ara kat odası en düşük ısı kaybına, kuzey cepheli ve yalıtımsız bir çatı katı odası ise en yüksek ısı kaybına sahiptir. Emin değilseniz orta seçeneklerden birini kullanabilirsiniz.' },
+      { q: 'Sonuç neden bir aralık olarak veriliyor?', a: 'Bu hesap, tesisatçıların saha pratiğinde kullandığı basitleştirilmiş bir yöntemdir; duvar kalınlığı, doğrama kalitesi ve gerçek yalıtım detayları gibi etkenler sonucu ±%10 civarında değiştirebilir. Kesin ısıtma projesi için yetkili bir tesisatçı/mühendis değerlendirmesi gerekir.' },
+      { q: 'Dilim başına ısı verimi neden panel yüksekliğine göre değişiyor?', a: 'Daha yüksek bir panel, aynı genişlikte daha fazla yüzey alanına ve su hacmine sahiptir; bu nedenle daha yüksek radyatörlerin her bir dilimi daha fazla ısı verir ve daha az dilimle aynı ısı yüküne ulaşılabilir.' },
+      { q: 'kcal/h ile Watt arasındaki fark nedir?', a: 'İkisi de ısı gücü birimidir; Türkiye\'de geleneksel olarak kcal/h, Avrupa/uluslararası standartlarda ise Watt (W) kullanılır. Dönüşüm oranı 1 kcal/h = 1,163 W\'tır; bu araç sonucu her iki birimde de gösterir.' },
+      { q: 'Kombi kapasitesi de bu hesapla mı belirlenir?', a: 'Kısmen; kombi, evdeki TÜM odaların toplam ısı kaybını (bu araçla oda oda hesaplanıp toplanabilir) artı sıcak su ihtiyacını karşılayacak şekilde seçilir. Tek bir odanın hesabı, kombi seçimi için yeterli değildir.' },
+      { q: 'Panel radyatör ile alüminyum/dökme dilimli radyatör aynı mı sayılır?', a: 'Hayır, ısı verimleri farklıdır; bu araçtaki dilim verimi değerleri alüminyum panel radyatör tipine dayanır. Farklı bir radyatör türü kullanıyorsanız üretici teknik föyündeki değerleri esas almanız daha doğru olur.' },
+    ],
+  },
 
   // ── Alışveriş & Kargo (yeni) ──
   'kargo-desi-hesaplama': {

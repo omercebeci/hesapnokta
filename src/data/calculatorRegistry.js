@@ -550,6 +550,14 @@ export const calculators = [
     icon: 'gauge',
     keywords: ['klima btu hesaplama', 'kaç btu klima', 'klima kapasite hesabı', '9000 btu kaç m2', '12000 btu kaç m2', '18000 btu kaç m2'],
   },
+  {
+    id: 'radyator-dilim-hesaplama',
+    title: 'Radyatör/Petek Dilim Hesaplama',
+    description: 'Oda hacmi, yalıtım/cephe/kat durumuna göre gereken ısı yükünü (kcal/h ve W) ve seçtiğiniz panel yüksekliğine göre gereken radyatör dilim sayısını hesaplayın.',
+    category: 'insaat-tadilat',
+    icon: 'flame',
+    keywords: ['radyatör hesaplama', 'petek dilim hesaplama', 'kalorifer peteği hesaplama', 'kaç dilim radyatör', 'ısı kaybı hesabı'],
+  },
 
   // ── Alışveriş & Kargo (yeni) ──
   {
