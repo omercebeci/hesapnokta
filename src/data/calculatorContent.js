@@ -1131,6 +1131,38 @@ export const calculatorContent = {
       { q: 'Ton cinsinden sonuç neden bu kadar çok ondalık basamak gösteriyor?', a: 'İnşaat demiri genellikle tonlarca sipariş edildiğinden, tek bir hesaplamadaki küçük yuvarlama farkları büyük metrajlarda belirgin hale gelebilir; bu yüzden ton sonucu 4 ondalık basamağa kadar gösterilerek hassasiyet korunur.' },
     ],
   },
+  'merdiven-hesaplama': {
+    about: 'Merdiven hesaplama aracı, kat yüksekliği ve merdivenin kaplayacağı yatay uzunluğa göre basamak sayısını, rıht (dikey) yüksekliğini, basamak (yatay) genişliğini ve merdiven eğimini hesaplar. Sonucu, konforlu bir merdiven için yaygın kabul edilen Blondel ergonomi kuralına (2×rıht + basamak genişliği = 63-65 cm) ve Planlı Alanlar İmar Yönetmeliği\'nin konut merdivenleri için verdiği sınırlara göre değerlendirip gerekirse uyarı gösterir.',
+    method: 'Basamak sayısı, kat yüksekliğinin ideal kabul edilen 17 cm\'lik rıht yüksekliğine bölünüp en yakın tam sayıya yuvarlanmasıyla bulunur; gerçek rıht yüksekliği bu basamak sayısına göre yeniden hesaplanır. Basamak genişliği, merdivenin yatay uzunluğunun, basamak (tread) sayısına — ki bu rıht sayısından bir eksiktir, çünkü son basamak üst kat döşemesiyle çakışır — bölünmesiyle bulunur. Blondel formülü (2×rıht + basamak genişliği) 63-65 cm aralığındaysa merdiven ergonomik kabul edilir; bu aralığın dışında kalan sonuçlar için uyarı gösterilir. Ayrıca rıht yüksekliğinin 17,5 cm\'yi aşması veya basamak genişliğinin 26 cm\'nin altında kalması durumunda, bunların Planlı Alanlar İmar Yönetmeliği\'ndeki konut merdiveni sınırlarına uymadığı ayrıca belirtilir.',
+    examples: [
+      {
+        title: '270 cm kat yüksekliği, 4,5 m yatay uzunluk (ergonomik)',
+        rows: [
+          { label: 'Basamak sayısı', value: '16 basamak' },
+          { label: 'Rıht yüksekliği', value: '16,88 cm' },
+          { label: 'Basamak genişliği', value: '30 cm' },
+          { label: 'Blondel değeri', value: '63,75 cm (63-65 cm aralığında, ergonomik)' },
+        ],
+      },
+      {
+        title: '270 cm kat yüksekliği, 4 m yatay uzunluk (dar merdiven — uyarı)',
+        rows: [
+          { label: 'Basamak sayısı', value: '16 basamak' },
+          { label: 'Basamak genişliği', value: '26,67 cm' },
+          { label: 'Blondel değeri', value: '60,42 cm (63-65 cm aralığının altında — ergonomi uyarısı)' },
+        ],
+      },
+    ],
+    faq: [
+      { q: 'Blondel formülü nedir, neden önemlidir?', a: 'Fransız mimar François Blondel\'in tanımladığı bu formül (2×rıht yüksekliği + basamak genişliği), düz zeminde yürürken attığımız ortalama adımın (~63 cm) merdiven çıkarken de korunmasını hedefler. Bu değer 63-65 cm aralığındaysa merdiven ne çok dik/yorucu ne de çok düz/uzun hissedilir.' },
+      { q: 'Blondel değerim 63-65 cm aralığının dışında çıktı, ne yapmalıyım?', a: 'Değer 63\'ün altındaysa merdiven büyük olasılıkla dar/dik hissedilecektir — merdiven boşluğunuz uygunsa yatay uzunluğu artırmayı deneyin. Değer 65\'in üzerindeyse merdiven gereğinden düz/uzun olabilir — yatay uzunluğu azaltmayı veya basamak sayısını gözden geçirmeyi değerlendirin.' },
+      { q: 'Basamak (tread) sayısı neden rıht sayısından bir eksik?', a: 'Bir merdivende N adet rıht (yükselme) varsa, N. rıhtın üzerine bastığınızda zaten üst kat döşemesine ulaşmış olursunuz; bu yüzden ayrı bir "basamak yüzeyi" gerektiren yatay adım sayısı N-1\'dir. Üst kat döşemesinin kendisi son basamağın yatay yüzeyi işlevini görür.' },
+      { q: 'Yönetmelik sınırları ile Blondel ergonomi aralığı aynı şey mi?', a: 'Hayır, ikisi farklı amaçlara hizmet eder. Yönetmelik sınırları (rıht ≤ 17,5 cm, basamak genişliği ≥ 26 cm) güvenlik için belirlenmiş asgari/azami yasal limitlerdir; Blondel aralığı (63-65 cm) ise bu yasal sınırlar içinde kalan tasarımların ne kadar KONFORLU olduğunu ölçen ayrı bir ergonomi kuralıdır. Bir merdiven yönetmeliğe uygun olsa bile Blondel açısından ideal olmayabilir.' },
+      { q: 'Eğim açısı ne işe yarar?', a: 'Eğim açısı, merdivenin ne kadar dik olduğunu gösterir; konut merdivenleri genelde 30-35° civarında olur. Daha düşük açılar daha rahat ama daha uzun, daha yüksek açılar daha dik ama daha kısa bir merdiven anlamına gelir.' },
+      { q: 'Sarmal (döner) merdivenler için de kullanılabilir mi?', a: 'Bu araç düz kollu merdivenler için tasarlanmıştır; sarmal/döner merdivenlerde basamak genişliği merdivenin iç ve dış kenarında farklılaştığından (üçgen basamak formu), bu basit hesap doğrudan uygulanamaz ve bir mimarın ayrı bir tasarım yapması gerekir.' },
+      { q: 'Sonuçlar kesin bir mimari/statik proje yerine geçer mi?', a: 'Hayır, bu araç yalnızca ön fikir vermek için bir ergonomi/geometri kontrolüdür; korkuluk yüksekliği, sahanlık ölçüleri, taşıyıcı sistem ve yangın kaçış merdiveni gibi ek yönetmelik gereklilikleri için bir mimar/mühendisle çalışmanız gerekir.' },
+    ],
+  },
 
   // ── Alışveriş & Kargo (yeni) ──
   'kargo-desi-hesaplama': {

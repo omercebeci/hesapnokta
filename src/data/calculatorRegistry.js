@@ -582,6 +582,14 @@ export const calculators = [
     icon: 'ruler',
     keywords: ['demir ağırlık hesaplama', 'donatı hesaplama', 'inşaat demiri kg hesaplama', 'ts 708', 'demir metraj hesaplama'],
   },
+  {
+    id: 'merdiven-hesaplama',
+    title: 'Merdiven Hesaplama',
+    description: 'Kat yüksekliği ve merdiven uzunluğuna göre basamak sayısını, rıht ve basamak genişliğini, eğimi hesaplayın; Blondel ergonomi kuralına (2×rıht + basamak genişliği = 63-65 cm) göre uyarı alın.',
+    category: 'insaat-tadilat',
+    icon: 'triangle',
+    keywords: ['merdiven hesaplama', 'basamak sayısı hesaplama', 'rıht yüksekliği hesaplama', 'blondel formülü', 'merdiven eğimi hesaplama'],
+  },
 
   // ── Alışveriş & Kargo (yeni) ──
   {

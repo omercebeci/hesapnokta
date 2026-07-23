@@ -533,3 +533,41 @@ export function calculateHollowProfileWeight({ outerWidthMm, outerHeightMm, wall
     totalTon: Math.round((totalKg / 1000) * 10000) / 10000,
   };
 }
+
+// ── 16) Merdiven hesaplama ──
+// Blondel formülü (2×rıht + basamak genişliği), konforlu bir merdiven için
+// yaygın kabul edilen 63-65 cm aralığına dayanır (düz zeminde ortalama adım
+// uzunluğu ~63 cm). Yönetmelik sınırları (rıht ≤ 17,5 cm, basamak genişliği
+// ≥ 26 cm), Planlı Alanlar İmar Yönetmeliği'nde konut merdivenleri için
+// verilen üst/alt sınırlardır — bunlar Blondel'in "ideal" aralığından ayrı,
+// asgari/azami yasal sınırlardır.
+export const STAIR_IDEAL_RISER_CM = 17;
+export const STAIR_BLONDEL_MIN_CM = 63;
+export const STAIR_BLONDEL_MAX_CM = 65;
+export const STAIR_MAX_RISER_REGULATION_CM = 17.5;
+export const STAIR_MIN_TREAD_REGULATION_CM = 26;
+
+export function calculateStaircase({ floorHeightCm, horizontalLengthM, targetRiserCm = STAIR_IDEAL_RISER_CM }) {
+  const floorHeight = Math.max(1, safeNumber(floorHeightCm));
+  const horizontalLengthCm = Math.max(1, safeNumber(horizontalLengthM)) * 100;
+  const targetRiser = Math.max(1, safeNumber(targetRiserCm, STAIR_IDEAL_RISER_CM));
+
+  const stepCount = Math.max(1, Math.round(floorHeight / targetRiser));
+  const riserCm = floorHeight / stepCount;
+  const treadCount = Math.max(1, stepCount - 1);
+  const treadCm = horizontalLengthCm / treadCount;
+
+  const blondelCm = 2 * riserCm + treadCm;
+  const slopeDegrees = (Math.atan(riserCm / treadCm) * 180) / Math.PI;
+
+  return {
+    stepCount,
+    riserCm: round2(riserCm),
+    treadCm: round2(treadCm),
+    blondelCm: round2(blondelCm),
+    slopeDegrees: round2(slopeDegrees),
+    isErgonomic: blondelCm >= STAIR_BLONDEL_MIN_CM && blondelCm <= STAIR_BLONDEL_MAX_CM,
+    exceedsRiserRegulation: riserCm > STAIR_MAX_RISER_REGULATION_CM,
+    belowTreadRegulation: treadCm < STAIR_MIN_TREAD_REGULATION_CM,
+  };
+}

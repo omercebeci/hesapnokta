@@ -24,6 +24,7 @@ import {
   calculateTruckCount,
   calculateRebarWeight,
   calculateHollowProfileWeight,
+  calculateStaircase,
 } from './insaatTadilatCalculators.js';
 
 describe('insaat & tadilat hesaplayıcıları', () => {
@@ -290,6 +291,24 @@ describe('insaat & tadilat hesaplayıcıları', () => {
     const expectedKgPerMeter = Math.round(expectedCrossSectionM2 * 7850 * 1000) / 1000;
     expect(result.kgPerMeter).toBe(expectedKgPerMeter);
     expect(result.totalKg).toBe(round2(expectedKgPerMeter * 6));
+  });
+
+  it('kat yüksekliği ve uzunluğa göre basamak sayısı/rıht/genişlik/eğim hesaplar, Blondel aralığındaysa ergonomik işaretler', () => {
+    const result = calculateStaircase({ floorHeightCm: 270, horizontalLengthM: 4.5 });
+    expect(result.stepCount).toBe(16);
+    expect(result.riserCm).toBe(16.88);
+    expect(result.treadCm).toBe(30);
+    expect(result.blondelCm).toBe(63.75);
+    expect(result.slopeDegrees).toBe(29.36);
+    expect(result.isErgonomic).toBe(true);
+    expect(result.exceedsRiserRegulation).toBe(false);
+    expect(result.belowTreadRegulation).toBe(false);
+  });
+
+  it('Blondel aralığı dışına düşen ölçülerde ergonomi uyarısı üretir', () => {
+    const result = calculateStaircase({ floorHeightCm: 270, horizontalLengthM: 4 });
+    expect(result.blondelCm).toBe(60.42);
+    expect(result.isErgonomic).toBe(false);
   });
 });
 
