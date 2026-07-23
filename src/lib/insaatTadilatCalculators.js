@@ -443,3 +443,44 @@ export function calculateMantolamaNeed({ area, materialKey, thicknessMm = 50, wa
     materialLabel: material.label,
   };
 }
+
+// ── 14) Moloz/hafriyat hesaplama ──
+// Kabarma oranları (fire payı), molozhatti.com.tr'nin "Hafriyat m³ Nasıl
+// Hesaplanır?" rehberinde iş türüne göre verilen aralıkların orta noktalarıdır:
+// iç mekân kırım (duvar/zemin yıkımı) %10-20 → %15, temel/derin kazı %20-35 →
+// %27,5, dolgu/karışık zemin %25-40 → %32,5. Taşıma aracı kapasite seçenekleri
+// (6/8/12/14/16/18 m³), hafriyat sektöründe yaygın kullanılan damper tipi
+// kapasite sınıflandırmasından alınmıştır.
+export const MOLOZ_TIERS = {
+  'ic-mekan-kirim': { label: 'İç mekân kırım (duvar/zemin yıkımı)', kabarmaOrani: 15 },
+  'temel-derin-kazi': { label: 'Temel/derin kazı', kabarmaOrani: 27.5 },
+  'dolgu-karisik-zemin': { label: 'Dolgu/karışık zemin', kabarmaOrani: 32.5 },
+};
+
+export const TRUCK_CAPACITY_OPTIONS_M3 = [6, 8, 12, 14, 16, 18];
+
+export function calculateDemolitionNetVolume({ length, width, thicknessCm }) {
+  const l = Math.max(0, safeNumber(length));
+  const w = Math.max(0, safeNumber(width));
+  const thickness = Math.max(0, safeNumber(thicknessCm)) / 100;
+  return round2(l * w * thickness);
+}
+
+export function calculateMolozVolume({ netVolumeM3, tierKey }) {
+  const netVolume = Math.max(0, safeNumber(netVolumeM3));
+  const tier = MOLOZ_TIERS[tierKey] || MOLOZ_TIERS['ic-mekan-kirim'];
+  const looseVolumeM3 = netVolume * (1 + tier.kabarmaOrani / 100);
+
+  return {
+    netVolumeM3: round2(netVolume),
+    looseVolumeM3: round2(looseVolumeM3),
+    kabarmaOrani: tier.kabarmaOrani,
+    tierLabel: tier.label,
+  };
+}
+
+export function calculateTruckCount(looseVolumeM3, truckCapacityM3) {
+  const volume = Math.max(0, safeNumber(looseVolumeM3));
+  const capacity = Math.max(0.1, safeNumber(truckCapacityM3, 12));
+  return Math.ceil(volume / capacity);
+}

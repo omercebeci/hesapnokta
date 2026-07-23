@@ -1074,6 +1074,35 @@ export const calculatorContent = {
       { q: 'Köşe profili, su tahliye profili gibi yardımcı malzemeler hesaba dahil mi?', a: 'Hayır, bu araç yalnızca ana malzemeleri (levha, dübel, file, yapıştırıcı, sıva) hesaplar; pencere/kapı köşe profilleri, su tahliye profili, silikon gibi tamamlayıcı malzemeler projenin detaylarına göre ayrıca hesaplanmalıdır.' },
     ],
   },
+  'moloz-hafriyat-hesaplama': {
+    about: 'Moloz/hafriyat hesaplama aracı, yıkılan duvar/zemin ölçülerinden (veya doğrudan girdiğiniz m³ değerinden) net hacmi bulur; bu hacmi seçtiğiniz iş türüne göre bir kabarma oranıyla büyüterek gerçekte taşınacak moloz hacmini ve seçtiğiniz taşıma aracı kapasitesine göre gereken sefer sayısını hesaplar.',
+    method: 'Duvar/zemin ölçülerinden hesaplanıyorsa net hacim, uzunluk × genişlik/yükseklik × kalınlık formülüyle bulunur. Kırılan/kazılan malzeme, yerinde sıkışık haldeyken kapladığı hacimden daha fazla yer kaplar (kabarma); bu araç, iş türüne göre üç kademeli bir oran kullanır: iç mekân kırım (duvar/zemin yıkımı) için %15, temel/derin kazı için %27,5, dolgu/karışık zemin için %32,5 — bunlar sektörde yaygın kullanılan aralıkların (sırasıyla %10-20, %20-35, %25-40) orta noktalarıdır. Gereken sefer/araç sayısı, bu kabarmış hacmin seçtiğiniz taşıma aracı kapasitesine (6-18 m³ arası, yaygın damper tipi sınıflandırması) bölünüp yukarı yuvarlanmasıyla bulunur.',
+    examples: [
+      {
+        title: '5×3 m duvar, 20 cm kalınlık, iç mekân kırım, 12 m³ araç',
+        rows: [
+          { label: 'Net hacim', value: '3 m³' },
+          { label: 'Taşınacak hacim (kabarma dahil)', value: '3,45 m³' },
+          { label: 'Gereken sefer sayısı', value: '1 sefer' },
+        ],
+      },
+      {
+        title: 'Doğrudan 40 m³ hafriyat, dolgu/karışık zemin, 12 m³ araç',
+        rows: [
+          { label: 'Taşınacak hacim (kabarma dahil)', value: '53 m³' },
+          { label: 'Gereken sefer sayısı', value: '5 sefer' },
+        ],
+      },
+    ],
+    faq: [
+      { q: 'Kabarma katsayısı nedir, neden önemlidir?', a: 'Bir duvar veya zemin kırıldığında, ortaya çıkan parçalar arasında boşluklar oluşur; bu yüzden aynı kütledeki malzeme, yerinde sıkışık haldeyken kapladığından daha fazla hacim kaplar. Kamyon/konteyner sayısını bu büyümüş (kabarmış) hacme göre hesaplamazsanız, taşıma sırasında eksik araç/konteyner siparişi verebilirsiniz.' },
+      { q: 'İş türünü nasıl seçmeliyim?', a: 'Sadece bir duvar veya zemin kaplaması söküyorsanız "İç mekân kırım" seçeneğini kullanın (en düşük kabarma oranı); temel kazısı gibi daha derin ve karışık malzeme içeren işlerde "Temel/derin kazı" veya "Dolgu/karışık zemin" seçeneklerini tercih edin.' },
+      { q: 'Taşıma aracı kapasitesini nasıl seçmeliyim?', a: 'Anlaştığınız nakliye firmasının kullandığı aracın (kamyon veya moloz konteyneri) hacim kapasitesini seçin; hafriyat sektöründe sık kullanılan damper tipleri 6, 8, 12, 14, 16 ve 18 m³ kapasitelidir. Farklı bir kapasiteniz varsa en yakın seçeneği kullanabilirsiniz.' },
+      { q: 'Doğrudan m³ girişini ne zaman kullanmalıyım?', a: 'Hacmi zaten biliyorsanız (ör. bir hafriyat firmasından ölçüm aldıysanız veya farklı bir araçla hesapladıysanız) "Doğrudan m³" modunu kullanarak bu değeri doğrudan girip kabarma ve sefer sayısı hesaplarını yaptırabilirsiniz.' },
+      { q: 'Moloz ile hafriyat toprağı aynı kabarma oranına mı sahiptir?', a: 'Hayır, tam olarak değil; bu araçtaki oranlar pratik/ortalama değerlerdir. Kayalık zemin veya çok yoğun betonarme moloz gibi özel durumlarda gerçek kabarma oranı daha da yüksek olabilir; büyük/kritik projelerde nakliye firmanızla veya bir mühendisle teyit etmeniz önerilir.' },
+      { q: 'Hesaplanan sefer sayısına atık bertaraf/depolama ücreti dahil mi?', a: 'Hayır, bu araç yalnızca taşıma için gereken araç/sefer sayısını hesaplar; moloz döküm sahası veya geri dönüşüm tesisi ücretleri, varsa ayrıca hesaba katılmalıdır.' },
+    ],
+  },
 
   // ── Alışveriş & Kargo (yeni) ──
   'kargo-desi-hesaplama': {

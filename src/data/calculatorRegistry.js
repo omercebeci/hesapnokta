@@ -566,6 +566,14 @@ export const calculators = [
     icon: 'layers',
     keywords: ['mantolama hesaplama', 'ısı yalıtımı hesaplama', 'eps hesaplama', 'dübel sayısı hesaplama', 'mantolama m2 hesabı'],
   },
+  {
+    id: 'moloz-hafriyat-hesaplama',
+    title: 'Moloz/Hafriyat Hesaplama',
+    description: 'Yıkılan duvar/zemin ölçülerinden veya doğrudan m³ girişinden, kabarma katsayısı uygulanmış moloz hacmini ve gereken kamyon/konteyner sefer sayısını hesaplayın.',
+    category: 'insaat-tadilat',
+    icon: 'truck',
+    keywords: ['moloz hesaplama', 'hafriyat hesaplama', 'moloz kaç kamyon', 'kabarma katsayısı', 'hafriyat m3 hesaplama'],
+  },
 
   // ── Alışveriş & Kargo (yeni) ──
   {

@@ -19,6 +19,9 @@ import {
   calculateRoomHeatLoss,
   calculateRadiatorSections,
   calculateMantolamaNeed,
+  calculateDemolitionNetVolume,
+  calculateMolozVolume,
+  calculateTruckCount,
 } from './insaatTadilatCalculators.js';
 
 describe('insaat & tadilat hesaplayıcıları', () => {
@@ -242,6 +245,26 @@ describe('insaat & tadilat hesaplayıcıları', () => {
 
     const orta = calculateMantolamaNeed({ area: 30, materialKey: 'eps', wasteRate: 0, buildingHeightM: 15 });
     expect(orta.dubelPerM2).toBe(8);
+  });
+
+  it('duvar/zemin ölçülerinden net yıkım hacmini hesaplar', () => {
+    expect(calculateDemolitionNetVolume({ length: 5, width: 3, thicknessCm: 20 })).toBe(3);
+  });
+
+  it('kabarma oranına göre moloz hacmini net hacimden büyütür', () => {
+    const icMekan = calculateMolozVolume({ netVolumeM3: 3, tierKey: 'ic-mekan-kirim' });
+    expect(icMekan.looseVolumeM3).toBe(3.45);
+    expect(icMekan.kabarmaOrani).toBe(15);
+
+    const dolgu = calculateMolozVolume({ netVolumeM3: 10, tierKey: 'dolgu-karisik-zemin' });
+    expect(dolgu.looseVolumeM3).toBe(13.25);
+    expect(dolgu.kabarmaOrani).toBe(32.5);
+  });
+
+  it('kabarmış moloz hacmine ve kamyon kapasitesine göre gereken sefer sayısını yukarı yuvarlar', () => {
+    expect(calculateTruckCount(13.25, 12)).toBe(2);
+    expect(calculateTruckCount(3.45, 6)).toBe(1);
+    expect(calculateTruckCount(50, 18)).toBe(3);
   });
 });
 
