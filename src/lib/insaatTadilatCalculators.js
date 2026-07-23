@@ -277,3 +277,59 @@ export function calculatePlasterCoverage({ bagCount, bagWeightKg, thicknessMm, m
     materialSource: material.source,
   };
 }
+
+// ── 11) Klima BTU hesaplama ──
+// Bu alan, Manual-J gibi mühendislik hesabı değil, Türkiye'deki klima
+// perakendecilerinin (klima.com.tr, btuhesaplama.com, Vestel, semteknik.com.tr
+// vb. birden çok kaynakta tutarlı biçimde tekrarlanan) "kaba tahmin" pratiğidir;
+// bu yüzden sonuç kesin tek sayı değil bir ARALIK olarak sunulur.
+// Taban oran: oda alanı × ~600 BTU/m² (yaygın kabul gören ortalama pratik değer).
+// Düzeltmeler: tavan yüksekliği (2,5 m taban, hacimsel ölçekleme), maruziyet
+// durumu (kat/cephe/güneş alma — az güneşli -%5, normal değişiklik yok, çok
+// güneşli/üst kat +%15, hem üst kat hem çok güneşli +%25 — birden çok kaynakta
+// "+%10-20" olarak tekrarlanan aralığın orta noktaları), kişi başı +600 BTU
+// (2 kişilik taban varsayımın üzerindeki her kişi için) ve cihaz başı +600 BTU.
+export const AC_BTU_BASE_PER_M2 = 600;
+export const AC_BTU_BASE_CEILING_HEIGHT_M = 2.5;
+export const AC_BTU_PER_EXTRA_PERSON = 600;
+export const AC_BTU_PER_DEVICE = 600;
+
+export const AC_EXPOSURE_FACTORS = {
+  'az-gunes': { label: 'Az güneş alan / kuzey cephe', factor: 0.95 },
+  normal: { label: 'Normal (ara kat, orta düzey güneş)', factor: 1 },
+  'cok-gunes-veya-ust-kat': { label: 'Çok güneş alan (güney/batı cephe) VEYA üst kat/çatı katı', factor: 1.15 },
+  'cok-gunes-ve-ust-kat': { label: 'Çok güneş alan VE üst kat/çatı katı (ikisi birden)', factor: 1.25 },
+};
+
+// Standart klima kapasite sınıfları (BTU/h) ve bu sınıfa geçiş eşiği (üst sınır).
+const AC_CAPACITY_CLASSES = [9000, 12000, 18000, 24000];
+
+function pickAcCapacityClass(btu) {
+  const found = AC_CAPACITY_CLASSES.find((capacity) => btu <= capacity);
+  return found || null; // null: 24000 BTU üzeri, çoklu/salon tipi klima veya uzman değerlendirmesi gerekir
+}
+
+export function calculateAcBtuNeed({ area, ceilingHeight = AC_BTU_BASE_CEILING_HEIGHT_M, exposureKey = 'normal', personCount = 2, deviceCount = 0 }) {
+  const a = Math.max(0, safeNumber(area));
+  const height = Math.max(1, safeNumber(ceilingHeight, AC_BTU_BASE_CEILING_HEIGHT_M));
+  const people = Math.max(0, safeNumber(personCount, 2));
+  const devices = Math.max(0, safeNumber(deviceCount, 0));
+  const exposure = AC_EXPOSURE_FACTORS[exposureKey] || AC_EXPOSURE_FACTORS.normal;
+
+  const heightFactor = Math.max(1, height / AC_BTU_BASE_CEILING_HEIGHT_M);
+  const baseBtu = a * AC_BTU_BASE_PER_M2 * heightFactor * exposure.factor;
+  const peopleExtraBtu = Math.max(0, people - 2) * AC_BTU_PER_EXTRA_PERSON;
+  const deviceExtraBtu = devices * AC_BTU_PER_DEVICE;
+  const estimatedBtu = baseBtu + peopleExtraBtu + deviceExtraBtu;
+
+  const minBtu = estimatedBtu * 0.9;
+  const maxBtu = estimatedBtu * 1.1;
+
+  return {
+    estimatedBtu: Math.round(estimatedBtu),
+    minBtu: Math.round(minBtu),
+    maxBtu: Math.round(maxBtu),
+    recommendedClass: pickAcCapacityClass(estimatedBtu),
+    exposureLabel: exposure.label,
+  };
+}

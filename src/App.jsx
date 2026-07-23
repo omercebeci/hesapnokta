@@ -110,6 +110,7 @@ const MutfakTadilatButcesiHesaplama = lazy(() => import('./pages/calculators/ins
 const CatiHesaplama = lazy(() => import('./pages/calculators/insaat-tadilat/CatiHesaplama.jsx'));
 const EvYapimMaliyetiPlanlayici = lazy(() => import('./pages/calculators/insaat-tadilat/EvYapimMaliyetiPlanlayici.jsx'));
 const AlciSivaHesaplama = lazy(() => import('./pages/calculators/insaat-tadilat/AlciSivaHesaplama.jsx'));
+const KlimaBtuHesaplama = lazy(() => import('./pages/calculators/insaat-tadilat/KlimaBtuHesaplama.jsx'));
 
 export default function App() {
   return (
@@ -209,6 +210,7 @@ export default function App() {
             <Route path="/cati-hesaplama" element={<CatiHesaplama />} />
             <Route path="/ev-yapim-maliyeti-planlayici" element={<EvYapimMaliyetiPlanlayici />} />
             <Route path="/alci-siva-hesaplama" element={<AlciSivaHesaplama />} />
+            <Route path="/klima-btu-hesaplama" element={<KlimaBtuHesaplama />} />
 
             <Route path="/rehber" element={<RehberIndexPage />} />
             <Route path="/rehber/:slug" element={<RehberPostPage />} />

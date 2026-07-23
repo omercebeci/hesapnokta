@@ -542,6 +542,14 @@ export const calculators = [
     icon: 'paint-bucket',
     keywords: ['alçı sıva m2 hesaplama', 'alçı kaç m2 yer yapar', '35 kg alçı kaç m2', '35 kg sıva alçı kaç m2', 'sıva hesaplama', 'saten alçı hesaplama', 'perlitli sıva hesaplama'],
   },
+  {
+    id: 'klima-btu-hesaplama',
+    title: 'Klima BTU Hesaplama',
+    description: 'Oda m², tavan yüksekliği, kat/cephe/güneş alma durumu ve kişi/cihaz yüküne göre önerilen BTU aralığını ve tipik klima sınıfını (9000/12000/18000/24000) hesaplayın.',
+    category: 'insaat-tadilat',
+    icon: 'gauge',
+    keywords: ['klima btu hesaplama', 'kaç btu klima', 'klima kapasite hesabı', '9000 btu kaç m2', '12000 btu kaç m2', '18000 btu kaç m2'],
+  },
 
   // ── Alışveriş & Kargo (yeni) ──
   {

@@ -15,6 +15,7 @@ import {
   calculatePlasterNeed,
   calculateBagCount,
   calculatePlasterCoverage,
+  calculateAcBtuNeed,
 } from './insaatTadilatCalculators.js';
 
 describe('insaat & tadilat hesaplayıcıları', () => {
@@ -173,6 +174,26 @@ describe('insaat & tadilat hesaplayıcıları', () => {
     const result = calculatePlasterCoverage({ bagCount: 1, bagWeightKg: 35, thicknessMm: 10, materialKey: 'makine-sivasi' });
     expect(result.totalKg).toBe(35);
     expect(result.coverageM2).toBe(3.5);
+  });
+
+  it('varsayılan koşullarda alanı 600 BTU/m² ile çarparak standart sınıfa yuvarlar', () => {
+    const result = calculateAcBtuNeed({ area: 20 });
+    expect(result.estimatedBtu).toBe(12000);
+    expect(result.minBtu).toBe(10800);
+    expect(result.maxBtu).toBe(13200);
+    expect(result.recommendedClass).toBe(12000);
+  });
+
+  it('güneş/kat maruziyeti ve kişi/cihaz yükü BTU ihtiyacını artırır', () => {
+    const result = calculateAcBtuNeed({ area: 15, exposureKey: 'cok-gunes-ve-ust-kat', personCount: 3, deviceCount: 1 });
+    expect(result.estimatedBtu).toBe(12450);
+    expect(result.recommendedClass).toBe(18000);
+  });
+
+  it('büyük bir alan için 24000 BTU üzerinde önerilen sınıf olmadığını (uzman gerekir) belirtir', () => {
+    const result = calculateAcBtuNeed({ area: 50 });
+    expect(result.estimatedBtu).toBe(30000);
+    expect(result.recommendedClass).toBeNull();
   });
 });
 

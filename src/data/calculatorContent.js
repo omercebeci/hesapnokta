@@ -980,6 +980,36 @@ export const calculatorContent = {
       { q: 'Kartonpiyer alçısı neden bu araçta yok?', a: 'Kartonpiyer alçısı, diğer dört malzemeden farklı bir amaçla kullanılır: düz bir yüzeye ince bir kalınlıkta sürülen bir kaplama değil, kartonpiyer/kalıp profillerini duvar veya tavana yapıştırmak için kullanılan bir montaj/yapıştırma alçısıdır. Sarfiyatı alan × kalınlık ile değil, karışım oranı (yaklaşık 7-7,5 L su / 10 kg alçı) ve uygulama tekniğiyle (profilin arkasına sürülen şerit miktarı) belirlenir; üreticiler bu ürün için kg/m² cinsinden bir sarfiyat değeri yayınlamaz. Aynı nedenle alçıpan (kartonpiyer değil, drywall) derz dolgusu/macunu da bu araca dahil edilmedi: onun sarfiyatı da sabit bir bant genişliğiyle yapılan derz doldurma işlemine bağlıdır, kullanıcının seçtiği bir kalınlığa göre ölçeklenmez. Bu malzemeleri kullanacaksanız, ürün ambalajındaki karışım/sarfiyat talimatını esas almanız en doğrusudur.' },
     ],
   },
+  'klima-btu-hesaplama': {
+    about: 'Klima BTU hesaplama aracı, oda alanı, tavan yüksekliği, kat/cephe/güneş alma durumu ve odadaki kişi/elektronik cihaz yüküne göre önerilen BTU (soğutma kapasitesi) aralığını ve buna en yakın standart klima sınıfını (9000/12000/18000/24000 BTU) hesaplar. Sonuç kesin bir mühendislik hesabı değil, Türkiye\'de yaygın kullanılan pratik bir tahmin yöntemidir; bu yüzden tek bir sayı yerine bir aralık olarak sunulur.',
+    method: 'Taban ihtiyaç, oda alanının yaklaşık 600 BTU/m² ile çarpılmasıyla bulunur. Tavan yüksekliği 2,5 metrenin üzerindeyse oda hacmiyle orantılı olarak ihtiyaç artırılır. Kat/cephe/güneş alma durumuna göre az güneşli odalarda %5 azaltma, çok güneşli (güney/batı cephe) veya üst kat/çatı katı odalarda %15-25 arası artış uygulanır. 2 kişilik taban varsayımının üzerindeki her kişi ve sürekli çalışan her elektronik cihaz için 600 BTU/h eklenir. Elde edilen değerin ±%10\'u aralık olarak gösterilir ve en yakın standart klima sınıfı önerilir.',
+    examples: [
+      {
+        title: '20 m², 2,5 m tavan, normal maruziyet, 2 kişi',
+        rows: [
+          { label: 'Önerilen aralık', value: '10.800 - 13.200 BTU/h' },
+          { label: 'Tipik klima sınıfı', value: '12.000 BTU' },
+        ],
+      },
+      {
+        title: '15 m², çok güneşli + üst kat, 3 kişi + 1 cihaz',
+        rows: [
+          { label: 'Önerilen aralık', value: '11.205 - 13.695 BTU/h' },
+          { label: 'Tipik klima sınıfı', value: '18.000 BTU' },
+        ],
+      },
+    ],
+    faq: [
+      { q: '9000 BTU kaç m² soğutur?', a: 'Genel kabul gören pratik tabloya göre 9000 BTU\'luk bir klima, iyi yalıtımlı ve normal maruziyetli 10-15 m² arası bir odayı soğutmaya yeterlidir. Çok güneş alan veya üst kat odalarda bu değer daha küçük bir alanla sınırlı kalabilir.' },
+      { q: '12000 BTU kaç m² soğutur?', a: '12000 BTU\'luk bir klima, tipik olarak 15-25 m² arası bir odayı soğutur; kesin sınır oda yüksekliği, güneş alma durumu ve kişi sayısına göre değişir.' },
+      { q: '18000 BTU kaç m² soğutur?', a: '18000 BTU\'luk bir klima, tipik olarak 25-35 m² arası bir alanı soğutur; salon gibi geniş ve çok güneş alan mekanlarda bu üst sınıra daha erken ihtiyaç duyulabilir.' },
+      { q: 'Klima BTU hesabı neden kesin bir sayı değil aralık veriyor?', a: 'BTU ihtiyacı; güneşlenme açısı, pencere/cam alanı, yalıtım kalitesi ve kullanım yoğunluğu gibi bu araca girmeyen birçok faktöre de bağlıdır. Bu yüzden sonuç, gerçekçi bir aralık olarak sunulur; kesin seçim için yetkili bir klima firması veya mühendisin yerinde ısı yükü değerlendirmesi yaptırmanız önerilir.' },
+      { q: 'Tavan yüksekliği BTU ihtiyacını neden etkiliyor?', a: 'Soğutulması gereken asıl şey oda alanı değil oda hacmidir; standart 2,5 m\'nin üzerindeki her tavan yüksekliği artışı, aynı zemin alanında daha fazla havanın soğutulması gerektiği anlamına gelir.' },
+      { q: 'Üst kat/çatı katı neden daha fazla BTU gerektiriyor?', a: 'Çatıdan gelen güneş ışınımı ve dış sıcaklık etkisi üst kat/çatı katı odalarda ısı kazancını artırır; bu nedenle aynı büyüklükteki ara kat odalarına göre daha yüksek kapasiteli bir klima gerekir.' },
+      { q: 'Kişi ve cihaz sayısı neden hesaba dahil ediliyor?', a: 'Her insan vücudu ve çalışan elektronik cihaz (TV, bilgisayar vb.) ortama ısı yayar; kalabalık veya cihaz yoğun odalarda bu ek ısı yükü klima kapasitesi hesabına eklenmelidir.' },
+      { q: 'Hesaplanan BTU\'dan daha küçük bir klima alırsam ne olur?', a: 'Klima sürekli tam kapasitede çalışmak zorunda kalır, istenen sıcaklığa hiç ulaşamayabilir veya çok geç ulaşır, enerji tüketimi ve aşınma artar; bu yüzden sınırda kalan durumlarda bir üst kapasiteyi tercih etmek genellikle daha güvenlidir.' },
+    ],
+  },
 
   // ── Alışveriş & Kargo (yeni) ──
   'kargo-desi-hesaplama': {
