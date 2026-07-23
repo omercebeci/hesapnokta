@@ -26,6 +26,7 @@ import {
   calculateHollowProfileWeight,
   calculateStaircase,
   calculateRenovationTimeline,
+  calculateHakedisSummary,
 } from './insaatTadilatCalculators.js';
 
 describe('insaat & tadilat hesaplayıcıları', () => {
@@ -344,6 +345,31 @@ describe('insaat & tadilat hesaplayıcıları', () => {
     expect(result.timeline).toEqual([]);
     expect(result.totalDaysMin).toBe(0);
     expect(result.totalDaysMax).toBe(0);
+  });
+
+  it('kalemlerin tamamlanma yüzdesine göre hak edilen tutarı ve genel tamamlanma oranını hesaplar', () => {
+    const items = [
+      { label: 'Seramik', amount: 20000, percentComplete: 50 },
+      { label: 'Boya', amount: 10000, percentComplete: 100 },
+      { label: 'Mutfak dolabı', amount: 30000, percentComplete: 0 },
+    ];
+    const result = calculateHakedisSummary({ items, paidAmount: 25000 });
+    expect(result.totalContractAmount).toBe(60000);
+    expect(result.totalEarnedAmount).toBe(20000);
+    expect(result.overallCompletionPercent).toBe(33.33);
+    expect(result.balance).toBe(5000);
+    expect(result.overpaymentRisk).toBe(false);
+  });
+
+  it('ödenen tutar, hak edilenden %10 eşiğinden fazla aşınca fazla ödeme riski işaretler', () => {
+    const items = [
+      { label: 'Seramik', amount: 20000, percentComplete: 50 },
+      { label: 'Boya', amount: 10000, percentComplete: 100 },
+      { label: 'Mutfak dolabı', amount: 30000, percentComplete: 0 },
+    ];
+    const result = calculateHakedisSummary({ items, paidAmount: 30000 });
+    expect(result.balance).toBe(10000);
+    expect(result.overpaymentRisk).toBe(true);
   });
 });
 

@@ -709,3 +709,34 @@ export function calculateRenovationTimeline({ selectedTaskKeys }) {
     totalDaysMax: cursorMax,
   };
 }
+
+// ── 18) Hakediş/ödeme planı takibi ──
+// Bilgilendirme amaçlıdır, hukuki tavsiye değildir: "fazla ödeme riski" eşiği
+// (%10) basit bir uyarı sınırıdır, yasal bir standarda dayanmaz.
+export const OVERPAYMENT_RISK_RATIO = 0.1;
+
+export function calculateHakedisSummary({ items, paidAmount }) {
+  const parsedItems = (items || []).map((item) => {
+    const amount = Math.max(0, safeNumber(item.amount));
+    const percentComplete = Math.min(100, Math.max(0, safeNumber(item.percentComplete)));
+    const earnedAmount = round2(amount * (percentComplete / 100));
+    return { label: item.label, amount: round2(amount), percentComplete, earnedAmount };
+  });
+
+  const totalContractAmount = round2(parsedItems.reduce((sum, item) => sum + item.amount, 0));
+  const totalEarnedAmount = round2(parsedItems.reduce((sum, item) => sum + item.earnedAmount, 0));
+  const totalPaidAmount = Math.max(0, safeNumber(paidAmount));
+  const balance = round2(totalPaidAmount - totalEarnedAmount);
+  const overallCompletionPercent = totalContractAmount > 0 ? round2((totalEarnedAmount / totalContractAmount) * 100) : 0;
+  const overpaymentRisk = totalContractAmount > 0 && balance > totalContractAmount * OVERPAYMENT_RISK_RATIO;
+
+  return {
+    items: parsedItems,
+    totalContractAmount,
+    totalEarnedAmount,
+    totalPaidAmount: round2(totalPaidAmount),
+    balance,
+    overallCompletionPercent,
+    overpaymentRisk,
+  };
+}

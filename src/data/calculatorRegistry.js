@@ -598,6 +598,14 @@ export const calculators = [
     icon: 'calendar-clock',
     keywords: ['tadilat takvimi', 'tadilat süresi ne kadar sürer', 'şap kaç günde kurur', 'tadilat sırası', 'ev tadilatı planlama'],
   },
+  {
+    id: 'tadilat-hakedis-takibi',
+    title: 'Hakediş / Ödeme Planı Takibi',
+    description: 'Tadilat iş kalemlerinizi ve tamamlanma yüzdelerini girin; hak edilen tutarı, ödediğiniz tutarı ve aradaki farkı hesaplayın. Yazdırılabilir, ustanızla masaya koyabileceğiniz bir özet çıkarır.',
+    category: 'insaat-tadilat',
+    icon: 'clipboard-check',
+    keywords: ['hakediş takibi', 'tadilat ödeme planı', 'usta ödeme takibi', 'tadilat bütçe takibi', 'iş tamamlanma yüzdesi'],
+  },
 
   // ── Alışveriş & Kargo (yeni) ──
   {

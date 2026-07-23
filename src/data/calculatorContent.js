@@ -1191,6 +1191,30 @@ export const calculatorContent = {
       { q: 'Bu takvime göre taşınma tarihi belirleyebilir miyim?', a: 'Bu araç size gerçekçi bir başlangıç noktası verir, ancak beklenmedik gecikmeler (malzeme tedariki, hava koşulları, ek işler) her zaman mümkündür; kritik bir tarih (ör. kira sözleşmesi bitişi, taşınma günü) için hesaplanan üst sınıra ek olarak birkaç günlük bir güvenlik payı daha bırakmanız önerilir.' },
     ],
   },
+  'tadilat-hakedis-takibi': {
+    about: 'Hakediş/ödeme planı takibi aracı, tadilat sözleşmenizdeki iş kalemlerini (her biri kendi bedeliyle) ve her kalemin ne kadarının tamamlandığını girmenizi sağlar; buradan tamamlanma oranına göre hak edilen tutarı hesaplar ve bugüne kadar ödediğiniz toplamla karşılaştırarak kalan veya fazla ödenen tutarı gösterir. Sonuç, ustanızla masaya koyabileceğiniz yazdırılabilir bir özet olarak da alınabilir.',
+    method: 'Her kalem için hak edilen tutar, kalemin sözleşme bedeli ile tamamlanma yüzdesinin çarpılmasıyla bulunur (ör. 20.000 TL\'lik bir kalem %50 tamamlandıysa 10.000 TL hak edilmiştir). Tüm kalemlerin hak edilen tutarları toplanarak toplam hak edilen tutar bulunur; bu, girdiğiniz "bugüne kadar ödenen toplam" ile karşılaştırılır. Ödenen tutar hak edilenden fazlaysa (ve bu fark sözleşme bedelinin belirli bir oranını aşıyorsa) bir "fazla ödeme" uyarısı gösterilir; azsa aradaki fark "ödenmesi kalan tutar" olarak gösterilir.',
+    examples: [
+      {
+        title: 'Seramik (20.000 TL, %50) + Boya (10.000 TL, %100) + Mutfak dolabı (30.000 TL, %0), 25.000 TL ödenmiş',
+        rows: [
+          { label: 'Toplam sözleşme bedeli', value: '60.000 TL' },
+          { label: 'Hak edilen tutar', value: '20.000 TL (%33 genel tamamlanma)' },
+          { label: 'Ödenen toplam', value: '25.000 TL' },
+          { label: 'Hak edilenden fazla ödenen', value: '5.000 TL' },
+        ],
+      },
+    ],
+    faq: [
+      { q: '"Hak edilen tutar" ne anlama gelir?', a: 'Bir iş kaleminin, o ana kadar tamamlanan kısmına karşılık gelen parasal değeridir. Örneğin 20.000 TL\'lik bir kalem %50 tamamlandıysa, bu kalem için 10.000 TL "hak edilmiştir" — geri kalan 10.000 TL, iş tamamlandıkça hak edilecektir.' },
+      { q: 'Bu araç bana hukuki bir hak veya yükümlülük mü söylüyor?', a: 'Hayır. Bu araç yalnızca girdiğiniz rakamlarla bir matematiksel karşılaştırma yapar (hak edilen vs. ödenen); herhangi bir hukuki tavsiye veya yasal hak beyanı içermez. Ödeme anlaşmazlıklarında sözleşmeniz ve gerekirse bir hukuk danışmanı esas alınmalıdır.' },
+      { q: '"Fazla ödeme riski" uyarısı ne zaman çıkar?', a: 'Ödediğiniz toplam tutar, kalemlerin tamamlanma oranına göre hak edilen tutardan, sözleşme bedelinin yaklaşık %10\'undan fazla bir miktarla aşıyorsa bu uyarı gösterilir. Bu basit bir bilgilendirme eşiğidir, kesin bir kural değildir; her projenin kendi ödeme yapısı ve güven ilişkisi farklı olabilir.' },
+      { q: 'Peşin ödeme her zaman riskli midir?', a: 'Hayır, malzeme alımı gibi meşru gerekçelerle makul bir başlangıç avansı yaygın bir uygulamadır. Risk, ödenen tutarın tamamlanan işin çok üzerine çıkmasıyla artar; bu araç size bu farkı sürekli takip etme imkanı vererek erken uyarı vermeyi amaçlar.' },
+      { q: 'Tipik ödeme dilimleri nasıl olmalı?', a: 'Bu, tamamen taraflar arasındaki anlaşmaya bağlıdır ve yasal bir zorunluluk yoktur; ancak sektörde yaygın olarak tercih edilen bir yaklaşım, malzeme için makul bir başlangıç avansı, iş ilerledikçe tamamlanan kısma göre ara ödemeler ve son dilimin iş bitip kontrol edildikten sonra ödenmesidir. Bu araç, "yaygın iyi uygulamalar" bölümünde bu yaklaşımı genel bilgilendirme amacıyla özetler.' },
+      { q: 'Yazdırdığım özet resmi bir hakediş formu yerine geçer mi?', a: 'Hayır, bu yalnızca sizin girdiğiniz verilere dayanan bilgilendirici bir özet belgesidir; resmi bir hakediş raporu, fatura veya sözleşme eki değildir. Kurumsal/büyük projelerde resmi hakediş süreçleri için ilgili sözleşme ve mevzuat hükümleri esas alınmalıdır.' },
+      { q: 'Birden fazla usta/taşeronla çalışıyorsam bu aracı nasıl kullanmalıyım?', a: 'Her usta/taşeron için ayrı bir hesaplama yapmanız (veya kalemleri kimin yaptığını ayırt edecek şekilde adlandırmanız) daha net bir takip sağlar; farklı kişilere yapılan ödemeleri tek bir "ödenen toplam" alanında karıştırmak karışıklığa yol açabilir.' },
+    ],
+  },
 
   // ── Alışveriş & Kargo (yeni) ──
   'kargo-desi-hesaplama': {
