@@ -51,7 +51,7 @@ export default function BetonSapHesaplama() {
           <FormField label="Alan (m²)" htmlFor="area">
             <input id="area" type="text" inputMode="decimal" value={area} onChange={(e) => setArea(e.target.value)} />
           </FormField>
-          <FormField label="Kalınlık (cm)" htmlFor="thickness">
+          <FormField label="Kalınlık (cm)" htmlFor="thickness" hint="Örn: grobeton/temel altı betonu ~5-10 cm, zemin/saha betonu ~10 cm, şap ~3-8 cm">
             <input id="thickness" type="text" inputMode="decimal" value={thickness} onChange={(e) => setThickness(e.target.value)} />
           </FormField>
           <FormField label="Fire payı (%)" htmlFor="wasteRate">
@@ -104,7 +104,7 @@ export default function BetonSapHesaplama() {
 
       <div className="info-card">
         <h2>Nasıl hesaplanır?</h2>
-        <p>Hacim, alan × kalınlık formülüyle bulunur ve fire payı eklenir. Bu hacim, girdiğiniz mikser kapasitesine bölünerek kaç mikser sipariş etmeniz gerektiği hesaplanır. Elle karım yapacaksanız aynı hacim, tipik çimento/kum/çakıl/su oranlarıyla çarpılarak yaklaşık malzeme miktarları tahmin edilir.</p>
+        <p>Hacim, alan × kalınlık formülüyle bulunur ve fire payı eklenir. Bu hacim, girdiğiniz mikser kapasitesine bölünerek kaç mikser sipariş etmeniz gerektiği hesaplanır. Elle karım yapacaksanız aynı hacim, tipik çimento/kum/çakıl/su oranlarıyla çarpılarak yaklaşık malzeme miktarları tahmin edilir. Aynı formül; temel betonu/grobeton (temel altına dökülen donatısız tesviye betonu), zemin/saha betonu ve ince şap için de geçerlidir — her biri için yalnızca kendi tipik kalınlığını girmeniz yeterlidir.</p>
       </div>
     </CalculatorLayout>
   );

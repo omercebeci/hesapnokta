@@ -12,6 +12,9 @@ import {
   calculateFlooringNeed,
   calculateLineItemBudget,
   calculateRoofNeed,
+  calculatePlasterNeed,
+  calculateBagCount,
+  calculatePlasterCoverage,
 } from './insaatTadilatCalculators.js';
 
 describe('insaat & tadilat hesaplayıcıları', () => {
@@ -137,6 +140,39 @@ describe('insaat & tadilat hesaplayıcıları', () => {
     expect(result.tileCount).toBe(Math.ceil(result.areaWithWaste * 10));
     expect(result.osbSheetsCount).toBe(Math.ceil(result.areaWithWaste / 2.9768));
     expect(result.slopeIncreasePercent).toBeCloseTo(15.47, 1);
+  });
+
+  it('alan, kalınlık ve malzeme türüne göre gereken alçı/sıva miktarını hesaplar', () => {
+    const result = calculatePlasterNeed({ area: 20, thicknessMm: 3, materialKey: 'saten-alcisi', wasteRate: 5 });
+    expect(result.requiredKg).toBe(round2(20 * 3 * 1 * 1.05));
+    expect(result.requiredKg).toBe(63);
+    expect(result.materialLabel).toBe('Saten Alçı');
+  });
+
+  it('farklı malzeme türleri için farklı sarfiyat oranı kullanır', () => {
+    const saten = calculatePlasterNeed({ area: 10, thicknessMm: 10, materialKey: 'saten-alcisi', wasteRate: 0 });
+    const kabaSiva = calculatePlasterNeed({ area: 10, thicknessMm: 10, materialKey: 'kaba-siva', wasteRate: 0 });
+    expect(saten.requiredKg).toBe(100);
+    expect(kabaSiva.requiredKg).toBe(145);
+    expect(kabaSiva.requiredKg).toBeGreaterThan(saten.requiredKg);
+  });
+
+  it('gereken kg üzerinden torba sayısını yukarı yuvarlayarak hesaplar', () => {
+    expect(calculateBagCount(63, 25)).toBe(3);
+    expect(calculateBagCount(75, 25)).toBe(3);
+    expect(calculateBagCount(76, 25)).toBe(4);
+  });
+
+  it('ters hesap: "35 kg alçı kaç m² yapar?" sorgusunu tam olarak karşılar', () => {
+    const result = calculatePlasterCoverage({ bagCount: 1, bagWeightKg: 35, thicknessMm: 1, materialKey: 'saten-alcisi' });
+    expect(result.totalKg).toBe(35);
+    expect(result.coverageM2).toBe(35);
+  });
+
+  it('ters hesapta kalınlık arttıkça kaplanabilir alan azalır', () => {
+    const result = calculatePlasterCoverage({ bagCount: 1, bagWeightKg: 35, thicknessMm: 10, materialKey: 'makine-sivasi' });
+    expect(result.totalKg).toBe(35);
+    expect(result.coverageM2).toBe(3.5);
   });
 });
 

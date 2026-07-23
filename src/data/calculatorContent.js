@@ -820,7 +820,7 @@ export const calculatorContent = {
     ],
   },
   'beton-sap-hesaplama': {
-    about: 'Beton/şap hesaplama aracı, döşenecek alan ve kalınlığa göre gereken beton/şap hacmini (m³) ve bunun hazır beton mikser karşılığını hesaplar. Hazır beton yerine elle karım yapacaklar için tipik çimento/kum/çakıl/su oranlarını da gösterir.',
+    about: 'Beton/şap hesaplama aracı, döşenecek alan ve kalınlığa göre gereken beton/şap hacmini (m³) ve bunun hazır beton mikser karşılığını hesaplar. Aynı alan × kalınlık formülü temel betonu (grobeton), zemin/saha betonu ve ince şap için de geçerlidir — sadece kendi projenize uygun kalınlığı girmeniz yeterlidir. Hazır beton yerine elle karım yapacaklar için tipik çimento/kum/çakıl/su oranlarını da gösterir.',
     method: 'Hacim, alan × kalınlık formülüyle bulunur ve girdiğiniz fire payı kadar büyütülür. Bu hacim, mikser kapasitesine bölünerek kaç mikser sipariş etmeniz gerektiği (yukarı yuvarlanarak) hesaplanır. Elle karım seçeneğinde aynı hacim, genel amaçlı C25/30 sınıfı beton için yaygın kabul gören çimento (kg/m³), kum (m³/m³), çakıl (m³/m³) ve su (L/m³) oranlarıyla çarpılarak yaklaşık malzeme miktarları tahmin edilir.',
     examples: [
       {
@@ -848,6 +848,9 @@ export const calculatorContent = {
       { q: 'Donatı (demir) miktarı bu hesaba dahil mi?', a: 'Hayır, bu araç yalnızca beton/şap hacmini ve karışım malzemelerini hesaplar; donatı, taşıyıcı sistem gerektiren dökümlerde ayrı bir statik hesapla belirlenmelidir.' },
       { q: 'Zemin ısıtmalı (yerden ısıtma) şap için farklı bir hesap mı gerekir?', a: 'Hacim hesabı aynıdır; ancak yerden ısıtmalı sistemlerde şap kalınlığı genellikle biraz daha fazla tutulur (boru üstü payı dahil), bu değeri kalınlık alanına siz girmelisiniz.' },
       { q: 'Kaç torba çimento gerektiği nasıl bulunuyor?', a: 'Toplam çimento miktarı (kg), standart 50 kg\'lık torba ağırlığına bölünüp yukarı yuvarlanarak torba sayısına çevrilir.' },
+      { q: 'Bu araçla temel betonu (grobeton) hesaplanabilir mi?', a: 'Evet. Grobeton (tesviye betonu), zemin ile temel arasına dökülen, donatısız, düşük dozlu (C8-C16) bir dolgu/temel altı betonudur; kalınlığı genellikle 10 cm civarındadır (minimum 5 cm, maksimum ~20 cm). Alan kısmına temel izdüşüm alanınızı, kalınlık kısmına da bu değeri girerek hacmi ve mikser sayısını bulabilirsiniz.' },
+      { q: 'Zemin betonu (saha betonu) kalınlığı ne kadar olmalı?', a: 'Zemin/saha betonu tipik olarak yaklaşık 10 cm kalınlığında dökülür; garaj veya depo gibi ağır yük taşıyan zeminlerde bu değer daha da artırılabilir. Bu değeri kalınlık alanına girmeniz, aracın geri kalanını aynı şekilde hesaplaması için yeterlidir.' },
+      { q: 'Grobeton ile temel betonu (temel betonarmesi) aynı şey mi?', a: 'Hayır. Grobeton, donatısız ve düşük dayanımlı bir hazırlık/tesviye katmanıdır; asıl taşıyıcı temel betonu (temel betonarmesi) bunun üzerine, donatılı ve daha yüksek dayanım sınıfıyla ayrıca dökülür. Bu araç her iki katmanın hacmini de (ayrı ayrı, kendi kalınlıklarını girerek) hesaplayabilir, ancak donatı miktarını hesaplamaz.' },
     ],
   },
   'parke-laminat-hesaplama': {
@@ -939,6 +942,42 @@ export const calculatorContent = {
       { q: 'Arsa alım maliyeti bu bütçeye dahil mi?', a: 'Hayır, bu araç yalnızca yapım (inşaat) maliyetini kapsar; arsa bedeli, tapu harcı gibi kalemler dahil değildir.' },
       { q: 'Mimari proje ve ruhsat masrafları nereye eklenir?', a: 'Bu araçta ayrı bir kalem olarak yer almaz; isterseniz bu masrafları mevcut kalemlerden birine (ör. "Hafriyat ve temel") dahil ederek veya toplam sonucu elle bu tutar kadar artırarak dikkate alabilirsiniz.' },
       { q: 'Birden fazla müteahhitten teklif almalı mıyım?', a: 'Evet, özellikle kaba yapı ve çatı gibi büyük kalemlerde birden fazla müteahhit/ustadan teklif almanız, gerçekçi bir toplam bütçe oluşturmanıza yardımcı olur.' },
+    ],
+  },
+  'alci-siva-hesaplama': {
+    about: 'Alçı/sıva hesaplama aracı, duvar/tavan alanı, uygulama kalınlığı (mm) ve seçtiğiniz malzeme türüne (saten alçı, perlitli sıva alçısı, makine sıvası, kaba sıva) göre gereken malzeme miktarını (kg) ve torba sayısını hesaplar. "Ters hesap" modunda ise elinizdeki torba sayısından, o torbaların kaç m² alanı kaplayacağını bulabilirsiniz (ör. "35 kg alçı kaç m² yer yapar?").',
+    method: 'Gereken miktar (kg), alan × kalınlık (mm) × malzemenin kg/m²/mm cinsinden sarfiyat oranı formülüyle hesaplanır ve girdiğiniz fire payı kadar büyütülür; bu miktar seçtiğiniz torba ağırlığına bölünüp yukarı yuvarlanarak torba sayısına çevrilir. Her malzemenin sarfiyat oranı farklıdır ve üretici teknik föylerinden alınmıştır: saten alçı ve makine sıvası için 1 mm kalınlıkta ortalama 1 kg/m², perlitli sıva alçısı için ortalama 0,95 kg/m², çimento esaslı kaba sıva için ortalama 1,45 kg/m². Ters hesapta aynı formül tersine çevrilir: torba sayısı × torba ağırlığı, kalınlık × sarfiyat oranına bölünerek kaplanabilir alan bulunur.',
+    examples: [
+      {
+        title: '20 m² alan, 1 mm saten alçı (tipik perdah kalınlığı), %5 fire',
+        rows: [
+          { label: 'Gereken miktar', value: '21 kg' },
+          { label: 'Torba sayısı (35 kg)', value: '1 torba' },
+        ],
+      },
+      {
+        title: '10 m² alan, 10 mm (1 cm) kaba sıva, %5 fire',
+        rows: [
+          { label: 'Gereken miktar', value: '152,25 kg' },
+          { label: 'Torba sayısı (35 kg)', value: '5 torba' },
+        ],
+      },
+      {
+        title: 'Ters hesap: 1 torba (35 kg) saten alçı, 1 mm kalınlık',
+        rows: [
+          { label: 'Kaplanabilir alan', value: '35 m²' },
+        ],
+      },
+    ],
+    faq: [
+      { q: '35 kg alçı kaç m² yer yapar?', a: '1 mm kalınlığında (standart saten perdah alçısı için tipik uygulama kalınlığı) sürüldüğünde, 35 kg saten alçı yaklaşık 35 m² yer kaplar; çünkü saten alçının sarfiyatı üretici teknik föylerine göre 1 mm kalınlıkta yaklaşık 1 kg/m²\'dir. Daha kalın uygulamada (ör. 2 mm) aynı 35 kg yaklaşık 17,5 m² kaplar. Bu aracın "Ters hesap" modunda torba sayınızı ve kalınlığı girerek kendi durumunuz için kesin sonucu görebilirsiniz.' },
+      { q: '35 kg sıva alçı kaç m² yer yapar?', a: 'Bu, hangi sıva türü olduğuna göre değişir. Örneğin 10 mm (1 cm) kalınlığında uygulanan makine sıvası için sarfiyat yaklaşık 1 kg/m²/mm olduğundan, 35 kg yaklaşık 3,5 m² kaplar; perlitli sıva alçısında (sarfiyatı biraz daha düşük, ~0,95 kg/m²/mm) bu değer yaklaşık 3,7 m²\'dir. Saten alçı gibi çok ince (1 mm) sürülen bir malzeme değilse, "sıva" kalınlığı genellikle 8-20 mm arasında olur; kendi kalınlığınızı girerek doğru sonucu görebilirsiniz.' },
+      { q: 'Alçı sıva m² hesabı nasıl yapılır?', a: 'Genel formül: gereken kg = alan (m²) × kalınlık (mm) × malzemenin kg/m²/mm sarfiyat oranı. Bu araç, seçtiğiniz malzeme türüne göre doğru sarfiyat oranını otomatik kullanır; siz yalnızca alanı, kalınlığı ve malzeme türünü girmeniz yeterlidir.' },
+      { q: 'Malzeme türleri arasındaki sarfiyat farkı neden bu kadar önemli?', a: 'Aynı alan ve kalınlıkta bile malzemeye göre gereken kg değişir: örneğin 10 m² alanı 10 mm kalınlıkta kaplamak için saten alçı/makine sıvası ~100 kg gerektirirken, çimento esaslı kaba sıva ~145 kg gerektirir. Yanlış malzeme seçimiyle yapılan hesap, torba sayısında ciddi sapmaya yol açabilir.' },
+      { q: 'Fire payı neden ekleniyor?', a: 'Duvar/tavan yüzeyindeki düzensizlikler, karışım sırasında dökülen/kalan malzeme ve taşıma kayıpları nedeniyle gerçek tüketim hesaplanan net miktardan bir miktar fazla olur; %5 tipik bir başlangıç değeridir, çok düzensiz yüzeylerde artırabilirsiniz.' },
+      { q: 'Torba ağırlığını neden seçebiliyorum?', a: 'Piyasada alçı/sıva ürünleri farklı ambalaj ağırlıklarıyla satılır (yaygın olarak 25, 35 ve 40 kg); kullanacağınız ürünün ambalaj ağırlığını seçerek doğru torba sayısını görebilirsiniz.' },
+      { q: 'Ters hesap modu ne işe yarar?', a: 'Elinizde zaten alınmış belirli sayıda torba varsa (ör. arta kalan malzeme), bu modla o torbaların, girdiğiniz kalınlıkta yaklaşık kaç m² alanı kaplayabileceğini görebilirsiniz — "35 kg alçı kaç m² yapar?" gibi sorguların doğrudan cevabıdır.' },
+      { q: 'Kartonpiyer alçısı neden bu araçta yok?', a: 'Kartonpiyer alçısı, diğer dört malzemeden farklı bir amaçla kullanılır: düz bir yüzeye ince bir kalınlıkta sürülen bir kaplama değil, kartonpiyer/kalıp profillerini duvar veya tavana yapıştırmak için kullanılan bir montaj/yapıştırma alçısıdır. Sarfiyatı alan × kalınlık ile değil, karışım oranı (yaklaşık 7-7,5 L su / 10 kg alçı) ve uygulama tekniğiyle (profilin arkasına sürülen şerit miktarı) belirlenir; üreticiler bu ürün için kg/m² cinsinden bir sarfiyat değeri yayınlamaz. Aynı nedenle alçıpan (kartonpiyer değil, drywall) derz dolgusu/macunu da bu araca dahil edilmedi: onun sarfiyatı da sabit bir bant genişliğiyle yapılan derz doldurma işlemine bağlıdır, kullanıcının seçtiği bir kalınlığa göre ölçeklenmez. Bu malzemeleri kullanacaksanız, ürün ambalajındaki karışım/sarfiyat talimatını esas almanız en doğrusudur.' },
     ],
   },
 

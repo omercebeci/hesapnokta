@@ -221,3 +221,59 @@ export function calculateRoofNeed({ length, width, pitchDegrees = 30, tilesPerM2
     osbSheetsCount: Math.ceil(areaWithWaste / OSB_SHEET_AREA_M2),
   };
 }
+
+// ── 10) Alçı/Sıva hesaplama ──
+// Sarfiyat sabitleri (kg/m² per mm kalınlık) üretici teknik föylerinden alınmıştır, fiyat içermez:
+// - saten-alcisi: Dalsan SATENTEK Teknik Föyü, "Her 1 mm kalınlık 1 kg/m²" (TS EN 13279-1/2 C6/20/2)
+// - perlitli-siva: BMT Alçı (SIAS) ürün verisi, "1 cm için yaklaşık 9-10 kg/m²" (ortalama 9,5 kg/m²/cm)
+// - makine-sivasi: Dalsan ALÇITEK Teknik Föyü, "Her 1 cm kalınlık 10 kg/m²" (TS EN 13279-1/2 B4/50/2)
+// - kaba-siva: İSKİM Çimento Esaslı Hazır Sıva (Kalın) 3260 ürün verisi, "1 cm için 14-15 kg/m²" (ortalama)
+export const PLASTER_MATERIALS = {
+  'saten-alcisi': { label: 'Saten Alçı', kgPerM2PerMm: 1, source: 'Dalsan SATENTEK Teknik Föyü (TS EN 13279-1/2 C6/20/2)' },
+  'perlitli-siva': { label: 'Perlitli Sıva Alçısı', kgPerM2PerMm: 0.95, source: 'BMT Alçı (SIAS) ürün verisi' },
+  'makine-sivasi': { label: 'Makine Sıvası (alçı bazlı)', kgPerM2PerMm: 1, source: 'Dalsan ALÇITEK Teknik Föyü (TS EN 13279-1/2 B4/50/2)' },
+  'kaba-siva': { label: 'Kaba Sıva (çimento esaslı)', kgPerM2PerMm: 1.45, source: 'İSKİM Çimento Esaslı Hazır Sıva (Kalın) 3260 ürün verisi' },
+};
+
+function resolvePlasterMaterial(materialKey) {
+  return PLASTER_MATERIALS[materialKey] || PLASTER_MATERIALS['saten-alcisi'];
+}
+
+export function calculatePlasterNeed({ area, thicknessMm, materialKey, wasteRate = 5 }) {
+  const a = Math.max(0, safeNumber(area));
+  const thickness = Math.max(0, safeNumber(thicknessMm));
+  const waste = Math.max(0, safeNumber(wasteRate, 5));
+  const material = resolvePlasterMaterial(materialKey);
+
+  const requiredKg = a * thickness * material.kgPerM2PerMm * (1 + waste / 100);
+
+  return {
+    requiredKg: round2(requiredKg),
+    materialLabel: material.label,
+    materialSource: material.source,
+  };
+}
+
+export function calculateBagCount(requiredKg, bagWeightKg) {
+  const kg = Math.max(0, safeNumber(requiredKg));
+  const bagWeight = Math.max(1, safeNumber(bagWeightKg, 25));
+  return Math.ceil(kg / bagWeight);
+}
+
+// Ters hesap: torba sayısı ve kalınlıktan kaplanabilir alanı bulur (ör. "35 kg alçı kaç m² yapar?").
+export function calculatePlasterCoverage({ bagCount, bagWeightKg, thicknessMm, materialKey }) {
+  const bags = Math.max(0, safeNumber(bagCount));
+  const bagWeight = Math.max(1, safeNumber(bagWeightKg, 25));
+  const thickness = Math.max(0.1, safeNumber(thicknessMm, 1));
+  const material = resolvePlasterMaterial(materialKey);
+
+  const totalKg = bags * bagWeight;
+  const coverageM2 = totalKg / (thickness * material.kgPerM2PerMm);
+
+  return {
+    totalKg: round2(totalKg),
+    coverageM2: round2(coverageM2),
+    materialLabel: material.label,
+    materialSource: material.source,
+  };
+}

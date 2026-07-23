@@ -534,6 +534,14 @@ export const calculators = [
     icon: 'hard-hat',
     keywords: ['ev yapım maliyeti', 'köyde ev yapmak', 'kaba inşaat maliyeti', 'yapı maliyeti'],
   },
+  {
+    id: 'alci-siva-hesaplama',
+    title: 'Alçı/Sıva Hesaplama',
+    description: 'Duvar/tavan alanı, uygulama kalınlığı ve malzeme türüne (saten alçı, perlitli sıva, makine sıvası, kaba sıva) göre gereken alçı/sıva miktarını (kg) ve torba sayısını hesaplayın.',
+    category: 'insaat-tadilat',
+    icon: 'paint-bucket',
+    keywords: ['alçı sıva m2 hesaplama', 'alçı kaç m2 yer yapar', '35 kg alçı kaç m2', '35 kg sıva alçı kaç m2', 'sıva hesaplama', 'saten alçı hesaplama', 'perlitli sıva hesaplama'],
+  },
 
   // ── Alışveriş & Kargo (yeni) ──
   {

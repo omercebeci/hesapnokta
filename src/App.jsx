@@ -109,6 +109,7 @@ const BanyoTadilatButcesiHesaplama = lazy(() => import('./pages/calculators/insa
 const MutfakTadilatButcesiHesaplama = lazy(() => import('./pages/calculators/insaat-tadilat/MutfakTadilatButcesiHesaplama.jsx'));
 const CatiHesaplama = lazy(() => import('./pages/calculators/insaat-tadilat/CatiHesaplama.jsx'));
 const EvYapimMaliyetiPlanlayici = lazy(() => import('./pages/calculators/insaat-tadilat/EvYapimMaliyetiPlanlayici.jsx'));
+const AlciSivaHesaplama = lazy(() => import('./pages/calculators/insaat-tadilat/AlciSivaHesaplama.jsx'));
 
 export default function App() {
   return (
@@ -207,6 +208,7 @@ export default function App() {
             <Route path="/mutfak-tadilat-butcesi-hesaplama" element={<MutfakTadilatButcesiHesaplama />} />
             <Route path="/cati-hesaplama" element={<CatiHesaplama />} />
             <Route path="/ev-yapim-maliyeti-planlayici" element={<EvYapimMaliyetiPlanlayici />} />
+            <Route path="/alci-siva-hesaplama" element={<AlciSivaHesaplama />} />
 
             <Route path="/rehber" element={<RehberIndexPage />} />
             <Route path="/rehber/:slug" element={<RehberPostPage />} />

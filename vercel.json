@@ -22,6 +22,12 @@
     { "source": "/metrekup-hesaplama/", "destination": "/beton-sap-hesaplama", "permanent": true },
     { "source": "/kum-ton-m3-hesaplama", "destination": "/beton-sap-hesaplama", "permanent": true },
     { "source": "/kum-ton-m3-hesaplama/", "destination": "/beton-sap-hesaplama", "permanent": true },
+    { "source": "/temel-betonu-hesaplama", "destination": "/beton-sap-hesaplama", "permanent": true },
+    { "source": "/temel-betonu-hesaplama/", "destination": "/beton-sap-hesaplama", "permanent": true },
+    { "source": "/zemin-betonu-hesaplama", "destination": "/beton-sap-hesaplama", "permanent": true },
+    { "source": "/zemin-betonu-hesaplama/", "destination": "/beton-sap-hesaplama", "permanent": true },
+    { "source": "/grobeton-hesaplama", "destination": "/beton-sap-hesaplama", "permanent": true },
+    { "source": "/grobeton-hesaplama/", "destination": "/beton-sap-hesaplama", "permanent": true },
 
     { "source": "/fayans-mozaik-hesaplama", "destination": "/fayans-seramik-hesaplama", "permanent": true },
     { "source": "/fayans-mozaik-hesaplama/", "destination": "/fayans-seramik-hesaplama", "permanent": true },
