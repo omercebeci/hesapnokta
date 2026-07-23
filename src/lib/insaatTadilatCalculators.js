@@ -484,3 +484,52 @@ export function calculateTruckCount(looseVolumeM3, truckCapacityM3) {
   const capacity = Math.max(0.1, safeNumber(truckCapacityM3, 12));
   return Math.ceil(volume / capacity);
 }
+
+// ── 15) Demir/donatı ağırlık hesaplama ──
+// Birim ağırlık (kg/m) = (π/4) × çap(m)² × çelik yoğunluğu (7850 kg/m³) — bu,
+// TS 708 standardındaki inşaat demiri birim ağırlık tablosunun dayandığı temel
+// fizik formülüdür (çubuk hacmi × yoğunluk). Bu oturumda formülle hesaplanan
+// Ø8/Ø10/Ø12/Ø14/Ø16 değerleri (0,395 / 0,617 / 0,888 / 1,208 / 1,578 kg/m),
+// yayınlanmış TS 708 birim ağırlık tablosundaki değerlerle birebir örtüştüğü
+// doğrulanmıştır — bu yüzden sabit bir tablo yerine doğrudan formül kullanılır
+// (her çap için ayrı ayrı hata riski taşıyan elle girilmiş bir tablo yerine).
+export const STEEL_DENSITY_KG_PER_M3 = 7850;
+export const STANDARD_REBAR_DIAMETERS_MM = [8, 10, 12, 14, 16, 18, 20, 22, 25, 28, 32];
+
+export function calculateRebarWeight({ diameterMm, lengthM }) {
+  const diameterM = Math.max(0, safeNumber(diameterMm)) / 1000;
+  const length = Math.max(0, safeNumber(lengthM));
+
+  const kgPerMeter = (Math.PI / 4) * diameterM * diameterM * STEEL_DENSITY_KG_PER_M3;
+  const totalKg = kgPerMeter * length;
+
+  return {
+    kgPerMeter: Math.round(kgPerMeter * 1000) / 1000,
+    totalKg: round2(totalKg),
+    totalTon: Math.round((totalKg / 1000) * 10000) / 10000,
+  };
+}
+
+// Kutu/dikdörtgen profil ağırlığı — dış ölçüler ve et kalınlığından kesit
+// alanı bulunup aynı çelik yoğunluğuyla çarpılır (fiziksel formül, marka/
+// üreticiden bağımsız).
+export function calculateHollowProfileWeight({ outerWidthMm, outerHeightMm, wallThicknessMm, lengthM }) {
+  const width = Math.max(0, safeNumber(outerWidthMm));
+  const height = Math.max(0, safeNumber(outerHeightMm));
+  const wall = Math.max(0, safeNumber(wallThicknessMm));
+  const length = Math.max(0, safeNumber(lengthM));
+
+  const innerWidth = Math.max(0, width - 2 * wall);
+  const innerHeight = Math.max(0, height - 2 * wall);
+  const crossSectionAreaMm2 = Math.max(0, width * height - innerWidth * innerHeight);
+  const crossSectionAreaM2 = crossSectionAreaMm2 / 1_000_000;
+
+  const kgPerMeter = crossSectionAreaM2 * STEEL_DENSITY_KG_PER_M3;
+  const totalKg = kgPerMeter * length;
+
+  return {
+    kgPerMeter: Math.round(kgPerMeter * 1000) / 1000,
+    totalKg: round2(totalKg),
+    totalTon: Math.round((totalKg / 1000) * 10000) / 10000,
+  };
+}

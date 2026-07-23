@@ -22,6 +22,8 @@ import {
   calculateDemolitionNetVolume,
   calculateMolozVolume,
   calculateTruckCount,
+  calculateRebarWeight,
+  calculateHollowProfileWeight,
 } from './insaatTadilatCalculators.js';
 
 describe('insaat & tadilat hesaplayıcıları', () => {
@@ -265,6 +267,29 @@ describe('insaat & tadilat hesaplayıcıları', () => {
     expect(calculateTruckCount(13.25, 12)).toBe(2);
     expect(calculateTruckCount(3.45, 6)).toBe(1);
     expect(calculateTruckCount(50, 18)).toBe(3);
+  });
+
+  it('birim ağırlık formülü (TS 708) yayınlanmış tablo değerleriyle birebir örtüşür', () => {
+    expect(calculateRebarWeight({ diameterMm: 8, lengthM: 1 }).kgPerMeter).toBe(0.395);
+    expect(calculateRebarWeight({ diameterMm: 10, lengthM: 1 }).kgPerMeter).toBe(0.617);
+    expect(calculateRebarWeight({ diameterMm: 12, lengthM: 1 }).kgPerMeter).toBe(0.888);
+    expect(calculateRebarWeight({ diameterMm: 14, lengthM: 1 }).kgPerMeter).toBe(1.208);
+    expect(calculateRebarWeight({ diameterMm: 16, lengthM: 1 }).kgPerMeter).toBe(1.578);
+  });
+
+  it('çap ve metraja göre toplam demir ağırlığını kg ve ton olarak hesaplar', () => {
+    const result = calculateRebarWeight({ diameterMm: 12, lengthM: 100 });
+    expect(result.kgPerMeter).toBe(0.888);
+    expect(result.totalKg).toBe(88.78);
+    expect(result.totalTon).toBe(0.0888);
+  });
+
+  it('kutu profil ağırlığını dış ölçü ve et kalınlığından hesaplar', () => {
+    const result = calculateHollowProfileWeight({ outerWidthMm: 40, outerHeightMm: 40, wallThicknessMm: 2, lengthM: 6 });
+    const expectedCrossSectionM2 = (40 * 40 - 36 * 36) / 1_000_000;
+    const expectedKgPerMeter = Math.round(expectedCrossSectionM2 * 7850 * 1000) / 1000;
+    expect(result.kgPerMeter).toBe(expectedKgPerMeter);
+    expect(result.totalKg).toBe(round2(expectedKgPerMeter * 6));
   });
 });
 

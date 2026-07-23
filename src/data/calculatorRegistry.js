@@ -574,6 +574,14 @@ export const calculators = [
     icon: 'truck',
     keywords: ['moloz hesaplama', 'hafriyat hesaplama', 'moloz kaç kamyon', 'kabarma katsayısı', 'hafriyat m3 hesaplama'],
   },
+  {
+    id: 'demir-agirlik-hesaplama',
+    title: 'Demir/Donatı Ağırlık Hesaplama',
+    description: 'Çap (Ø8-Ø32) ve metraja göre inşaat demiri ağırlığını kg ve ton olarak; opsiyonel olarak kutu/dikdörtgen profil ağırlığını hesaplayın. TS 708 standart formülüne dayanır.',
+    category: 'insaat-tadilat',
+    icon: 'ruler',
+    keywords: ['demir ağırlık hesaplama', 'donatı hesaplama', 'inşaat demiri kg hesaplama', 'ts 708', 'demir metraj hesaplama'],
+  },
 
   // ── Alışveriş & Kargo (yeni) ──
   {

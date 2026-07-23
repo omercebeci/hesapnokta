@@ -1103,6 +1103,34 @@ export const calculatorContent = {
       { q: 'Hesaplanan sefer sayısına atık bertaraf/depolama ücreti dahil mi?', a: 'Hayır, bu araç yalnızca taşıma için gereken araç/sefer sayısını hesaplar; moloz döküm sahası veya geri dönüşüm tesisi ücretleri, varsa ayrıca hesaba katılmalıdır.' },
     ],
   },
+  'demir-agirlik-hesaplama': {
+    about: 'Demir/donatı ağırlık hesaplama aracı, seçtiğiniz çap (Ø8-Ø32) ve girdiğiniz metraja göre inşaat demirinin (nervürlü betonarme çeliği) toplam ağırlığını kg ve ton olarak hesaplar. Opsiyonel olarak, dış ölçü ve et kalınlığını girerek kutu/dikdörtgen profil ağırlığını da hesaplayabilirsiniz.',
+    method: 'Birim ağırlık (kg/m), çubuğun kesit alanı (π/4 × çap²) ile standart çelik yoğunluğunun (7850 kg/m³) çarpılmasıyla bulunur; bu, TS 708 standardındaki inşaat demiri birim ağırlık tablosunun dayandığı fiziksel formüldür. Toplam ağırlık, bu birim ağırlığın girdiğiniz metrajla çarpılmasıyla hesaplanır. Kutu/dikdörtgen profil seçeneğinde aynı yoğunluk, dış genişlik × dış yükseklik ile (dış genişlik - 2×et kalınlığı) × (dış yükseklik - 2×et kalınlığı) arasındaki farktan bulunan kesit alanıyla çarpılır.',
+    examples: [
+      {
+        title: 'Ø12, 100 m metraj',
+        rows: [
+          { label: 'Birim ağırlık', value: '0,888 kg/m' },
+          { label: 'Toplam ağırlık', value: '88,78 kg (0,0888 ton)' },
+        ],
+      },
+      {
+        title: 'Kutu profil 40×40 mm, 2 mm et kalınlığı, 6 m metraj',
+        rows: [
+          { label: 'Birim ağırlık', value: '2,386 kg/m' },
+          { label: 'Toplam ağırlık', value: '14,32 kg (0,0143 ton)' },
+        ],
+      },
+    ],
+    faq: [
+      { q: 'Bu araçtaki demir ağırlıkları hangi standarda dayanıyor?', a: 'TS 708 (Türk Standardları Enstitüsü\'nün betonarme çeliği standardı) esas alınmıştır. Bu araç, tablodaki değerleri elle kopyalamak yerine, tablonun kendisinin dayandığı fiziksel formülü (kesit alanı × çelik yoğunluğu) kullanır; bu sayede herhangi bir çap için (Ø8-Ø32 dışında olsa dahi) tutarlı ve doğrulanabilir sonuç üretir.' },
+      { q: 'Neden sabit bir tablo yerine formül kullanılıyor?', a: 'Sabit bir tabloda tek bir çapın hatalı girilmesi fark edilmeden kalabilir; formül ise her çap için aynı doğrulanmış hesaplama mantığını (π/4 × çap² × 7850 kg/m³) uygular ve bu sayede Ø8-Ø16 arası hesaplanan değerlerin yayınlanmış TS 708 tablosuyla birebir örtüştüğü bu oturumda doğrulanmıştır.' },
+      { q: 'Donatı siparişi verirken bu hesaba ne kadar güvenebilirim?', a: 'Birim ağırlık formülü fiziksel bir sabite (çelik yoğunluğu) dayandığından güvenilirdir; ancak gerçek sipariş miktarını belirlerken statik projenizdeki donatı metrajını, ek bindirme boylarını (donatıların birbirine bağlandığı örtüşme payları) ve fire payını da dikkate almanız gerekir — bu araç yalnızca çap × metraj → ağırlık dönüşümünü yapar.' },
+      { q: 'Kutu/dikdörtgen profil hesabı hangi durumlarda kullanılır?', a: 'Korkuluk, çatı taşıyıcı sistemi, kapı/pencere doğraması gibi çelik kutu profil kullanılan uygulamalarda, profilin dış ölçüleri ve et kalınlığı biliniyorsa bu bölümle ağırlığını hesaplayabilirsiniz; malzeme siparişi veya nakliye/kaldırma planlaması için kullanışlıdır.' },
+      { q: 'Farklı bir çelik yoğunluğu (paslanmaz, galvanizli vb.) için de kullanılabilir mi?', a: 'Bu araç, standart yapı çeliğinin 7850 kg/m³ yoğunluğunu kullanır; paslanmaz çelik gibi farklı alaşımların yoğunluğu biraz farklı olabileceğinden (ör. ~8000 kg/m³), o tür malzemeler için üretici teknik verisini kullanmanız daha doğru olur.' },
+      { q: 'Ton cinsinden sonuç neden bu kadar çok ondalık basamak gösteriyor?', a: 'İnşaat demiri genellikle tonlarca sipariş edildiğinden, tek bir hesaplamadaki küçük yuvarlama farkları büyük metrajlarda belirgin hale gelebilir; bu yüzden ton sonucu 4 ondalık basamağa kadar gösterilerek hassasiyet korunur.' },
+    ],
+  },
 
   // ── Alışveriş & Kargo (yeni) ──
   'kargo-desi-hesaplama': {
