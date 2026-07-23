@@ -740,3 +740,134 @@ export function calculateHakedisSummary({ items, paidAmount }) {
     overpaymentRisk,
   };
 }
+
+// ── 19) Daire geneli tadilat planlayıcı ──
+// Bu, yeni bir hesaplama mantığı YAZMAZ: yukarıdaki calculateRoomWallArea,
+// calculatePaintNeed, suggestPaintPackages, calculateTileNeed,
+// calculateFlooringNeed, calculatePlasterNeed ve calculateBagCount
+// fonksiyonlarını her oda için tekrar tekrar çağırıp sonuçları tek bir
+// konsolide listede toplar. Oda başına ayrıntılı parametre (fayans ölçüsü,
+// fire payı, boya kat sayısı vb.) sormak yerine, ilgili tekil araçlarla aynı
+// varsayılan değerler kullanılır (aşağıdaki DEFAULT_* sabitleri) — hassas/özel
+// bir hesap için kullanıcı ilgili tekil aracı (Boya, Fayans/Seramik, Parke/
+// Laminat, Alçı/Sıva Hesaplama) ayrıca kullanabilir; bu araç yalnızca birden
+// çok odanın toplamını hızlıca konsolide etmek içindir.
+const AGGREGATE_DEFAULTS = {
+  paintCoatCount: 2,
+  paintCoveragePerLiter: 10,
+  floorTileLengthCm: 60,
+  floorTileWidthCm: 30,
+  floorTileWasteRate: 10,
+  floorTilePiecesPerBox: 6,
+  wallTileLengthCm: 20,
+  wallTileWidthCm: 25,
+  wallTileWasteRate: 10,
+  wallTilePiecesPerBox: 8,
+  flooringCoveragePerPackage: 2.2,
+  flooringWasteRate: 10,
+  plasterThicknessMm: 3,
+  plasterMaterialKey: 'saten-alcisi',
+  plasterWasteRate: 5,
+  plasterBagWeightKg: 25,
+};
+
+export function aggregateRoomRenovationPlan({ rooms }) {
+  const totals = {
+    paintLiters: 0,
+    floorTileCount: 0,
+    wallTileCount: 0,
+    flooringAreaWithWaste: 0,
+    flooringPerimeterM: 0,
+    plasterKg: 0,
+  };
+
+  const roomBreakdown = (rooms || []).map((room) => {
+    const length = Math.max(0, safeNumber(room.length));
+    const width = Math.max(0, safeNumber(room.width));
+    const height = Math.max(0, safeNumber(room.height));
+    const floorArea = round2(length * width);
+    const wallArea = calculateRoomWallArea({ length, width, height });
+
+    const jobs = [];
+
+    if (room.boya) {
+      const paint = calculatePaintNeed({
+        wallArea,
+        coatCount: AGGREGATE_DEFAULTS.paintCoatCount,
+        coveragePerLiter: AGGREGATE_DEFAULTS.paintCoveragePerLiter,
+      });
+      totals.paintLiters += paint.literNeeded;
+      jobs.push(`Boya: ${paint.literNeeded} L`);
+    }
+
+    if (room.zeminTuru === 'seramik') {
+      const tile = calculateTileNeed({
+        area: floorArea,
+        tileLengthCm: AGGREGATE_DEFAULTS.floorTileLengthCm,
+        tileWidthCm: AGGREGATE_DEFAULTS.floorTileWidthCm,
+        wasteRate: AGGREGATE_DEFAULTS.floorTileWasteRate,
+        piecesPerBox: AGGREGATE_DEFAULTS.floorTilePiecesPerBox,
+      });
+      totals.floorTileCount += tile.tileCount;
+      jobs.push(`Zemin seramik: ${tile.tileCount} adet`);
+    } else if (room.zeminTuru === 'parke') {
+      const flooring = calculateFlooringNeed({
+        area: floorArea,
+        coveragePerPackage: AGGREGATE_DEFAULTS.flooringCoveragePerPackage,
+        wasteRate: AGGREGATE_DEFAULTS.flooringWasteRate,
+        perimeter: round2(2 * (length + width)),
+      });
+      totals.flooringAreaWithWaste += flooring.areaWithWaste;
+      totals.flooringPerimeterM += flooring.skirtingMeters;
+      jobs.push(`Zemin parke: ${flooring.areaWithWaste} m²`);
+    }
+
+    if (room.duvarSeramik) {
+      const wallTile = calculateTileNeed({
+        area: wallArea,
+        tileLengthCm: AGGREGATE_DEFAULTS.wallTileLengthCm,
+        tileWidthCm: AGGREGATE_DEFAULTS.wallTileWidthCm,
+        wasteRate: AGGREGATE_DEFAULTS.wallTileWasteRate,
+        piecesPerBox: AGGREGATE_DEFAULTS.wallTilePiecesPerBox,
+      });
+      totals.wallTileCount += wallTile.tileCount;
+      jobs.push(`Duvar seramik: ${wallTile.tileCount} adet`);
+    }
+
+    if (room.siva) {
+      const plaster = calculatePlasterNeed({
+        area: wallArea,
+        thicknessMm: AGGREGATE_DEFAULTS.plasterThicknessMm,
+        materialKey: AGGREGATE_DEFAULTS.plasterMaterialKey,
+        wasteRate: AGGREGATE_DEFAULTS.plasterWasteRate,
+      });
+      totals.plasterKg += plaster.requiredKg;
+      jobs.push(`Sıva/alçı: ${plaster.requiredKg} kg`);
+    }
+
+    return { label: room.label, floorArea, wallArea, jobs };
+  });
+
+  const paintPackages = totals.paintLiters > 0 ? suggestPaintPackages(totals.paintLiters) : null;
+  const floorTileBoxCount = totals.floorTileCount > 0 ? Math.ceil(totals.floorTileCount / AGGREGATE_DEFAULTS.floorTilePiecesPerBox) : 0;
+  const wallTileBoxCount = totals.wallTileCount > 0 ? Math.ceil(totals.wallTileCount / AGGREGATE_DEFAULTS.wallTilePiecesPerBox) : 0;
+  const flooringPackageCount = totals.flooringAreaWithWaste > 0 ? Math.ceil(totals.flooringAreaWithWaste / AGGREGATE_DEFAULTS.flooringCoveragePerPackage) : 0;
+  const plasterBagCount = totals.plasterKg > 0 ? calculateBagCount(totals.plasterKg, AGGREGATE_DEFAULTS.plasterBagWeightKg) : 0;
+
+  return {
+    roomBreakdown,
+    totals: {
+      paintLiters: round2(totals.paintLiters),
+      floorTileCount: totals.floorTileCount,
+      floorTileBoxCount,
+      wallTileCount: totals.wallTileCount,
+      wallTileBoxCount,
+      flooringAreaWithWaste: round2(totals.flooringAreaWithWaste),
+      flooringPackageCount,
+      flooringPerimeterM: round2(totals.flooringPerimeterM),
+      plasterKg: round2(totals.plasterKg),
+      plasterBagCount,
+    },
+    paintPackages,
+  };
+}

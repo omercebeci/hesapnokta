@@ -27,6 +27,7 @@ import {
   calculateStaircase,
   calculateRenovationTimeline,
   calculateHakedisSummary,
+  aggregateRoomRenovationPlan,
 } from './insaatTadilatCalculators.js';
 
 describe('insaat & tadilat hesaplayıcıları', () => {
@@ -370,6 +371,53 @@ describe('insaat & tadilat hesaplayıcıları', () => {
     const result = calculateHakedisSummary({ items, paidAmount: 30000 });
     expect(result.balance).toBe(10000);
     expect(result.overpaymentRisk).toBe(true);
+  });
+
+  it('daire geneli planlayıcı, tekil hesap fonksiyonlarının sonuçlarını odalar arasında doğru toplar', () => {
+    const rooms = [
+      { label: 'Salon', length: 5, width: 4, height: 2.7, boya: true, zeminTuru: 'parke', duvarSeramik: false, siva: false },
+      { label: 'Banyo', length: 2.5, width: 2, height: 2.7, boya: false, zeminTuru: 'seramik', duvarSeramik: true, siva: false },
+    ];
+    const result = aggregateRoomRenovationPlan({ rooms });
+
+    // Beklenen değerler, aynı tekil fonksiyonlar doğrudan çağrılarak çapraz kontrol edilir
+    // (aggregate fonksiyonunun kendi formülünü tekrar yazmadığının kanıtı).
+    const salonWallArea = calculateRoomWallArea({ length: 5, width: 4, height: 2.7 });
+    const salonPaint = calculatePaintNeed({ wallArea: salonWallArea, coatCount: 2, coveragePerLiter: 10 });
+    const salonFlooring = calculateFlooringNeed({ area: 20, coveragePerPackage: 2.2, wasteRate: 10, perimeter: 18 });
+
+    const banyoWallArea = calculateRoomWallArea({ length: 2.5, width: 2, height: 2.7 });
+    const banyoFloorTile = calculateTileNeed({ area: 5, tileLengthCm: 60, tileWidthCm: 30, wasteRate: 10, piecesPerBox: 6 });
+    const banyoWallTile = calculateTileNeed({ area: banyoWallArea, tileLengthCm: 20, tileWidthCm: 25, wasteRate: 10, piecesPerBox: 8 });
+
+    expect(result.totals.paintLiters).toBe(salonPaint.literNeeded);
+    expect(result.paintPackages).toEqual(suggestPaintPackages(salonPaint.literNeeded));
+
+    expect(result.totals.flooringAreaWithWaste).toBe(salonFlooring.areaWithWaste);
+    expect(result.totals.flooringPackageCount).toBe(Math.ceil(salonFlooring.areaWithWaste / 2.2));
+
+    expect(result.totals.floorTileCount).toBe(banyoFloorTile.tileCount);
+    expect(result.totals.floorTileBoxCount).toBe(Math.ceil(banyoFloorTile.tileCount / 6));
+
+    expect(result.totals.wallTileCount).toBe(banyoWallTile.tileCount);
+    expect(result.totals.wallTileBoxCount).toBe(Math.ceil(banyoWallTile.tileCount / 8));
+
+    expect(result.roomBreakdown).toHaveLength(2);
+    expect(result.roomBreakdown[0].label).toBe('Salon');
+    expect(result.roomBreakdown[1].label).toBe('Banyo');
+  });
+
+  it('daire geneli planlayıcıda birden çok oda için aynı malzeme türü doğru birikir', () => {
+    const rooms = [
+      { label: 'Yatak Odası 1', length: 4, width: 3.5, height: 2.7, boya: true, zeminTuru: null },
+      { label: 'Yatak Odası 2', length: 3.5, width: 3, height: 2.7, boya: true, zeminTuru: null },
+    ];
+    const result = aggregateRoomRenovationPlan({ rooms });
+
+    const room1Paint = calculatePaintNeed({ wallArea: calculateRoomWallArea({ length: 4, width: 3.5, height: 2.7 }), coatCount: 2, coveragePerLiter: 10 });
+    const room2Paint = calculatePaintNeed({ wallArea: calculateRoomWallArea({ length: 3.5, width: 3, height: 2.7 }), coatCount: 2, coveragePerLiter: 10 });
+
+    expect(result.totals.paintLiters).toBe(round2(room1Paint.literNeeded + room2Paint.literNeeded));
   });
 });
 

@@ -118,6 +118,7 @@ const DemirAgirlikHesaplama = lazy(() => import('./pages/calculators/insaat-tadi
 const MerdivenHesaplama = lazy(() => import('./pages/calculators/insaat-tadilat/MerdivenHesaplama.jsx'));
 const TadilatTakvimi = lazy(() => import('./pages/calculators/insaat-tadilat/TadilatTakvimi.jsx'));
 const TadilatHakedisTakibi = lazy(() => import('./pages/calculators/insaat-tadilat/TadilatHakedisTakibi.jsx'));
+const DaireTadilatPlanlayici = lazy(() => import('./pages/calculators/insaat-tadilat/DaireTadilatPlanlayici.jsx'));
 
 export default function App() {
   return (
@@ -225,6 +226,7 @@ export default function App() {
             <Route path="/merdiven-hesaplama" element={<MerdivenHesaplama />} />
             <Route path="/tadilat-takvimi" element={<TadilatTakvimi />} />
             <Route path="/tadilat-hakedis-takibi" element={<TadilatHakedisTakibi />} />
+            <Route path="/daire-tadilat-planlayici" element={<DaireTadilatPlanlayici />} />
 
             <Route path="/rehber" element={<RehberIndexPage />} />
             <Route path="/rehber/:slug" element={<RehberPostPage />} />

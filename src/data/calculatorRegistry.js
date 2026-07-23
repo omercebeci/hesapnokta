@@ -606,6 +606,14 @@ export const calculators = [
     icon: 'clipboard-check',
     keywords: ['hakediş takibi', 'tadilat ödeme planı', 'usta ödeme takibi', 'tadilat bütçe takibi', 'iş tamamlanma yüzdesi'],
   },
+  {
+    id: 'daire-tadilat-planlayici',
+    title: 'Daire Geneli Tadilat Planlayıcı',
+    description: 'Oda oda (salon, yatak odası, banyo, mutfak, hol) ölçü girin ve yapılacak işleri seçin; tüm odaların malzemesi (boya, seramik, parke, alçı/sıva) tek konsolide alışveriş listesinde toplanır.',
+    category: 'insaat-tadilat',
+    icon: 'home',
+    keywords: ['daire tadilat planlama', 'ev tadilat malzeme listesi', 'oda oda tadilat hesaplama', 'tadilat alışveriş listesi', 'konsolide malzeme listesi'],
+  },
 
   // ── Alışveriş & Kargo (yeni) ──
   {

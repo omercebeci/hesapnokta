@@ -1215,6 +1215,30 @@ export const calculatorContent = {
       { q: 'Birden fazla usta/taşeronla çalışıyorsam bu aracı nasıl kullanmalıyım?', a: 'Her usta/taşeron için ayrı bir hesaplama yapmanız (veya kalemleri kimin yaptığını ayırt edecek şekilde adlandırmanız) daha net bir takip sağlar; farklı kişilere yapılan ödemeleri tek bir "ödenen toplam" alanında karıştırmak karışıklığa yol açabilir.' },
     ],
   },
+  'daire-tadilat-planlayici': {
+    about: 'Daire geneli tadilat planlayıcı, mevcut tekil hesaplayıcıların (Boya, Fayans/Seramik, Parke/Laminat, Alçı/Sıva Hesaplama) üzerine kurulu bir konsolidasyon katmanıdır: oda oda (salon, yatak odası, banyo, mutfak, hol vb.) ölçü girip hangi işleri yapacağınızı işaretlersiniz, araç her odanın malzemesini aynı tekil araçlarla hesaplayıp tek bir toplam alışveriş listesinde birleştirir — toplam boya litresi, seramik kutusu, parke paketi, alçı torbası gibi.',
+    method: 'Her oda için önce duvar alanı (Boya Hesaplama\'daki ile aynı formülle: 2×(uzunluk+genişlik)×yükseklik) ve taban alanı (uzunluk×genişlik) bulunur. İşaretlediğiniz her iş için ilgili tekil aracın AYNI formülü çalıştırılır (boya için litre, seramik için adet/kutu, parke için paket, alçı/sıva için kg/torba); oda başına ayrıntı sormak yerine (fayans ölçüsü, fire payı gibi) o aracın tipik varsayılan değerleri kullanılır. Tüm odaların ham miktarları (litre, m², kg) önce toplanır, paket/kutu/torba sayıları yalnızca bu toplam üzerinden BİR KEZ hesaplanır — bu, her odanın kendi paket sayısını ayrı ayrı yukarı yuvarlayıp toplamaktan daha az fire ile sonuç verir.',
+    examples: [
+      {
+        title: '5 oda (Salon, Yatak Odası: parke+boya; Banyo: seramik zemin+duvar; Mutfak, Hol: seramik zemin+boya)',
+        rows: [
+          { label: 'Toplam boya', value: '29,7 L (1×15L + 1×7,5L + 3×2,5L)' },
+          { label: 'Zemin seramik', value: '124 adet (21 kutu)' },
+          { label: 'Zemin parke', value: '37,4 m² (17 paket) + 33 m süpürgelik' },
+          { label: 'Duvar seramik (yalnızca banyo)', value: '535 adet (67 kutu)' },
+        ],
+      },
+    ],
+    faq: [
+      { q: 'Bu araç, tekil hesaplayıcılardan (Boya, Fayans/Seramik...) farklı bir yöntem mi kullanıyor?', a: 'Hayır — tam tersine, aynı formülleri birebir çalıştırır; tek fark, tüm odaların sonucunu tek bir listede toplamasıdır. Herhangi bir odayı tekil araçla ayrıca (kendi fire payınız, fayans ölçünüz gibi ayrıntılarla) hesaplayıp buradaki toplamdan çıkarıp yerine koyabilirsiniz.' },
+      { q: '"Duvar seramik" neden tüm duvar yüksekliği için hesaplanıyor?', a: 'Banyo gibi genelde tavana kadar tam kaplanan alanlar için bu doğru bir varsayımdır. Ancak mutfakta genellikle yalnızca tezgah üstünde dar bir şerit fayanslanır; bu durumda bu araçtaki toplam gerçek ihtiyacınızdan çok daha fazla çıkar — bu yüzden mutfak için "Duvar seramik" varsayılan olarak kapalıdır ve açarsanız bir uyarı gösterilir. Şerit tipi bir uygulama için tekil Fayans/Seramik Hesaplama aracını kendi şerit yüksekliğinizle (m² olarak) kullanmanız çok daha doğru sonuç verir.' },
+      { q: 'Neden oda başına fayans ölçüsü, fire payı gibi ayrıntıları giremiyorum?', a: 'Bu araç, çok sayıda odayı hızlıca konsolide etmek için tasarlanmıştır; her odada farklı fayans ölçüsü/fire payı sormak arayüzü çok karmaşıklaştırır. Standart varsayılanlar (ör. zemin seramik için 60×30 cm, %10 fire) kullanılır — hassas/özel bir hesap gerekiyorsa o odayı tekil araçla ayrıca hesaplayabilirsiniz.' },
+      { q: 'Paket/kutu sayıları neden odaların kendi paket sayılarının toplamından farklı olabilir?', a: 'Bu araç, her odanın HAM miktarını (litre, m², kg) önce toplar, paket/kutu/torba sayısını yalnızca bu toplam üzerinden bir kez hesaplar. Bu, her odanın paket sayısını ayrı ayrı yukarı yuvarlayıp sonra toplamaktan daha az malzeme israfına yol açar — pratikte genellikle oda oda hesaplayıp toplamaktan biraz daha az paket çıkabilir.' },
+      { q: 'Sıva/alçı seçeneği hangi odalarda kullanılmalı?', a: 'Genellikle yeni örülen bir duvarınız veya sıvası tamamen yenilenecek bir odanız varsa işaretlenir; sadece boyanacak, mevcut sıvası sağlam bir duvar için bu seçeneği kapalı bırakabilirsiniz.' },
+      { q: 'Listeyi kopyalayıp ustama gönderebilir miyim?', a: 'Evet, "📋 Kopyala" butonuyla listeyi panoya kopyalayıp mesaj/e-posta ile gönderebilir, veya "Yazdır / PDF kaydet" ile ustanızla masaya koyabileceğiniz bir özet çıkarabilirsiniz.' },
+      { q: 'Bu liste bir fiyat teklifi midir?', a: 'Hayır, bu araç yalnızca miktar (litre, adet, kutu, m², kg, torba) hesaplar; hiçbir fiyat içermez veya önermez. Güncel fiyatları satıcınızdan/ustanızdan almanız gerekir.' },
+    ],
+  },
 
   // ── Alışveriş & Kargo (yeni) ──
   'kargo-desi-hesaplama': {
