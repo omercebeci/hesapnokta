@@ -3,6 +3,7 @@ import CalculatorLayout from '../../../components/CalculatorLayout.jsx';
 import FormField from '../../../components/FormField.jsx';
 import ShoppingListCard from '../../../components/ShoppingListCard.jsx';
 import PrintableMaterialList from '../../../components/PrintableMaterialList.jsx';
+import PrintableQuoteRequest from '../../../components/PrintableQuoteRequest.jsx';
 import { aggregateRoomRenovationPlan } from '../../../lib/insaatTadilatCalculators.js';
 import { formatInteger, formatNumber, parseLocaleNumber } from '../../../utils/format.js';
 import { useQueryParamState, serializeRows, deserializeRows } from '../../../hooks/useQueryParamState.js';
@@ -136,6 +137,23 @@ export default function DaireTadilatPlanlayici() {
           <>
             <ShoppingListCard items={shoppingItems.map((item) => `${item.label}: ${item.value}`)} />
             <PrintableMaterialList items={shoppingItems} />
+            <PrintableQuoteRequest
+              sections={[
+                {
+                  heading: 'Mahal Ölçüleri ve Seçilen İşler',
+                  items: result.roomBreakdown
+                    .filter((room) => room.jobs.length > 0)
+                    .map((room) => ({
+                      label: room.label,
+                      detail: `Taban ${formatNumber(room.floorArea)} m², Duvar ${formatNumber(room.wallArea)} m² — ${room.jobs.join(', ')}`,
+                    })),
+                },
+                {
+                  heading: 'Hesaplanan Malzeme Miktarları',
+                  items: shoppingItems.map((item) => ({ label: item.label, detail: item.value })),
+                },
+              ]}
+            />
           </>
         )}
       </div>

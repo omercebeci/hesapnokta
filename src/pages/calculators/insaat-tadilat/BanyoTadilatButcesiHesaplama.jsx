@@ -8,6 +8,7 @@ import RatioBar from '../../../components/RatioBar.jsx';
 import Icon from '../../../components/Icon.jsx';
 import StepStrip from '../../../components/StepStrip.jsx';
 import PrintableBudgetPlan from '../../../components/PrintableBudgetPlan.jsx';
+import PrintableQuoteRequest from '../../../components/PrintableQuoteRequest.jsx';
 import { calculateLineItemBudget } from '../../../lib/insaatTadilatCalculators.js';
 import { formatCurrency, formatNumber, parseLocaleNumber } from '../../../utils/format.js';
 import { useQueryParamState, serializeRows, deserializeRows } from '../../../hooks/useQueryParamState.js';
@@ -101,6 +102,7 @@ export default function BanyoTadilatButcesiHesaplama() {
           </div>
         )}
         <PrintableBudgetPlan items={result.breakdown} total={result.total} />
+        <PrintableQuoteRequest sections={[{ heading: 'İş Kalemleri', items: result.breakdown.map((item) => ({ label: item.label })) }]} />
       </div>
 
       <div className="info-card">
